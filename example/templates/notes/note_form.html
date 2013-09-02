@@ -1,3 +1,7 @@
 <html>
-  {{form}}
+    <form method="POST" action="."> 
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save">
+    </form>
 </html>
