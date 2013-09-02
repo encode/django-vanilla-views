@@ -4,11 +4,11 @@
         <link href="/static/css/bootstrap.css" rel="stylesheet">
     </head>
     <body>
-        <h1 style="margin: 10px">Django Vanilla Views</h1>
-        <div style="margin: 10px">
+        <h1 style="margin: 30px">Django Vanilla Views</h1>
+        <div style="margin: 30px">
             {% if note_list %}
-            <table class="table">
-                <tr><th>Message</th><th>Completed</th><th span="2"></th></tr>
+            <table class="table table-striped">
+                <tr><th>Message</th><th>Completed</th><th></th><th></th></tr>
                 {% for note in note_list %}
                     <tr>
                         <td>{{ note.message }}</td>
