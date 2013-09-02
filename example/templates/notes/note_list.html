@@ -1,0 +1,8 @@
+<html>
+    <table>
+        <tr><th>Message</th><th>Completed</th></tr>
+        {% for note in note_list %}
+            <tr><td>{{ note.message }}</td><td>{{ note.completed }}</td></tr>
+        {% endfor %}
+    </table>
+</html>
