@@ -217,7 +217,7 @@ class CreateView(GenericModelView):
         return self.get_response(context)
 
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = self.get_form(data=request.POST, files=request.FILES)
         if form.is_valid():
             return self.form_valid(form)
@@ -252,7 +252,7 @@ class UpdateView(GenericModelView):
         return self.get_response(context)
 
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form(
             data=request.POST,
@@ -290,7 +290,7 @@ class DeleteView(GenericModelView):
         return self.get_response(context)
 
 
-    def post(self):
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
         if self.success_url is None:
