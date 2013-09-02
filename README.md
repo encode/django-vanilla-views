@@ -41,9 +41,70 @@ Install using pip.
 
     pip install django-vanilla-views
 
+# Usage
+
 Import and use the views.
 
     from vanilla import ListView, DetailView
+
+This repository includes an example project in the `'example'` directory.
+
+To run the example, clone the repo, and then:
+
+    cd example
+    virtualenv env
+    source env/bin/activate
+    pip install -r requirements.txt
+    python ./manage.py syncdb --noinput
+    python ./manage.py runserver
+
+The project code is listed below as an example of using `django-vanilla-views`.
+
+**views.py**
+
+	from django.core.urlresolvers import reverse_lazy
+	from example.notes.models import Note
+	from vanilla import CreateView, DeleteView, ListView, UpdateView
+	
+	class ListNotes(ListView):
+	    model = Note
+	
+	
+	class CreateNote(CreateView):
+	    model = Note
+	    success_url = reverse_lazy('list_notes')
+	
+	
+	class EditNote(UpdateView):
+	    model = Note
+	    success_url = reverse_lazy('list_notes')
+	
+	
+	class DeleteNote(DeleteView):
+	    model = Note
+	    success_url = reverse_lazy('list_notes')
+	
+	
+	list_notes = ListNotes.as_view()
+	create_note = CreateNote.as_view()
+	edit_note = EditNote.as_view()
+	delete_note = DeleteNote.as_view()
+
+**urls.py**
+
+	from django.conf.urls import patterns, include, url
+	from example.notes.models import Note
+	
+	urlpatterns = patterns('example.notes.views',
+	    url(r'^$', 'list_notes', name='list_notes'),
+	    url(r'^create/$', 'create_note', name='create_note'),
+	    url(r'^edit/(?P<pk>\d+)/$', 'edit_note', name='edit_note'),
+	    url(r'^delete/(?P<pk>\d+)/$', 'delete_note', name='delete_note'),
+	)
+
+**screenshot**
+
+![image](example.png)
 
 # License
 
