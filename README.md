@@ -35,6 +35,8 @@ Note that the package does not yet include the date based generic views.
 
 `django-vanilla-views` should currently be considered in draft.  A properly tested and documented beta release is planned.
 
+**The release announcement and further details on `django-vanilla-views` are [available here](http://dabapps.com/blog/fixing-djangos-generic-class-based-views/).**
+
 # Installation
 
 Install using pip.
@@ -57,6 +59,10 @@ To run the example, clone the repo, and then:
     pip install -r requirements.txt
     python ./manage.py syncdb --noinput
     python ./manage.py runserver
+
+**screenshot**
+
+![image](example.png)
 
 The project code is listed below as an example of using `django-vanilla-views`.
 
@@ -101,10 +107,6 @@ The project code is listed below as an example of using `django-vanilla-views`.
 	    url(r'^edit/(?P<pk>\d+)/$', 'edit_note', name='edit_note'),
 	    url(r'^delete/(?P<pk>\d+)/$', 'delete_note', name='delete_note'),
 	)
-
-**screenshot**
-
-![image](example.png)
 
 # License
 
