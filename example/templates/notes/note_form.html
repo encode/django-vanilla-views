@@ -1,7 +1,16 @@
-<html>
-    <form method="POST" action="."> 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1 style="margin: 10px">{% if note %}Edit note{% else %}Create note{% endif%}</h1>
+        <div style="margin: 10px">
+        <form method="POST" action="."> 
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save">
-    </form>
+        <input type="submit" class="btn btn-primary" value="Save">
+        </form>
+        </div>
+    </body>
 </html>

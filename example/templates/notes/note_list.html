@@ -1,21 +1,30 @@
-<html>
-    {% if note_list %}
-    <table>
-        <tr><th>Message</th><th>Completed</th></tr>
-        {% for note in note_list %}
-            <tr>
-                <td>{{ note.message }}</td>
-                <td>{{ note.checkbox_character }}</td>
-                <td><a href="{% url 'edit_note' note.pk %}">edit</a></td>
-                <td>
-                    <form method="POST" action="{% url 'delete_note' note.pk %}">
-                        {% csrf_token %}
-                        <input type="submit" value="delete"></input>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-    <p><a href="{% url 'create_note' %}">Create a new note</a></p>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1 style="margin: 10px">Django Vanilla Views</h1>
+        <div style="margin: 10px">
+            {% if note_list %}
+            <table class="table">
+                <tr><th>Message</th><th>Completed</th><th span="2"></th></tr>
+                {% for note in note_list %}
+                    <tr>
+                        <td>{{ note.message }}</td>
+                        <td>{{ note.checkbox_character }}</td>
+                        <td><a href="{% url 'edit_note' note.pk %}">edit</a></td>
+                        <td>
+                            <form method="POST" action="{% url 'delete_note' note.pk %}">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+            <p><a href="{% url 'create_note' %}">Create a new note</a></p>
+        </div>
+    </body>
 </html>
