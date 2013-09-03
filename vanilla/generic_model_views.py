@@ -11,26 +11,34 @@ class GenericModelView(View):
     """
     Base class for all model generic views.
     """
+
     model = None
 
+    # All the following are optional, and fall back to default values
+    # based on the 'model' shortcut.
     queryset = None
     form_class = None
     template_name = None
     context_object_name = None
 
+    # Object lookup
     lookup_field = 'pk'
-    initial = {}
-    template_name_suffix = None
+    url_kwarg = None
 
+    # Pagination    
     paginate_by = None
+    page_kwarg = 'page'
     paginator_class = Paginator
+
+    # Suffix appended to automatically generated template names
+    template_name_suffix = None
 
     def get_object(self):
         """
         Returns the object the view is displaying.
         """
         queryset = self.get_queryset()
-        lookup_value = self.kwargs.get(self.lookup_field)
+        lookup_value = self.kwargs.get(self.url_kwarg or self.lookup_field)
         if lookup_value is None:
             raise ImproperlyConfigured("Lookup field '%s' was not provided"
             " in view kwargs to '%s'" %
@@ -91,12 +99,7 @@ class GenericModelView(View):
         Return a form instance.
         """
         cls = self.get_form_class()
-        return cls(
-            data=data,
-            files=files,
-            instance=instance,
-            initial=self.initial.copy()
-        )
+        return cls(data=data, files=files, instance=instance)
 
     def get_paginate_by(self):
         """
@@ -143,10 +146,8 @@ class GenericModelView(View):
         and additionally includes:
 
         * `view`
-        * `object` if the view includes an `object` attribute.
-        * `object_list` if the view includes an `object_list` attribute.
-
-        TODO...
+        * `object`/`object_list`
+        * {context_object_name} or {model_name}/{model_name_list}
         """
         kwargs['view'] = self
 
@@ -172,7 +173,7 @@ class GenericModelView(View):
 
         return kwargs
 
-    def get_response(self, context):
+    def render_to_response(self, context):
         return TemplateResponse(
             request=self.request,
             template=self.get_template_names(),
@@ -194,7 +195,7 @@ class ListView(GenericModelView):
             is_paginated=page is not None,
             paginator=page.paginator if (page is not None) else None,
         )
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
 class DetailView(GenericModelView):
@@ -203,7 +204,7 @@ class DetailView(GenericModelView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context()
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
 
@@ -214,7 +215,7 @@ class CreateView(GenericModelView):
     def get(self, request, *args, **kwargs):
         form = self.get_form()
         context = self.get_context(form=form)
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
     def post(self, request, *args, **kwargs):
@@ -237,7 +238,7 @@ class CreateView(GenericModelView):
 
     def form_invalid(self, form):
         context = self.get_context(form=form)
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
 
@@ -249,7 +250,7 @@ class UpdateView(GenericModelView):
         self.object = self.get_object()
         form = self.get_form(instance=self.object)
         context = self.get_context(form=form)
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
     def post(self, request, *args, **kwargs):
@@ -277,7 +278,7 @@ class UpdateView(GenericModelView):
 
     def form_invalid(self, form):
         context = self.get_context(form=form)
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
 class DeleteView(GenericModelView):
@@ -287,7 +288,7 @@ class DeleteView(GenericModelView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context()
-        return self.get_response(context)
+        return self.render_to_response(context)
 
 
     def post(self, request, *args, **kwargs):
