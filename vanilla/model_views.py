@@ -11,7 +11,6 @@ class GenericModelView(View):
     """
     Base class for all model generic views.
     """
-
     model = None
 
     # All the following are optional, and fall back to default values
@@ -21,16 +20,19 @@ class GenericModelView(View):
     template_name = None
     context_object_name = None
 
-    # Object lookup
+    # Object lookup parameters. These are used in the URL kwargs, and when
+    # performing the model instance lookup.
+    # Note that `url_kwarg` defaults to same value as lookup_field.
     lookup_field = 'pk'
     url_kwarg = None
 
-    # Pagination    
+    # Pagination parameters.
+    # Set `paginate_by` to an integer value to turn pagination on.
     paginate_by = None
     page_kwarg = 'page'
     paginator_class = Paginator
 
-    # Suffix appended to automatically generated template names
+    # Suffix that should be appended to automatically generated template names.
     template_name_suffix = None
 
     def get_object(self):
@@ -40,9 +42,8 @@ class GenericModelView(View):
         queryset = self.get_queryset()
         lookup_value = self.kwargs.get(self.url_kwarg or self.lookup_field)
         if lookup_value is None:
-            raise ImproperlyConfigured("Lookup field '%s' was not provided"
-            " in view kwargs to '%s'" %
-            (self.lookup_field, self.__class__.__name__))
+            msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
+            raise ImproperlyConfigured(msg % (self.lookup_field, self.__class__.__name__))
         lookup_kwargs = {self.lookup_field: lookup_value}
         return get_object_or_404(queryset, **lookup_kwargs)
 
@@ -59,8 +60,8 @@ class GenericModelView(View):
         if self.model is not None:
             return self.model._default_manager.all()
 
-        raise ImproperlyConfigured("'%s' must either define 'queryset' or "
-            "'model', or override 'get_queryset()'" % self.__class__.__name__)
+        msg = "'%s' must either define 'queryset' or 'model', or override 'get_queryset()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_form_class(self):
         """
@@ -72,9 +73,8 @@ class GenericModelView(View):
         if self.model is not None:
             return model_forms.modelform_factory(self.model)
 
-        raise ImproperlyConfigured("'%s' must either define 'form_class' or "
-            "'model' and 'template_name_suffix', or override "
-            "'get_form_class()'" % self.__class__.__name__)
+        msg = "'%s' must either define 'form_class' or 'model', or override 'get_form_class()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_template_names(self):
         """
@@ -90,20 +90,20 @@ class GenericModelView(View):
                 self.template_name_suffix
             )]
 
-        raise ImproperlyConfigured("'%s' must either define 'template_name' "
-            "or 'model', or override 'get_template_names()'" %
-            self.__class__.__name__)
+        msg = "'%s' must either define 'template_name' or 'model' and " \
+            "'template_name_suffix', or override 'get_template_names()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_form(self, data=None, files=None, instance=None):
         """
-        Return a form instance.
+        Returns a form instance.
         """
         cls = self.get_form_class()
         return cls(data=data, files=files, instance=instance)
 
     def get_paginate_by(self):
         """
-        Return the size of pages to use with pagination.
+        Returns the size of pages to use with pagination.
         """
         return self.paginate_by
 
@@ -132,11 +132,8 @@ class GenericModelView(View):
         try:
             return paginator.page(page_number)
         except InvalidPage as exc:
-            msg = 'Invalid page (%(page_number)s): %(message)s' % {
-                'page_number': page_number,
-                'message': str(exc)
-            }
-            raise Http404(_(msg))
+            msg = 'Invalid page (%s): %s'
+            raise Http404(_(msg % (page_number, str(exc))))
 
     def get_context(self, **kwargs):
         """
@@ -174,6 +171,9 @@ class GenericModelView(View):
         return kwargs
 
     def render_to_response(self, context):
+        """
+        Given a context dictionary, returns an HTTP response.
+        """
         return TemplateResponse(
             request=self.request,
             template=self.get_template_names(),
@@ -181,8 +181,7 @@ class GenericModelView(View):
         )
 
 
-
-#### Model Views
+## The concrete model views
 
 class ListView(GenericModelView):
     template_name_suffix = '_list'
@@ -207,7 +206,6 @@ class DetailView(GenericModelView):
         return self.render_to_response(context)
 
 
-
 class CreateView(GenericModelView):
     success_url = None
     template_name_suffix = '_form'
@@ -217,29 +215,26 @@ class CreateView(GenericModelView):
         context = self.get_context(form=form)
         return self.render_to_response(context)
 
-
     def post(self, request, *args, **kwargs):
         form = self.get_form(data=request.POST, files=request.FILES)
         if form.is_valid():
             return self.form_valid(form)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
-        form.save()
+        self.object = form.save()
         try:
             url = self.success_url or self.object.get_absolute_url()
         except AttributeError:
-            msg = ("No URL to redirect to.  '%s' must provide 'success_url' "
-                "or define a 'get_absolute_url' method on the Model." %
-                self.__class__.__name__)
-            raise ImproperlyConfigured(msg)
+            msg = "No URL to redirect to.  '%s' must provide 'success_url', " \
+                "define a 'get_absolute_url()' method on the model class, " \
+                "or override 'form_valid()'"
+            raise ImproperlyConfigured(msg % self.__class__.__name__)
         return HttpResponseRedirect(url)
 
     def form_invalid(self, form):
         context = self.get_context(form=form)
         return self.render_to_response(context)
-
 
 
 class UpdateView(GenericModelView):
@@ -252,15 +247,9 @@ class UpdateView(GenericModelView):
         context = self.get_context(form=form)
         return self.render_to_response(context)
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form(
-            data=request.POST,
-            files=request.FILES,
-            instance=self.object
-        )
-
+        form = self.get_form(data=request.POST, files=request.FILES, instance=self.object)
         if form.is_valid():
             return self.form_valid(form)
         return self.form_invalid(form)
@@ -270,10 +259,9 @@ class UpdateView(GenericModelView):
         try:
             url = self.success_url or self.object.get_absolute_url()
         except AttributeError:
-            msg = ("No URL to redirect to.  '%s' must provide 'success_url' "
-                "or define a 'get_absolute_url' method on the Model." %
-                self.__class__.__name__)
-            raise ImproperlyConfigured(msg)
+            msg = "No URL to redirect to. '%s' must provide 'success_url' " \
+                "or define a 'get_absolute_url()' method on the Model."
+            raise ImproperlyConfigured(msg % self.__class__.__name__)
         return HttpResponseRedirect(url)
 
     def form_invalid(self, form):
@@ -290,12 +278,10 @@ class DeleteView(GenericModelView):
         context = self.get_context()
         return self.render_to_response(context)
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
         if self.success_url is None:
-            msg = ("No URL to redirect to.  '%s' must define 'success_url'" %
-                self.__class__.__name__)
-            raise ImproperlyConfigured(msg)
+            msg = "No URL to redirect to. '%s' must define 'success_url'"
+            raise ImproperlyConfigured(msg % self.__class__.__name__)
         return HttpResponseRedirect(self.success_url)
