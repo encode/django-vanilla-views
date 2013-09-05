@@ -1,7 +1,9 @@
 *.pyc
 *.db
+.coverage
 MANIFEST
 dist/
 build/
 env/
+htmlcov/
 *.egg-info/

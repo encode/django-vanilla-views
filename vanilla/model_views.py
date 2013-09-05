@@ -1,9 +1,11 @@
+#coding: utf-8
 from django.core.exceptions import ImproperlyConfigured
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, InvalidPage
 from django.forms import models as model_forms
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext as _
 from django.views.generic import View
 
 
@@ -13,24 +15,24 @@ class GenericModelView(View):
     """
     model = None
 
+    # Object lookup parameters. These are used in the URL kwargs, and when
+    # performing the model instance lookup.
+    # Note that `lookup_url_kwarg` defaults to same value as `lookup_field`.
+    lookup_field = 'pk'
+    lookup_url_kwarg = None
+
     # All the following are optional, and fall back to default values
     # based on the 'model' shortcut.
+    # Each of these has a corresponding `.get_<attribute>()` method.
     queryset = None
     form_class = None
     template_name = None
     context_object_name = None
 
-    # Object lookup parameters. These are used in the URL kwargs, and when
-    # performing the model instance lookup.
-    # Note that `url_kwarg` defaults to same value as lookup_field.
-    lookup_field = 'pk'
-    url_kwarg = None
-
     # Pagination parameters.
     # Set `paginate_by` to an integer value to turn pagination on.
     paginate_by = None
     page_kwarg = 'page'
-    paginator_class = Paginator
 
     # Suffix that should be appended to automatically generated template names.
     template_name_suffix = None
@@ -40,12 +42,15 @@ class GenericModelView(View):
         Returns the object the view is displaying.
         """
         queryset = self.get_queryset()
-        lookup_value = self.kwargs.get(self.url_kwarg or self.lookup_field)
-        if lookup_value is None:
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        try:
+            lookup = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        except KeyError:
             msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
             raise ImproperlyConfigured(msg % (self.lookup_field, self.__class__.__name__))
-        lookup_kwargs = {self.lookup_field: lookup_value}
-        return get_object_or_404(queryset, **lookup_kwargs)
+
+        return get_object_or_404(queryset, **lookup)
 
     def get_queryset(self):
         """
@@ -79,6 +84,9 @@ class GenericModelView(View):
     def get_template_names(self):
         """
         Returns a list of template names to use when rendering the response.
+
+        If `.template_name` is not specified, then defaults to the following
+        pattern: "{app_label}/{model_name}{template_name_suffix}.html"
         """
         if self.template_name is not None:
             return [self.template_name]
@@ -94,6 +102,20 @@ class GenericModelView(View):
             "'template_name_suffix', or override 'get_template_names()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
+    def get_context_object_name(self, is_list=False):
+        """
+        Returns a descriptive name to use in the context in addition to the
+        default 'object'/'object_list'.
+        """
+        if self.context_object_name is not None:
+            return self.context_object_name
+
+        elif self.model is not None:
+            fmt = '%s_list' if is_list else '%s'
+            return fmt % self.model._meta.object_name.lower()
+
+        return None 
+
     def get_form(self, data=None, files=None, instance=None):
         """
         Returns a form instance.
@@ -107,16 +129,23 @@ class GenericModelView(View):
         """
         return self.paginate_by
 
+    def get_paginator(self, queryset, page_size):
+        """
+        Returns a paginator instance.
+        """
+        return Paginator(queryset, page_size)
+
     def paginate_queryset(self, queryset):
         """
-        Paginate a queryset if required, either returns a page object,
-        or returns `None` if pagination is not configured for this view.
+        Paginate a queryset if required.
+
+        Returns a 4-tuple of (paginator, page, object_list, is_paginated) 
         """
         page_size = self.get_paginate_by()
         if not page_size:
             return None
 
-        paginator = self.paginator_class(queryset, page_size)
+        paginator = self.get_paginator(queryset, page_size)
         page_kwarg = self.kwargs.get(self.page_kwarg)
         page_query_param = self.request.GET.get(self.page_kwarg)
         page = page_kwarg or page_query_param or 1
@@ -140,33 +169,25 @@ class GenericModelView(View):
         Returns a dictionary to use as the context of the response.
 
         Takes a set of keyword arguments to use as the base context,
-        and additionally includes:
+        and adds the following keys:
 
-        * `view`
-        * `object`/`object_list`
-        * {context_object_name} or {model_name}/{model_name_list}
+        * 'view'
+        * Optionally, 'object' or 'object_list'
+        * Optionally, '{context_object_name}' or '{context_object_name}_list'
         """
         kwargs['view'] = self
 
-        obj = getattr(self, 'object', None)
-        obj_list = getattr(self, 'object_list', None)
-
-        if self.context_object_name is not None:
-            context_object_name = self.context_object_name
-        elif self.model is not None:
-            context_object_name = self.model._meta.object_name.lower()
-        else:
-            context_object_name = None
-
-        if obj:
-            kwargs['object'] = obj
+        if getattr(self, 'object', None) is not None:
+            kwargs['object'] = self.object
+            context_object_name = self.get_context_object_name()
             if context_object_name:
-                kwargs[context_object_name] = obj
+                kwargs[context_object_name] = self.object
 
-        if obj_list:
-            kwargs['object_list'] = obj_list
+        if getattr(self, 'object_list', None) is not None:
+            kwargs['object_list'] = self.object_list
+            context_object_name = self.get_context_object_name(is_list=True)
             if context_object_name:
-                kwargs[context_object_name + '_list'] = obj_list
+                kwargs[context_object_name] = self.object_list
 
         return kwargs
 
@@ -185,14 +206,19 @@ class GenericModelView(View):
 
 class ListView(GenericModelView):
     template_name_suffix = '_list'
+    allow_empty = True
 
     def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
-        page = self.paginate_queryset(self.object_list)
+        queryset = self.get_queryset()
+        if not self.allow_empty and not queryset.exists():
+            raise Http404
+        page = self.paginate_queryset(queryset)
+        self.object_list = page.object_list if page else queryset
+
         context = self.get_context(
-            page=page,
+            page_obj=page,
             is_paginated=page is not None,
-            paginator=page.paginator if (page is not None) else None,
+            paginator=page.paginator if page is not None else None,
         )
         return self.render_to_response(context)
 
