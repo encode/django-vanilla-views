@@ -2,7 +2,7 @@
 
 **Beautifully simple class based views.**
 
-**Author:** Tom Christie, [Follow me on Twitter][1].
+**Author:** Tom Christie, Follow me on Twitter, [here][twitter].
 
 
     View --+------------------------- RedirectView
@@ -23,7 +23,7 @@
 
 Django's generic class based view implementation is unneccesarily complicated.
 
-Django vanilla views gives you the same benefits of using class based views, but with:
+Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
 
 * No mixin classes.
 * No calls to `super()`.
@@ -31,42 +31,63 @@ Django vanilla views gives you the same benefits of using class based views, but
 * A stripped down API.
 * Simpler method implementations, with less magical behavior.
 
-Note that the package does not yet include the date based generic views.
+Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in `django-vanilla-views`.  Although note that the package does not yet include the date based generic views.
 
-`django-vanilla-views` should currently be considered in draft.  A properly tested and documented beta release is planned.
+If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see [the migration guide][migration].
 
-**The release announcement and further details on `django-vanilla-views` are [available here](http://dabapps.com/blog/fixing-djangos-generic-class-based-views/).**
+For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].
 
-# Installation
+## Helping you to code smarter
+
+Django Vanilla Views isn't just easier to use.  I'd contest that because it presents fewer points of API to override, you'll also end up writing better, more maintainable code as a result.  You'll be working from a smaller set of repeated patterns throughout your projects, and with a much more obvious flow control in your views.
+
+As an example, a custom view implemented against Django's `CreateView` class might typically look something like this:
+
+	class AccountCreateView(CreateView):
+	    model = Account
+	    form_class = AccountForm
+
+	    def get_success_url(self):
+	        return self.object.account_activated_url()
+
+	    def get_form_kwargs(self):
+	        kwargs = super(AccountView, self).get_form_kwargs()
+	        kwargs['owner'] = self.request.user
+	        return kwargs
+ 
+	    def form_valid(self, form):
+	        send_activation_email(self.request.user)
+	        return super(AccountActivationView, self).form_valid(form)
+
+Writing the same code with `django-vanilla-views`, you'd instead arrive at a simpler, more concise, and more direct style:
+
+	class AccountCreateView(CreateView):
+	    model = Account
+
+	    def get_form(self, data=None, files=None, instance=None):
+	        return AccountForm(data, files, instance=instance, owner=self.request.user)
+
+	    def form_valid(self, form):
+	        send_activation_email(self.request.user)
+	        account = form.save()
+	        return HttpResponseRedirect(account.account_activated_url())
+
+Of course, you *can* write the same code against Django's `CreateView`, but it's less obvious as there are many more possible points of API to override.
+
+## Installation
 
 Install using pip.
 
     pip install django-vanilla-views
 
-# Usage
+
+## Usage
 
 Import and use the views.
 
     from vanilla import ListView, DetailView
 
-This repository includes an example project in the `'example'` directory.
-
-To run the example, clone the repo, and then:
-
-    cd example
-    virtualenv env
-    source env/bin/activate
-    pip install -r requirements.txt
-    python ./manage.py syncdb --noinput
-    python ./manage.py runserver
-
-**screenshot**
-
-![image](example.png)
-
-The project code is listed below as an example of using `django-vanilla-views`.
-
-**views.py**
+For example:
 
 	from django.core.urlresolvers import reverse_lazy
 	from example.notes.models import Note
@@ -89,26 +110,117 @@ The project code is listed below as an example of using `django-vanilla-views`.
 	class DeleteNote(DeleteView):
 	    model = Note
 	    success_url = reverse_lazy('list_notes')
-	
-	
-	list_notes = ListNotes.as_view()
-	create_note = CreateNote.as_view()
-	edit_note = EditNote.as_view()
-	delete_note = DeleteNote.as_view()
 
-**urls.py**
 
-	from django.conf.urls import patterns, include, url
-	from example.notes.models import Note
-	
-	urlpatterns = patterns('example.notes.views',
-	    url(r'^$', 'list_notes', name='list_notes'),
-	    url(r'^create/$', 'create_note', name='create_note'),
-	    url(r'^edit/(?P<pk>\d+)/$', 'edit_note', name='edit_note'),
-	    url(r'^delete/(?P<pk>\d+)/$', 'delete_note', name='delete_note'),
-	)
+## Compare and contrast
 
-# License
+To help give you an idea of the relative complexity of `django-vanilla-views` against Django's existing implementations, let's compare the two.
+
+### Inheritance hierachy
+
+The inheritance hierarchy of the views in `django-vanilla-views` is trivial, making it easy to figure out the control flow in the view.
+
+    CreateView --> GenericModelView --> View
+
+**Total number of source files**: 1 ([model_views.py][model_views.py])
+
+Here's the corresponding inheritance hiearchy in Django's implementation of `CreateView`.
+
+                 +--> SingleObjectTemplateResponseMixin --> TemplateResponseMixin
+                 |
+    CreateView --+                     +--> ProcessFormView --> View
+                 |                     |                                       
+                 +--> BaseCreateView --+
+                                       |                     +--> FormMixin ----------+
+                                       +--> ModelFormMixin --+                        +--> ContextMixin
+                                                             +--> SingleObjectMixin --+
+
+**Total number of source files**: 3 ([edit.py][edit.py], [detail.py][detail.py], [base.py][base.py])
+
+### Calling hierarchy
+
+Let's take a look at the calling hierarchy when making an HTTP `GET` request to `CreateView`.
+
+	CreateView.get()
+	|
+	+--> GenericModelView.get_form()
+	|    |
+	|    +--> GenericModelView.get_form_class()
+	|
+	+--> GenericModelView.get_context()
+	|    |
+	|    +--> GenericModelView.get_context_object_name()
+	|
+	+--> GenericModelView.render_to_response()
+	     |
+	     +--> GenericModelView.get_template_names()
+
+**Total number of code statements covered**: 30
+
+Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
+
+	CreateView.get()
+	|
+	+--> ProcessFormView.get()
+	     |
+	     +--> ModelFormMixin.get_form_class()
+	     |    |
+	     |    +--> SingleObjectMixin.get_queryset()
+	     |
+	     +--> FormMixin.get_form()
+	     |    |
+	     |    +--> ModelFormMixin.get_form_kwargs()
+	     |    |    |
+	     |    |    +--> FormMixin.get_form_kwargs()
+	     |    |
+	     |    +--> FormMixin.get_initial()
+	     |
+ 	     +--> ModelFormMixin.get_context_data()
+	     |    |
+	     |    +--> SingleObjectMixin.get_context_object_name()
+	     |    |
+	     |    +--> SingleObjectMixin.get_context_data()
+	     |         |
+	     |         +--> SingleObjectMixin.get_context_object_name()
+	     |         |
+	     |         +--> ContextMixin.get_context_data()
+	     |
+	     +--> TemplateResponseMixin.render_to_response()
+	          |
+	          +--> SingleObjectTemplateResponseMixin.get_template_names()
+	          |
+	          +--> TemplateResponseMixin.get_template_names()
+
+**Total number of code statements covered**: 72
+
+## Example project
+
+This repository includes an example project in the [example][example] directory.
+
+You can run the example locally by following these steps:
+
+    git clone git://github.com/tomchristie/django-vanilla-views.git
+    cd django-vanilla-views/example
+    
+    # Create a clean virtualenv environment
+    virtualenv env
+    source env/bin/activate
+    pip install -r requirements.txt
+    
+    # Ensure local copy of 'vanilla' is in our path
+    export PYTHONPATH=..:. 
+    
+    # Run the project
+    python ./manage.py syncdb --noinput
+    python ./manage.py runserver
+
+#### Screenshot from the example project...
+
+![image](example.png)
+
+---
+
+## License
 
 Copyright © Tom Christie.
 
@@ -133,4 +245,12 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-[1]: http://twitter.com/_tomchristie
+[twitter]: http://twitter.com/_tomchristie
+[tickets]: https://github.com/tomchristie/django-vanilla-views/issues
+[migration]: docs/migration.md
+[release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
+[model_views.py]: https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py
+[base.py]: https://github.com/django/django/tree/master/django/views/generic/base.py
+[detail.py]: https://github.com/django/django/tree/master/django/views/generic/detail.py
+[edit.py]: https://github.com/django/django/tree/master/django/views/generic/edit.py
+[example]: https://github.com/tomchristie/django-vanilla-views/tree/master/example
