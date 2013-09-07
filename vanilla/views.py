@@ -4,12 +4,12 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-from django.views.generic import View
+from django.views.generic import View, RedirectView
 
 
 class GenericView(View):
     """
-    Base class for the template and form views.
+    A generic base class for building template and/or form views.
     """
     form_class = None
     template_name = None
@@ -61,27 +61,6 @@ class GenericView(View):
             context=context
         )
 
-class RedirectView(View):
-    url = None
-    pattern_name = None
-    permanent = True
-
-    def get(self, request, *args, **kwargs):
-        if self.url:
-            url = self.url % kwargs
-        elif self.pattern_name:
-            url = reverse(self.pattern_name, args=args, kwargs=kwargs)
-        else:
-            msg = "'%s' must define 'url' or 'pattern_name'"
-            raise ImproperlyConfigured(msg % self.__class__.__name__)
-
-        if self.permanent:
-            return HttpResponsePermanentRedirect(url)
-        return HttpResponseRedirect(url)
-
-    def post(self, request, *args, **kwargs):
-        return self.get(request, *args, **kwargs)
-
 
 class TemplateView(GenericView):
     def get(self, request, *args, **kwargs):
@@ -105,7 +84,7 @@ class FormView(GenericView):
 
     def form_valid(self, form):
         if self.success_url is None:
-            msg = "'%s' must define 'success_url' or override `form_valid()`"
+            msg = "'%s' must define 'success_url' or override 'form_valid()'"
             raise ImproperlyConfigured(msg % self.__class__.__name__)
         return HttpResponseRedirect(self.success_url)
 
