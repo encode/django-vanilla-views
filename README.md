@@ -116,13 +116,15 @@ For example:
 
 To help give you an idea of the relative complexity of `django-vanilla-views` against Django's existing implementations, let's compare the two.
 
-### Inheritance hierachy
+#### Inheritance hierachy, Vanilla style.
 
 The inheritance hierarchy of the views in `django-vanilla-views` is trivial, making it easy to figure out the control flow in the view.
 
     CreateView --> GenericModelView --> View
 
 **Total number of source files**: 1 ([model_views.py][model_views.py])
+
+#### Inheritance hierachy, Django style.
 
 Here's the corresponding inheritance hiearchy in Django's implementation of `CreateView`.
 
@@ -137,7 +139,7 @@ Here's the corresponding inheritance hiearchy in Django's implementation of `Cre
 
 **Total number of source files**: 3 ([edit.py][edit.py], [detail.py][detail.py], [base.py][base.py])
 
-### Calling hierarchy
+#### Calling hierarchy, Vanilla style.
 
 Let's take a look at the calling hierarchy when making an HTTP `GET` request to `CreateView`.
 
@@ -156,6 +158,8 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 	     +--> GenericModelView.get_template_names()
 
 **Total number of code statements covered**: 30
+
+#### Calling hierarchy, Django style.
 
 Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 
