@@ -123,6 +123,8 @@ class GenericModelView(View):
         cls = self.get_form_class()
         return cls(data=data, files=files, instance=instance)
 
+    # Pagination methods
+
     def get_paginate_by(self):
         """
         Returns the size of pages to use with pagination.
@@ -135,24 +137,18 @@ class GenericModelView(View):
         """
         return Paginator(queryset, page_size)
 
-    def paginate_queryset(self, queryset):
+    def paginate_queryset(self, queryset, page_size):
         """
-        Paginate a queryset if required.
-
-        Returns a 4-tuple of (paginator, page, object_list, is_paginated) 
+        Paginates a queryset, and returns a page object.
         """
-        page_size = self.get_paginate_by()
-        if not page_size:
-            return None
-
         paginator = self.get_paginator(queryset, page_size)
         page_kwarg = self.kwargs.get(self.page_kwarg)
         page_query_param = self.request.GET.get(self.page_kwarg)
-        page = page_kwarg or page_query_param or 1
+        page_number = page_kwarg or page_query_param or 1
         try:
-            page_number = int(page)
+            page_number = int(page_number)
         except ValueError:
-            if page == 'last':
+            if page_number == 'last':
                 page_number = paginator.num_pages
             else:
                 msg = "Page is not 'last', nor can it be converted to an int."
@@ -163,6 +159,8 @@ class GenericModelView(View):
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
             raise Http404(_(msg % (page_number, str(exc))))
+
+    # Response rendering methods
 
     def get_context(self, **kwargs):
         """
@@ -210,16 +208,29 @@ class ListView(GenericModelView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        paginate_by = self.get_paginate_by()
+
         if not self.allow_empty and not queryset.exists():
             raise Http404
-        page = self.paginate_queryset(queryset)
-        self.object_list = page.object_list if page else queryset
 
-        context = self.get_context(
-            page_obj=page,
-            is_paginated=page is not None,
-            paginator=page.paginator if page is not None else None,
-        )
+        if paginate_by is None:
+            # Unpaginated response
+            self.object_list = queryset
+            context = self.get_context(
+                page_obj=None,
+                is_paginated=False,
+                paginator=None,
+            )
+        else:
+            # Paginated response
+            page = self.paginate_queryset(queryset, paginate_by)
+            self.object_list = page.object_list
+            context = self.get_context(
+                page_obj=page,
+                is_paginated=page.has_other_pages(),
+                paginator=page.paginator,
+            )
+
         return self.render_to_response(context)
 
 
