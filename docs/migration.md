@@ -1,3 +1,15 @@
+# Migration
+
+This document provides the complete set of API changes between Django's existing model views and the corresponding `django-vanilla-views` implementations.
+
+Wherever API points have been removed, we provide examples of what you should be using instead.
+
+This scope of this migration guide may appear intimidating at first if you're intending to port your existing views accross to using `django-vanilla-views`, but you should be able to approach refactorings in a fairly simple step-by-step manner, working through each item in the list one at a time.
+
+If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.
+
+## Removed attributes and methods
+
 #### `pk_url_field`, `slug_url_field`, `slug_url_kwarg`, `get_slug_field()`
 
 **These have been replaced** with a simpler style using `lookup_field` and `lookup_url_kwarg`.
@@ -81,51 +93,39 @@ If you needed to override the content type, you might write:
 Write this:
 
     def form_valid(form):
-        self.object = form.save()
-        return HttpResponseRedirect(self.object.account_activated_url())
+        account = form.save()
+        return HttpResponseRedirect(account.account_activated_url())
 
-It's hardly any more code, and there's no indirection or implicit behavior going on here.
-You'll thank yourself when you later need to add some more behavior to `form_valid()`.  Instead of ending up with code like this:
+It's hardly any more code, and there's no indirection or implicit behavior going on anymore.
 
-    def get_success_url():
-        return self.object.account_activated_url()
-
-    def form_valid(form):
-        send_activation_email(self.request.user)
-        return super(AccountActivationView, self).form_valid(form)
-
-You'll instead have a simpler, more direct style:
-
-    def form_valid(form):
-        send_activation_email(self.request.user)
-        self.object = form.save()
-        return HttpResponseRedirect(self.object.account_activated_url())
+## Simplified methods
 
 #### `paginate_queryset()`
 
-The call signature and return value for this method **have been simplified**.  Instead of this:
+The **return value has been simplified**.  Instead of returning a 4-tuple it now simply returns a page object.  Instead of this:
 
-    paginate_by = self.get_paginate_by()
-	(page, paginator, queryset, is_paginated) = self.paginate_queryset(queryset, paginate_by)
+	(page, paginator, queryset, is_paginated) = self.paginate_queryset(queryset, page_size)
 
-You should just write this:
+You should write this:
 
-    page = self.paginate_queryset(queryset)
+    page = self.paginate_queryset(queryset, page_size)
 
-Which will either return a page object, or `None` if pagination is not configured on the view.
-The page object contains a `.paginator` attribute and a `.object_list` attribute, so you still have access to the same set of information.
+The page object contains a `.paginator` attribute, an `.object_list` attribute, and a `has_other_pages()` method, so you still have access to the same set of information that is available in the 4-tuple return style.
 
 #### `get_object()`
 
-The call signature **has been simplified**.  The `get_object()` method no longer takes an optional `queryset` parameter.
+The **call signature has been simplified**.  The `get_object()` method no longer takes an optional `queryset` parameter.
 
 #### `get_form_class()`
 
-The behavior has been made **slightly less magical**.  In the regular Django implementation, if neither `model` or `form_class` is specified on the view, then `get_form_class()` will fallback to attempting to automatically generate a form class based on either the object currently being operated on, or failing that to generate a form class by calling `get_queryset` and determining a default model form class from that.
+The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation, if neither `model` or `form_class` is specified on the view, then `get_form_class()` will fallback to attempting to automatically generate a form class based on either the object currently being operated on, or failing that to generate a form class by calling `get_queryset` and determining a default model form class from that.
 
-In `django-vanilla-views`, if neither the `model` or `form_class` is specified, it's a configuration error.  If you need any more advanced behavior that that, you should override `get_form_class()`.
+In `django-vanilla-views`, if neither the `model` or `form_class` is specified, it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_form_class()`.
 
-#### `get_template_name()`
+#### `get_template_names()`
 
-The behavior has been made **slightly less magical**...
+The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation if `template_name` has been defined that will be the preferred option.  Failing that, if `template_name_field` is defined, and `.object` is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if `.object` is set on the view then `{app}/{model_name}{suffix}.html` will be used based on the class of the object.  Finally if `.model` is set on the view then  `{app}/{model_name}{suffix}.html` will be used.
 
+In `django-vanilla-views`, if `template_name` is defined that will be used, otherwise if `model` is defined it'll use `{app}/{model_name}{suffix}.html`.  If neither is defined it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_template_names()`.
+
+[tickets]: https://github.com/tomchristie/django-vanilla-views/issues
