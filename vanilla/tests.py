@@ -1,10 +1,11 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Page, Paginator
 from django.db import models
-from django.forms import BaseForm, ModelForm
+from django.forms import fields, BaseForm, Form, ModelForm
 from django.http import Http404
 from django.test import RequestFactory, TestCase
 from model_mommy import mommy
-from vanilla import CreateView, DetailView, DeleteView, ListView, UpdateView, View
+from vanilla import *
 import types
 
 
@@ -13,6 +14,10 @@ class Example(models.Model):
 
     class Meta:
         ordering = ('id',)
+
+
+class ExampleForm(Form):
+    text = fields.CharField(max_length=10)
 
 
 class InstanceOf(object):
@@ -94,6 +99,13 @@ class TestDetail(BaseTestCase):
         mommy.make(Example, _quantity=3)
         view = DetailView.as_view(model=Example)
         self.assertRaises(Http404, self.get, view, pk=999)
+
+    def test_detail_misconfigured_urlconf(self):
+        # If we don't provide 'pk' in the URL conf,
+        # we should expect an ImproperlyConfigured exception.
+        mommy.make(Example, _quantity=3)
+        view = DetailView.as_view(model=Example)
+        self.assertRaises(ImproperlyConfigured, self.get, view, slug=999)
 
 
 class TestList(BaseTestCase):
@@ -226,6 +238,10 @@ class TestCreate(BaseTestCase):
         })
         self.assertFalse(Example.objects.exists())
 
+    def test_update_no_success_url(self):
+        view = CreateView.as_view(model=Example)
+        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+
 
 class TestUpdate(BaseTestCase):
     def test_update(self):
@@ -274,6 +290,12 @@ class TestUpdate(BaseTestCase):
         })
         self.assertEqual(Example.objects.count(), 3)
 
+    def test_update_no_success_url(self):
+        mommy.make(Example, _quantity=3)
+        pk = Example.objects.all()[0].pk
+        view = UpdateView.as_view(model=Example)
+        self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk, data={'text': 'example'})
+
 
 class TestDelete(BaseTestCase):
     def test_delete(self):
@@ -306,6 +328,12 @@ class TestDelete(BaseTestCase):
             'view': InstanceOf(View)
         })
         self.assertEqual(Example.objects.count(), 3)
+
+    def test_delete_no_success_url(self):
+        mommy.make(Example, _quantity=3)
+        pk = Example.objects.all()[0].pk
+        view = DeleteView.as_view(model=Example)
+        self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk)
 
 
 class TestAttributeOverrides(BaseTestCase):
@@ -382,3 +410,80 @@ class TestAttributeOverrides(BaseTestCase):
             'paginator': None,
             'is_paginated': False
         })
+
+
+class TestTemplateView(BaseTestCase):
+    def test_template_view(self):
+        view = TemplateView.as_view(template_name='example.html')
+        response = self.get(view)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ['example.html'])
+        self.assertContext(response, {
+            'view': InstanceOf(View)
+        })
+
+    def test_misconfigured_template_view(self):
+        # A template view with no `template_name` is improperly configured.
+        view = TemplateView.as_view()
+        self.assertRaises(ImproperlyConfigured, self.get, view)
+
+
+class TestFormView(BaseTestCase):
+    def test_form_success(self):
+        view = FormView.as_view(
+            form_class=ExampleForm,
+            success_url='/success/',
+            template_name='example.html'
+        )
+        response = self.post(view, data={'text': 'example'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/success/')
+
+    def test_form_failure(self):
+        view = FormView.as_view(
+            form_class=ExampleForm,
+            success_url='/success/',
+            template_name='example.html'
+        )
+        response = self.post(view, data={'text': 'example' * 100})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ['example.html'])
+        self.assertFormError(response, 'form', 'text', ['Ensure this value has at most 10 characters (it has 700).'])
+        self.assertContext(response, {
+            'form': InstanceOf(BaseForm),
+            'view': InstanceOf(View)
+        })
+
+    def test_form_preview(self):
+        view = FormView.as_view(
+            form_class=ExampleForm,
+            success_url='/success/',
+            template_name='example.html'
+        )
+        response = self.get(view)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ['example.html'])
+        self.assertContext(response, {
+            'form': InstanceOf(BaseForm),
+            'view': InstanceOf(View)
+        })
+
+    def test_misconfigured_form_view_no_form_class(self):
+        # A template view with no `form_class` is improperly configured.
+        view = FormView.as_view(
+            success_url='/success/',
+            template_name='example.html'
+        )
+        self.assertRaises(ImproperlyConfigured, self.get, view)
+
+    def test_misconfigured_form_view_no_success_url(self):
+        # A template view with no `success_url` is improperly configured.
+        view = FormView.as_view(
+            form_class=ExampleForm,
+            template_name='example.html'
+        )
+        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})

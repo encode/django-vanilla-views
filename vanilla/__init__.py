@@ -1,4 +1,8 @@
 __version__ = '0.1.2'
+__all__ = (
+    'View', 'GenericView', 'GenericModelView', 'RedirectView', 'TemplateView',
+    'FormView', 'ListView', 'DetailView', 'CreateView', 'UpdateView', 'DeleteView'
+)
 
 from django.views.generic import View
 from vanilla.views import (
