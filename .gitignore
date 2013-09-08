@@ -7,3 +7,4 @@ build/
 env/
 htmlcov/
 *.egg-info/
+.tox/
