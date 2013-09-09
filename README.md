@@ -4,6 +4,7 @@
 
 **Author:** Tom Christie. Follow me on Twitter, [here][twitter].
 
+[![Build Status](https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master)](https://travis-ci.org/tomchristie/django-vanilla-views) [![Coverage Status](https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master)](https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master)
 
     View --+------------------------- RedirectView
            |
