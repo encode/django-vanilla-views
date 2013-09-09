@@ -48,7 +48,7 @@ class GenericModelView(View):
             lookup = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         except KeyError:
             msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
-            raise ImproperlyConfigured(msg % (self.lookup_field, self.__class__.__name__))
+            raise ImproperlyConfigured(msg % (lookup_url_kwarg, self.__class__.__name__))
 
         return get_object_or_404(queryset, **lookup)
 
