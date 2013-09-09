@@ -1,2 +1,1 @@
 Django>=1.3
-model-mommy==1.1
