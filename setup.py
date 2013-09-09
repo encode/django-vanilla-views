@@ -10,12 +10,22 @@ import sys
 
 name = 'django-vanilla-views'
 package = 'vanilla'
-description = ''
+description = 'Beautifully simple class based views.'
 url = 'http://github.com/tomchristie/django-vanilla-views/'
 author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
 install_requires = []
+
+long_description = """Django's generic class based view implementation is unneccesarily complicated.
+
+Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
+
+* No mixin classes.
+* No calls to super().
+* A sane class heirarchy.
+* A stripped down API.
+* Simpler method implementations, with less magical behavior."""
 
 
 def get_version(package):
@@ -66,6 +76,7 @@ setup(
     url=url,
     license=license,
     description=description,
+    long_description=long_description,
     author=author,
     author_email=author_email,
     packages=get_packages(package),
