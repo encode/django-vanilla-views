@@ -16,7 +16,11 @@ install:
     - pip install $DJANGO
     - export PYTHONPATH=.
 
-script: python manage.py test
+before_script: coverage erase
+
+script: coverage run --source=vanilla manage.py test
+
+after_success: coverage report; coveralls
 
 matrix:
     exclude:
