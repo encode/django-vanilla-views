@@ -73,8 +73,6 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 	        account = form.save()
 	        return HttpResponseRedirect(account.account_activated_url())
 
-Of course, you *can* write the same code against Django's `CreateView`, but it's less obvious as there are many more possible points of API to override.
-
 ## Requirements
 
 * **Django**: 1.3, 1.4, 1.5, 1.6
