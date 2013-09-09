@@ -15,7 +15,7 @@ env:
 install:
     - pip install $DJANGO
     - pip install coverage==3.6
-    - pip install coveralls==2.4.0
+    - pip install python-coveralls==2.4.0
     - export PYTHONPATH=.
 
 before_script: coverage erase
