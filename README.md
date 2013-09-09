@@ -2,7 +2,7 @@
 
 **Beautifully simple class based views.**
 
-**Author:** Tom Christie, Follow me on Twitter, [here][twitter].
+**Author:** Tom Christie. Follow me on Twitter, [here][twitter].
 
 
     View --+------------------------- RedirectView
@@ -74,12 +74,16 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 Of course, you *can* write the same code against Django's `CreateView`, but it's less obvious as there are many more possible points of API to override.
 
+## Requirements
+
+* **Django**: 1.3, 1.4, 1.5, 1.6
+* **Python**: 2.6, 2.7, 3.2, 3.3
+
 ## Installation
 
 Install using pip.
 
     pip install django-vanilla-views
-
 
 ## Usage
 
@@ -138,6 +142,8 @@ Here's the corresponding inheritance hiearchy in Django's implementation of `Cre
                                                              +--> SingleObjectMixin --+
 
 **Total number of source files**: 3 ([edit.py][edit.py], [detail.py][detail.py], [base.py][base.py])
+
+---
 
 #### Calling hierarchy, Vanilla style.
 
@@ -206,7 +212,7 @@ You can run the example locally by following these steps:
     git clone git://github.com/tomchristie/django-vanilla-views.git
     cd django-vanilla-views/example
     
-    # Create a clean virtualenv environment
+    # Create a clean virtualenv environment and install Django
     virtualenv env
     source env/bin/activate
     pip install -r requirements.txt
