@@ -42,7 +42,7 @@ class GenericView(View):
         cls = self.get_form_class()
         return cls(data=data, files=files)
 
-    def get_context(self, **kwargs):
+    def get_context_data(self, **kwargs):
         """
         Takes a set of keyword arguments to use as the base context, and
         returns a context dictionary to use for the view, additionally adding
@@ -64,7 +64,7 @@ class GenericView(View):
 
 class TemplateView(GenericView):
     def get(self, request, *args, **kwargs):
-        context = self.get_context()
+        context = self.get_context_data()
         return self.render_to_response(context)
 
 
@@ -73,7 +73,7 @@ class FormView(GenericView):
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
     def post(self, request):
@@ -89,5 +89,5 @@ class FormView(GenericView):
         return HttpResponseRedirect(self.success_url)
 
     def form_invalid(self, form):
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)

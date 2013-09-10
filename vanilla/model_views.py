@@ -162,7 +162,7 @@ class GenericModelView(View):
 
     # Response rendering methods
 
-    def get_context(self, **kwargs):
+    def get_context_data(self, **kwargs):
         """
         Returns a dictionary to use as the context of the response.
 
@@ -216,7 +216,7 @@ class ListView(GenericModelView):
         if paginate_by is None:
             # Unpaginated response
             self.object_list = queryset
-            context = self.get_context(
+            context = self.get_context_data(
                 page_obj=None,
                 is_paginated=False,
                 paginator=None,
@@ -225,7 +225,7 @@ class ListView(GenericModelView):
             # Paginated response
             page = self.paginate_queryset(queryset, paginate_by)
             self.object_list = page.object_list
-            context = self.get_context(
+            context = self.get_context_data(
                 page_obj=page,
                 is_paginated=page.has_other_pages(),
                 paginator=page.paginator,
@@ -239,7 +239,7 @@ class DetailView(GenericModelView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context()
+        context = self.get_context_data()
         return self.render_to_response(context)
 
 
@@ -249,7 +249,7 @@ class CreateView(GenericModelView):
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -270,7 +270,7 @@ class CreateView(GenericModelView):
         return HttpResponseRedirect(url)
 
     def form_invalid(self, form):
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
 
@@ -281,7 +281,7 @@ class UpdateView(GenericModelView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form(instance=self.object)
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -302,7 +302,7 @@ class UpdateView(GenericModelView):
         return HttpResponseRedirect(url)
 
     def form_invalid(self, form):
-        context = self.get_context(form=form)
+        context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
 
@@ -312,7 +312,7 @@ class DeleteView(GenericModelView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context()
+        context = self.get_context_data()
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):

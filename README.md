@@ -154,7 +154,7 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 	|    |
 	|    +--> GenericModelView.get_form_class()
 	|
-	+--> GenericModelView.get_context()
+	+--> GenericModelView.get_context_data()
 	|    |
 	|    +--> GenericModelView.get_context_object_name()
 	|
