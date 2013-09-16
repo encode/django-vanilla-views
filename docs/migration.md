@@ -34,7 +34,7 @@ For more complex lookups, override `get_object()`, like so:
 		    queryset = self.get_queryset()
 		    return get_object_or_404(queryset, slug=self.kwargs['slug'], owner=self.request.user)
 
-#### `initial`, `get_initial()`, `get_form_kwargs()`
+#### `initial`, `prefix`, `get_initial()`, `get_prefix()`, `get_form_kwargs()`
 
 **These are all removed**.  If you need to override how the form is intialized, just override `get_form()`.
 
