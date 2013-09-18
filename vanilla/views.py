@@ -14,6 +14,8 @@ class GenericView(View):
     form_class = None
     template_name = None
 
+    # Form instantiation
+
     def get_form_class(self):
         """
         Returns the form class to use in this view.
@@ -23,6 +25,15 @@ class GenericView(View):
 
         msg = "'%s' must either define 'form_class' or override 'get_form_class()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+    def get_form(self, data=None, files=None):
+        """
+        Given `data` and `files` QueryDicts, returns a form.
+        """
+        cls = self.get_form_class()
+        return cls(data=data, files=files)
+
+    # Response rendering
 
     def get_template_names(self):
         """
@@ -34,13 +45,6 @@ class GenericView(View):
 
         msg = "'%s' must either define 'template_name' or override 'get_template_names()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
-
-    def get_form(self, data=None, files=None):
-        """
-        Given `data` and `files` QueryDicts, returns a form.
-        """
-        cls = self.get_form_class()
-        return cls(data=data, files=files)
 
     def get_context_data(self, **kwargs):
         """

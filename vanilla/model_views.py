@@ -17,7 +17,8 @@ class GenericModelView(View):
 
     # Object lookup parameters. These are used in the URL kwargs, and when
     # performing the model instance lookup.
-    # Note that `lookup_url_kwarg` defaults to same value as `lookup_field`.
+    # Note that if unset then `lookup_url_kwarg` defaults to using the same
+    # value as `lookup_field`.
     lookup_field = 'pk'
     lookup_url_kwarg = None
 
@@ -36,6 +37,9 @@ class GenericModelView(View):
 
     # Suffix that should be appended to automatically generated template names.
     template_name_suffix = None
+
+
+    # Queryset and object lookup
 
     def get_object(self):
         """
@@ -68,6 +72,8 @@ class GenericModelView(View):
         msg = "'%s' must either define 'queryset' or 'model', or override 'get_queryset()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
+    # Form instantiation
+
     def get_form_class(self):
         """
         Returns the form class to use in this view.
@@ -81,41 +87,6 @@ class GenericModelView(View):
         msg = "'%s' must either define 'form_class' or 'model', or override 'get_form_class()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
-    def get_template_names(self):
-        """
-        Returns a list of template names to use when rendering the response.
-
-        If `.template_name` is not specified, then defaults to the following
-        pattern: "{app_label}/{model_name}{template_name_suffix}.html"
-        """
-        if self.template_name is not None:
-            return [self.template_name]
-
-        if self.model is not None and self.template_name_suffix is not None:
-            return ["%s/%s%s.html" % (
-                self.model._meta.app_label,
-                self.model._meta.object_name.lower(),
-                self.template_name_suffix
-            )]
-
-        msg = "'%s' must either define 'template_name' or 'model' and " \
-            "'template_name_suffix', or override 'get_template_names()'"
-        raise ImproperlyConfigured(msg % self.__class__.__name__)
-
-    def get_context_object_name(self, is_list=False):
-        """
-        Returns a descriptive name to use in the context in addition to the
-        default 'object'/'object_list'.
-        """
-        if self.context_object_name is not None:
-            return self.context_object_name
-
-        elif self.model is not None:
-            fmt = '%s_list' if is_list else '%s'
-            return fmt % self.model._meta.object_name.lower()
-
-        return None 
-
     def get_form(self, data=None, files=None, instance=None):
         """
         Returns a form instance.
@@ -123,7 +94,7 @@ class GenericModelView(View):
         cls = self.get_form_class()
         return cls(data=data, files=files, instance=instance)
 
-    # Pagination methods
+    # Pagination
 
     def get_paginate_by(self):
         """
@@ -160,7 +131,21 @@ class GenericModelView(View):
             msg = 'Invalid page (%s): %s'
             raise Http404(_(msg % (page_number, str(exc))))
 
-    # Response rendering methods
+    # Response rendering
+
+    def get_context_object_name(self, is_list=False):
+        """
+        Returns a descriptive name to use in the context in addition to the
+        default 'object'/'object_list'.
+        """
+        if self.context_object_name is not None:
+            return self.context_object_name
+
+        elif self.model is not None:
+            fmt = '%s_list' if is_list else '%s'
+            return fmt % self.model._meta.object_name.lower()
+
+        return None 
 
     def get_context_data(self, **kwargs):
         """
@@ -188,6 +173,27 @@ class GenericModelView(View):
                 kwargs[context_object_name] = self.object_list
 
         return kwargs
+
+    def get_template_names(self):
+        """
+        Returns a list of template names to use when rendering the response.
+
+        If `.template_name` is not specified, then defaults to the following
+        pattern: "{app_label}/{model_name}{template_name_suffix}.html"
+        """
+        if self.template_name is not None:
+            return [self.template_name]
+
+        if self.model is not None and self.template_name_suffix is not None:
+            return ["%s/%s%s.html" % (
+                self.model._meta.app_label,
+                self.model._meta.object_name.lower(),
+                self.template_name_suffix
+            )]
+
+        msg = "'%s' must either define 'template_name' or 'model' and " \
+            "'template_name_suffix', or override 'get_template_names()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def render_to_response(self, context):
         """
