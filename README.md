@@ -58,7 +58,7 @@ As an example, a custom view implemented against Django's `CreateView` class mig
  
 	    def form_valid(self, form):
 	        send_activation_email(self.request.user)
-	        return super(AccountActivationView, self).form_valid(form)
+	        return super(AccountCreateView, self).form_valid(form)
 
 Writing the same code with `django-vanilla-views`, you'd instead arrive at a simpler, more concise, and more direct style:
 
