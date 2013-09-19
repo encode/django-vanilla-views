@@ -4,15 +4,15 @@ The model views provide a simple set of generic views for working with Django qu
 
 They replicate the functionality of Django's existing `ListView`, `DetailView`, `CreateView`, `UpdateView` and `DeleteView`, but present a simpler API and implementation.
 
-	GenericModelView --+-- ListView
-	                   |
-	                   +-- DetailView
-	                   |
-	                   +-- CreateView
-	                   |
-	                   +-- UpdateView
-	                   |
-	                   +-- DeleteView
+	View -- GenericModelView --+-- ListView
+	                           |
+	                           +-- DetailView
+	                           |
+	                           +-- CreateView
+	                           |
+	                           +-- UpdateView
+	                           |
+	                           +-- DeleteView
 
 ---
 
@@ -225,7 +225,7 @@ You can override this method if you need to customize how the response is genera
 
     def render_to_response(context):
     	template = self.get_template_names()
-        return TemplateResponse(self.request, template, context, mime_type='text/plain')
+        return TemplateResponse(self.request, template, context, content_type='text/plain')
 
 You can also override this class in order to use a subclass of Django's standard `HttpResponse` or `TemplateResponse`.  For example, if you had a written a custom `JSONResponse` class, you might override the method like this:
 
