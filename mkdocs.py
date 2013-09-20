@@ -19,7 +19,7 @@ if local:
     index = 'index.html'
 else:
     base_url = 'http://django-vanilla-views.org'
-    suffix = '.html'
+    suffix = ''
     index = ''
 
 
