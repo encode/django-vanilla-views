@@ -42,7 +42,7 @@ For more complex lookups, override `get_object()`, like so:
 
 ---
 
-#### `initial`, `get_initial()`, `get_form_kwargs()`
+#### `initial`, `prefix`, `get_initial()`, `get_prefix()`, `get_form_kwargs()`
 
 ---
 
