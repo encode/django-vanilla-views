@@ -2,10 +2,10 @@
 <html lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Django Vanilla Views - Migration Guide</title>
+    <title>Django Vanilla Views - Django Braces compatibility</title>
     <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Migration Guide">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Django Braces compatibility">
     <meta name="author" content="Tom Christie">
 
     <!-- Le styles -->
@@ -30,7 +30,7 @@
 
     </script>
   </head>
-  <body onload="prettyPrint()" class="base-views-page">
+  <body onload="prettyPrint()" class="django-braces-compatibility-page">
 
   <div class="wrapper">
 
@@ -38,8 +38,8 @@
       <div class="navbar-inner">
         <div class="container-fluid">
             <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
-            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views">Next <i class="icon-arrow-right icon-white"></i></a>
-            <a class="repo-link btn btn-inverse btn-small " href="../api/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small " href="../topics/release-notes">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
             <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -129,62 +129,64 @@
           -->
             <div id="table-of-contents">
               <ul class="nav nav-list side-nav well sidebar-nav-fixed">
-                <li class="main"><a href="#migration-guide">Migration Guide</a></li>
-<li><a href="#base-views">Base Views</a></li>
+                <li class="main"><a href="#django-braces-compatibility">Django Braces compatibility</a></li>
+<li><a href="#access-mixins">Access Mixins</a></li>
+<li><a href="#form-mixins">Form Mixins</a></li>
+<li><a href="#other-mixins">Other Mixins</a></li>
 
               </ul>
             </div>
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="migration-guide">Migration Guide</h1>
-<h2 id="base-views">Base Views</h2>
-<p>This document provides the complete set of API changes between Django's existing basic generic views and the corresponding <code>django-vanilla-views</code> implementations.</p>
-<p>It covers <code>RedirectView</code>, <code>TemplateView</code> and <code>FormView</code>.  For the model views please <a href="model-views">see here</a>.</p>
-<p>Wherever API points have been removed, we provide examples of what you should be using instead.</p>
-<p>Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please [open a ticket][tickets], and we'll treat it as a bug.</p>
-<hr />
-<h4 id="initial-get_initial-get_form_kwargs"><code>initial</code>, <code>get_initial()</code>, <code>get_form_kwargs()</code></h4>
-<hr />
-<p><strong>These are all removed</strong>.  If you need to override how the form is intialized, just override <code>get_form()</code>.</p>
-<p>For example, instead of this:</p>
-<pre class="prettyprint lang-py"><code>def get_form_kwargs(self):
-    kwargs = super(AccountEditView, self).get_form_kwargs
-    kwargs['user'] = self.request.user
-    return kwargs
+            <h1 id="django-braces-compatibility">Django Braces compatibility</h1>
+<p>The <code>django-vanilla-views</code> package is almost completely compatible with the mixin classes provided by the popular <a href="https://github.com/brack3t/django-braces"><code>django-braces</code></a> package.</p>
+<p>The full set of mixins is listed below.  If you believe any of these entries to be incorrect, or if new mixins are added that are not listed here, then please <a href="https://github.com/tomchristie/django-vanilla-views/issues">open an issue on GitHub</a> so we can keep the information up to date.</p>
+<h2 id="access-mixins">Access Mixins</h2>
+<table border=1>
+<tr><th>Mixin class</th><th>API compatible</th></tr>
+<tr><td>LoginRequiredMixin</td><td>Yes</td></tr>
+<tr><td>PermissionRequiredMixin</td><td>Yes</td></tr>
+<tr><td>MultiplePermissionsRequiredMixin</td><td>Yes</td></tr>
+<tr><td>GroupRequiredMixin</td><td>Yes</td></tr>
+<tr><td>SuperuserRequiredMixin</td><td>Yes</td></tr>
+<tr><td>StaffuserRequiredMixin</td><td>Yes</td></tr>
+</table>
+
+<h2 id="form-mixins">Form Mixins</h2>
+<table border=1>
+<tr><th>Mixin class</th><th>API compatible</th></tr>
+<tr><td>CsrfExemptMixin</td><td>Yes</td></tr>
+<tr><td>UserFormKwargsMixin</td><td>No (*)</td></tr>
+<tr><td>UserKwargModelFormMixin</td><td>Yes</td></tr>
+<tr><td>SuccessURLRedirectListMixin</td><td>Yes</td></tr>
+<tr><td>FormValidMessageMixin</td><td>Yes</td></tr>
+<tr><td>FormInvalidMessageMixin</td><td>Yes</td></tr>
+<tr><td>FormMessagesMixin</td><td>Yes</td></tr>
+</table>
+
+<p>(*) The <code>UserFormKwargsMixin</code> class is not compatible because it overrides the <code>get_form_kwargs()</code> method, which does not exist in <code>django-vanilla-views</code>.</p>
+<p>You can instead write a <code>django-vanilla-views</code> compatible mixin, like this:</p>
+<pre class="prettyprint lang-py"><code>class UserFormKwargsMixin(object):
+    def get_form(self, data=None, files=None, **kwargs):
+        kwargs['user'] = self.request.user
+        return super(UserFormKwargsMixin, self).get_form(data=data, files=files, **kwargs)
 </code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
-    return AccountForm(data, files, user=self.request.user)
-</code></pre>
-<p>Or this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
-    cls = self.get_form_class()
-    return cls(data, files, user=self.request.user)
-</code></pre>
-<hr />
-<h4 id="content_type-response_cls"><code>content_type</code>, <code>response_cls</code></h4>
-<hr />
-<p><strong>These are removed</strong>.  If you need to customize how responses are rendered, you should override <code>render_to_response()</code>.</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    return JSONResponse(self.request, context)
-</code></pre>
-<p>If you needed to override the content type, you might write:</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    template = self.get_template_names()
-    return TemplateResponse(self.request, template, context, content_type='text/plain')
-</code></pre>
-<hr />
-<h4 id="get_form"><code>get_form()</code></h4>
-<hr />
-<p><strong>This is refactored</strong>, instead of taking a single <code>form_class</code> argument it instead takes the form <code>data</code> and <code>files</code> arguments, plus optional extra keyword arguments.  This results in a simpler, more direct control flow in the implementation.</p>
-<p>Instead of this in your views:</p>
-<pre class="prettyprint lang-py"><code>form_cls = self.get_form_class()
-form = self.get_form(form_cls)
-</code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>form = self.get_form(request.DATA, request.FILES)
-</code></pre>
+<h2 id="other-mixins">Other Mixins</h2>
+<table border=1>
+<tr><th>Mixin class</th><th>API compatible</th></tr>
+<tr><td>SetHeadlineMixin</td><td>Yes</td></tr>
+<tr><td>SelectRelatedMixin</td><td>Yes</td></tr>
+<tr><td>PrefetchRelatedMixin</td><td>Yes</td></tr>
+<tr><td>JSONResponseMixin</td><td>Yes</td></tr>
+<tr><td>JsonRequestResponseMixin</td><td>Yes</td></tr>
+<tr><td>AjaxResponseMixin</td><td>Yes</td></tr>
+<tr><td>OrderableListMixin</td><td>Yes</td></tr>
+<tr><td>CanonicalSlugDetailMixin</td><td>Yes (*)</td></tr>
+</table>
+
+<p>(*) The <code>CanonicalSlugDetailMixin</code> is not compatible in the current <code>1.2.2</code> PyPI release, but is compatible in the current <code>master</code> branch, and should be compatible in the next upcoming PyPI release.</p>
+<p>Note that if using <code>CanonicalSlugDetailMixin</code> you <strong>must</strong> also set a <code>slug_url_kwarg</code> on the view.</p>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->

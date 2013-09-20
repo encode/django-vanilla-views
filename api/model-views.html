@@ -64,6 +64,13 @@
                   <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
                 </ul>
               </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/topics/django-braces-compatibility">Django Braces Compatibility</a></li>
+                  <li><a href="http://django-vanilla-views.org/topics/release-notes">Release Notes</a></li>
+                </ul>
+              </li>
             </ul>
             <ul class="nav pull-right">
               <!-- TODO
@@ -135,7 +142,8 @@
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="model-views">Model Views</h1>
+            <p><a class="github" href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py"><span class="label label-info">model_views.py</span></a></p>
+<h1 id="model-views">Model Views</h1>
 <p>The model views provide a simple set of generic views for working with Django querysets and model instances.</p>
 <p>They replicate the functionality of Django's existing <code>ListView</code>, <code>DetailView</code>, <code>CreateView</code>, <code>UpdateView</code> and <code>DeleteView</code>, but present a simpler API and implementation.</p>
 <pre class="prettyprint lang-py"><code>View -- GenericModelView --+-- ListView
@@ -224,12 +232,13 @@
         return AccountForm
     return BasicAccountForm
 </code></pre>
-<h4 id="get_formself-datanone-filesnone-instancenone">.get_form(self, data=None, files=None, instance=None)</h4>
+<h4 id="get_formself-datanone-filesnone-kwargs">.get_form(self, data=None, files=None, **kwargs)</h4>
 <p>The method instantiates and returns the form instance that should be used for the view.</p>
 <p>By default this method simply calls <code>.get_form_class</code>, and then instantiates the class with the parameters that have been passed to it.</p>
 <p>You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None, instance=None):
-    return AccountForm(data, files, instance=instance, user=self.request.user)
+<pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None, **kwargs):
+    kwargs['user'] = self.request.user
+    return AccountForm(data, files, **kwargs)
 </code></pre>
 <h4 id="get_paginate_byself">.get_paginate_by(self)</h4>
 <p>Returns an integer representing the number of items to display on each page of a paginated list.  Returns <code>None</code> if pagination is not enabled.</p>
@@ -318,9 +327,12 @@
 <h4 id="success_url">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="form_validself-form">form_valid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the new object instance, and then return a redirect response.  The redirect URL will be the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling <code>.get_success_url()</code>.</p>
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+<h4 id="get_success_url">get_success_url()</h4>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
 <hr />
 <h2 id="updateview">UpdateView</h2>
 <p>A page which allows the user to update an existing object.</p>
@@ -328,14 +340,20 @@
 <h4 id="success_url_1">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="form_validself-form_1">form_valid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will be the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling <code>.get_success_url()</code>.</p>
 <h4 id="form_invalidself-form_1">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+<h4 id="get_success_url_1">get_success_url()</h4>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
 <hr />
 <h2 id="deleteview">DeleteView</h2>
 <p>The <code>.object</code> attribute will be set on this view.</p>
 <h4 id="success_url_2">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
+<h4 id="get_success_url_2">get_success_url()</h4>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute.</p>
+<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>post()</code> methhod directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->

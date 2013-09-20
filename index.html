@@ -64,6 +64,13 @@
                   <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
                 </ul>
               </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/topics/django-braces-compatibility">Django Braces Compatibility</a></li>
+                  <li><a href="http://django-vanilla-views.org/topics/release-notes">Release Notes</a></li>
+                </ul>
+              </li>
             </ul>
             <ul class="nav pull-right">
               <!-- TODO
@@ -136,7 +143,14 @@
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="django-vanilla-views">Django Vanilla Views</h1>
+            <p class="badges">
+<iframe src="http://ghbtns.com/github-btn.html?user=tomchristie&amp;repo=django-vanilla-views&amp;type=watch&amp;count=true" class="github-star-button" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="django-vanilla-views.org" data-text="Django Vanilla Views... http://django-rest-framework.org" data-count="none"></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</p>
+
+<h1 id="django-vanilla-views">Django Vanilla Views</h1>
 <p><strong>Beautifully simple class based views.</strong></p>
 <p><strong>Author:</strong> Tom Christie. Follow me on Twitter, <a href="http://twitter.com/_tomchristie">here</a>.</p>
 <p><a href="https://travis-ci.org/tomchristie/django-vanilla-views"><img alt="Build Status" src="https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master" /></a> <a href="https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master" /></a> <a href="http://badge.fury.io/py/django-vanilla-views"><img alt="PyPI version" src="https://badge.fury.io/py/django-vanilla-views.png" /></a></p>
@@ -271,10 +285,10 @@ CreateView --+                     +--&gt; ProcessFormView --&gt; View
      |
      +--&gt; GenericModelView.get_template_names()
 </code></pre>
-<p><strong>Total number of code statements covered</strong>: 30</p>
+<p><strong>Total number of code statements covered</strong>: ~40</p>
 <h4 id="calling-hierarchy-django-style">Calling hierarchy, Django style.</h4>
 <p>Here's the equivelent calling hierarchy in Django's <code>CreateView</code> implmentation.</p>
-<pre class="prettyprint lang-py"><code>CreateView.get()
+<pre class="prettyprint lang-py"><code>BaseCreateView.get()
 |
 +--&gt; ProcessFormView.get()
      |
@@ -287,6 +301,8 @@ CreateView --+                     +--&gt; ProcessFormView --&gt; View
      |    +--&gt; ModelFormMixin.get_form_kwargs()
      |    |    |
      |    |    +--&gt; FormMixin.get_form_kwargs()
+     |    |
+     |    +--&gt; FormMixin.get_prefix()
      |    |
      |    +--&gt; FormMixin.get_initial()
      |
@@ -306,7 +322,7 @@ CreateView --+                     +--&gt; ProcessFormView --&gt; View
           |
           +--&gt; TemplateResponseMixin.get_template_names()
 </code></pre>
-<p><strong>Total number of code statements covered</strong>: 72</p>
+<p><strong>Total number of code statements covered</strong>: ~70</p>
 <h2 id="example-project">Example project</h2>
 <p>This repository includes an example project in the <a href="https://github.com/tomchristie/django-vanilla-views/tree/master/example">example</a> directory.</p>
 <p>You can run the example locally by following these steps:</p>

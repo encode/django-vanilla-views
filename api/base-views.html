@@ -64,6 +64,13 @@
                   <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
                 </ul>
               </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/topics/django-braces-compatibility">Django Braces Compatibility</a></li>
+                  <li><a href="http://django-vanilla-views.org/topics/release-notes">Release Notes</a></li>
+                </ul>
+              </li>
             </ul>
             <ul class="nav pull-right">
               <!-- TODO
@@ -133,7 +140,8 @@
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="base-views">Base Views</h1>
+            <p><a class="github" href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/views.py"><span class="label label-info">views.py</span></a></p>
+<h1 id="base-views">Base Views</h1>
 <p>The base views provide a simple set of generic views for working with Django querysets and model instances.</p>
 <p>They replicate the functionality of Django's existing <code>TemplateView</code> and <code>FormView</code> but present a simpler API and implementation.  Django's standard <code>RedirectView</code> is also included for completeness.</p>
 <pre class="prettyprint lang-py"><code>View --+-------------------- RedirectView
@@ -164,12 +172,13 @@
         return AccountForm
     return BasicAccountForm
 </code></pre>
-<h4 id="get_formself-datanone-filesnone">.get_form(self, data=None, files=None)</h4>
+<h4 id="get_formself-datanone-filesnone-kwargs">.get_form(self, data=None, files=None, **kwargs)</h4>
 <p>The method instantiates and returns the form instance that should be used for the view.</p>
 <p>By default this method simply calls <code>.get_form_class()</code>, and then instantiates the class with the parameters that have been passed to it.</p>
 <p>You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None):
-    return AccountForm(data, files, user=self.request.user)
+<pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None, **kwargs):
+    kwargs['user'] = self.request.user
+    return AccountForm(data, files, **kwargs)
 </code></pre>
 <h4 id="get_context_dataself-kwargs">.get_context_data(self, **kwargs)</h4>
 <p>This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.</p>
@@ -235,6 +244,9 @@
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will use the <code>success_url</code> attribute if it is set, or will otherwise raise a configuration error.</p>
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+<h4 id="get_success_url">get_success_url()</h4>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute.</p>
+<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->
