@@ -1,3 +1,10 @@
+<p class="badges">
+<iframe src="http://ghbtns.com/github-btn.html?user=tomchristie&amp;repo=django-vanilla-views&amp;type=watch&amp;count=true" class="github-star-button" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="django-vanilla-views.org" data-text="Django Vanilla Views... http://django-rest-framework.org" data-count="none"></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</p>
+
 # Django Vanilla Views
 
 **Beautifully simple class based views.**
@@ -162,13 +169,13 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 	     |
 	     +--> GenericModelView.get_template_names()
 
-**Total number of code statements covered**: 30
+**Total number of code statements covered**: ~40
 
 #### Calling hierarchy, Django style.
 
 Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 
-	CreateView.get()
+	BaseCreateView.get()
 	|
 	+--> ProcessFormView.get()
 	     |
@@ -181,6 +188,8 @@ Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 	     |    +--> ModelFormMixin.get_form_kwargs()
 	     |    |    |
 	     |    |    +--> FormMixin.get_form_kwargs()
+	     |    |
+	     |    +--> FormMixin.get_prefix()
 	     |    |
 	     |    +--> FormMixin.get_initial()
 	     |
@@ -200,7 +209,7 @@ Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 	          |
 	          +--> TemplateResponseMixin.get_template_names()
 
-**Total number of code statements covered**: 72
+**Total number of code statements covered**: ~70
 
 ## Example project
 

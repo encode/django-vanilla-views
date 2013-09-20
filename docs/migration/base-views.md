@@ -55,30 +55,11 @@ If you needed to override the content type, you might write:
 
 ---
 
-#### `get_success_url()`
-
----
-
-**This is removed**, as it introduces an uneccessary layer of indirection.  It's cleaner to override `form_valid()` instead.  So, instead of this:
-
-    def get_success_url():
-        return self.object.account_activated_url()
-
-Write this:
-
-    def form_valid(form):
-        account = form.save()
-        return HttpResponseRedirect(account.account_activated_url())
-
-It's hardly any more code, and there's no indirection or implicit behavior going on anymore.
-
----
-
 #### `get_form()`
 
 ---
 
-**This is refactored**, instead of taking a single `form_class` argument it instead takes the form `data` and `files` arguments.  This results in a simpler, more direct control flow in the implementation.
+**This is refactored**, instead of taking a single `form_class` argument it instead takes the form `data` and `files` arguments, plus optional extra keyword arguments.  This results in a simpler, more direct control flow in the implementation.
 
 Instead of this in your views:
 

@@ -1,3 +1,5 @@
+<a class="github" href="model_views.py"></a>
+
 # Model Views
 
 The model views provide a simple set of generic views for working with Django querysets and model instances.
@@ -127,7 +129,7 @@ You can customize how the form class for the view is determined by overriding th
             return AccountForm
         return BasicAccountForm
 
-#### .get_form(self, data=None, files=None, instance=None)
+#### .get_form(self, data=None, files=None, **kwargs)
 
 The method instantiates and returns the form instance that should be used for the view.
 
@@ -135,8 +137,9 @@ By default this method simply calls `.get_form_class`, and then instantiates the
 
 You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:
 
-    def get_form(self, data=None, files=None, instance=None):
-        return AccountForm(data, files, instance=instance, user=self.request.user)
+    def get_form(self, data=None, files=None, **kwargs):
+        kwargs['user'] = self.request.user
+        return AccountForm(data, files, **kwargs)
 
 #### .get_paginate_by(self)
 
@@ -266,11 +269,17 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### form_valid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the new object instance, and then return a redirect response.  The redirect URL will be the `success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling `.get_success_url()`.
 
 #### form_invalid(self, form)
 
 This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
+
+#### get_success_url()
+
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+
+**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 
 ---
 
@@ -286,11 +295,17 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### form_valid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will be the `success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling `.get_success_url()`.
 
 #### form_invalid(self, form)
 
 This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
+
+#### get_success_url()
+
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+
+**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 
 ---
 
@@ -301,3 +316,9 @@ The `.object` attribute will be set on this view.
 #### success_url
 
 The URL that should be used when redirecting after a successful form submission.
+
+#### get_success_url()
+
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute.
+
+**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `post()` methhod directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.

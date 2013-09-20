@@ -45,6 +45,8 @@ path_list = [
     'api/model-views.md',
     'migration/base-views.md',
     'migration/model-views.md',
+    'topics/django-braces-compatibility.md',
+    'topics/release-notes.md',
 ]
 
 prev_url_map = {}

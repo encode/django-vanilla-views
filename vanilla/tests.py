@@ -6,6 +6,7 @@ from django.http import Http404
 from django.test import RequestFactory, TestCase
 from vanilla import *
 import types
+import warnings
 
 
 class Example(models.Model):
@@ -241,7 +242,7 @@ class TestList(BaseTestCase):
 
 class TestCreate(BaseTestCase):
     def test_create(self):
-        view = CreateView.as_view(model=Example, success_url='/success/')
+        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.post(view, data={'text': 'example'})
 
         self.assertEqual(response.status_code, 302)
@@ -250,7 +251,7 @@ class TestCreate(BaseTestCase):
         self.assertEqual(Example.objects.get().text, 'example')
 
     def test_create_failed(self):
-        view = CreateView.as_view(model=Example, success_url='/success/')
+        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.post(view, data={'text': 'example' * 100})
 
         self.assertEqual(response.status_code, 200)
@@ -263,7 +264,7 @@ class TestCreate(BaseTestCase):
         self.assertFalse(Example.objects.exists())
 
     def test_create_preview(self):
-        view = CreateView.as_view(model=Example, success_url='/success/')
+        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.get(view)
 
         self.assertEqual(response.status_code, 200)
@@ -274,11 +275,11 @@ class TestCreate(BaseTestCase):
         })
         self.assertFalse(Example.objects.exists())
 
-    def test_update_no_success_url(self):
-        view = CreateView.as_view(model=Example)
+    def test_create_no_success_url(self):
+        view = CreateView.as_view(model=Example, fields=('text',))
         self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
 
-    def test_detail_misconfigured_form_class(self):
+    def test_create_misconfigured_form_class(self):
         # If don't provide 'model' or 'form_class',
         # we should expect an ImproperlyConfigured exception.
         view = CreateView.as_view(
@@ -288,12 +289,19 @@ class TestCreate(BaseTestCase):
         )
         self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
 
+    def test_create_create_no_fields(self):
+        # If we don't provide `.fields` then expect a `PendingDeprecation` warning.
+        view = CreateView.as_view(model=Example, success_url='/success/')
+        with warnings.catch_warnings(record=True) as warned:
+            warnings.simplefilter("always")
+            self.post(view, data={'text': 'example'})
+            assert len(warned) == 1
 
 class TestUpdate(BaseTestCase):
     def test_update(self):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = UpdateView.as_view(model=Example, success_url='/success/')
+        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.post(view, pk=pk, data={'text': 'example'})
 
         self.assertEqual(response.status_code, 302)
@@ -305,7 +313,7 @@ class TestUpdate(BaseTestCase):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
         original_text = Example.objects.all()[0].text
-        view = UpdateView.as_view(model=Example, success_url='/success/')
+        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.post(view, pk=pk, data={'text': 'example' * 100})
 
         self.assertEqual(response.status_code, 200)
@@ -323,7 +331,7 @@ class TestUpdate(BaseTestCase):
     def test_update_preview(self):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = UpdateView.as_view(model=Example, success_url='/success/')
+        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
         response = self.get(view, pk=pk)
 
         self.assertEqual(response.status_code, 200)
@@ -339,9 +347,18 @@ class TestUpdate(BaseTestCase):
     def test_update_no_success_url(self):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = UpdateView.as_view(model=Example)
+        view = UpdateView.as_view(model=Example, fields=('text',))
         self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk, data={'text': 'example'})
 
+    def test_update_no_fields(self):
+        # If we don't provide `.fields` then expect a `PendingDeprecation` warning.
+        create_instance(quantity=3)
+        pk = Example.objects.all()[0].pk
+        view = UpdateView.as_view(model=Example, success_url='/success/')
+        with warnings.catch_warnings(record=True) as warned:
+            warnings.simplefilter("always")
+            self.post(view, pk=pk, data={'text': 'example'})
+            assert len(warned) == 1
 
 class TestDelete(BaseTestCase):
     def test_delete(self):

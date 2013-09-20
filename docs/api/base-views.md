@@ -1,3 +1,5 @@
+<a class="github" href="views.py"></a>
+
 # Base Views
 
 The base views provide a simple set of generic views for working with Django querysets and model instances.
@@ -44,7 +46,7 @@ You can customize how the form class for the view is determined by overriding th
             return AccountForm
         return BasicAccountForm
 
-#### .get_form(self, data=None, files=None)
+#### .get_form(self, data=None, files=None, **kwargs)
 
 The method instantiates and returns the form instance that should be used for the view.
 
@@ -52,8 +54,9 @@ By default this method simply calls `.get_form_class()`, and then instantiates t
 
 You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:
 
-    def get_form(self, data=None, files=None):
-        return AccountForm(data, files, user=self.request.user) 
+    def get_form(self, data=None, files=None, **kwargs):
+        kwargs['user'] = self.request.user
+        return AccountForm(data, files, **kwargs) 
 
 #### .get_context_data(self, **kwargs)
 
@@ -145,5 +148,12 @@ This method will be run when a valid form submission occurs, and should return a
 #### form_invalid(self, form)
 
 This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
+
+
+#### get_success_url()
+
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute.
+
+**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 
 [redirect-view-docs]: https://docs.djangoproject.com/en/dev/ref/class-based-views/base/#redirectview

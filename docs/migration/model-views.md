@@ -107,25 +107,6 @@ If you needed to override the content type, you might write:
 
 ---
 
-#### `get_success_url()`
-
----
-
-**This is removed**, as it introduces an uneccessary layer of indirection.  It's cleaner to override `form_valid()` instead.  So, instead of this:
-
-    def get_success_url():
-        return self.object.account_activated_url()
-
-Write this:
-
-    def form_valid(form):
-        account = form.save()
-        return HttpResponseRedirect(account.account_activated_url())
-
-It's hardly any more code, and there's no indirection or implicit behavior going on anymore.
-
----
-
 #### `paginate_queryset()`
 
 ---
@@ -167,6 +148,23 @@ In `django-vanilla-views`, if neither the `model` or `form_class` is specified, 
 The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation if `template_name` has been defined that will be the preferred option.  Failing that, if `template_name_field` is defined, and `.object` is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if `.object` is set on the view then `{app}/{model_name}{suffix}.html` will be used based on the class of the object.  Finally if `.model` is set on the view then  `{app}/{model_name}{suffix}.html` will be used.
 
 In `django-vanilla-views`, if `template_name` is defined that will be used, otherwise if `model` is defined it'll use `{app}/{model_name}{suffix}.html`.  If neither is defined it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_template_names()`.
+
+---
+
+#### `get_form()`
+
+---
+
+**This is refactored**, instead of taking a single `form_class` argument it instead takes the form `data` and `files` arguments, plus optional extra keyword arguments.  This results in a simpler, more direct control flow in the implementation.
+
+Instead of this in your views:
+
+    form_cls = self.get_form_class()
+    form = self.get_form(form_cls)
+
+You should write this:
+
+    form = self.get_form(request.DATA, request.FILES, instance=self.object)
 
 [base-views]: base-views.md
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
