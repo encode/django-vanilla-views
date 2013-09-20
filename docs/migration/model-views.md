@@ -1,14 +1,16 @@
-# Migration
+# Migration Guide
+
+## Model Views
 
 This document provides the complete set of API changes between Django's existing model views and the corresponding `django-vanilla-views` implementations.
+
+It covers `ListView`, `DetailView`, `CreateView`, `UpdateView` and `DeleteView`.  For the base views please [see here][base-views].
 
 Wherever API points have been removed, we provide examples of what you should be using instead.
 
 This scope of this migration guide may appear intimidating at first if you're intending to port your existing views accross to using `django-vanilla-views`, but you should be able to approach refactorings in a fairly simple step-by-step manner, working through each item in the list one at a time.
 
-If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.
-
-## Removed attributes and methods
+Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.
 
 ---
 
@@ -122,8 +124,6 @@ Write this:
 
 It's hardly any more code, and there's no indirection or implicit behavior going on anymore.
 
-## Simplified methods
-
 ---
 
 #### `paginate_queryset()`
@@ -154,7 +154,7 @@ The **call signature has been simplified**.  The `get_object()` method no longer
 
 ---
 
-The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation, if neither `model` or `form_class` is specified on the view, then `get_form_class()` will fallback to attempting to automatically generate a form class based on either the object currently being operated on, or failing that to generate a form class by calling `get_queryset` and determining a default model form class from that.
+The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation, if neither `model` or `form_class` is specified on the view, then `get_form_class()` will fallback to attempting to automatically generate a form class based on either the object currently being operated on, or failing that to generate a form class by calling `get_queryset` and determining a default model form class from that.  Failing both of those it'll raise a configuration error.
 
 In `django-vanilla-views`, if neither the `model` or `form_class` is specified, it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_form_class()`.
 
@@ -168,4 +168,5 @@ The behavior has been **refactored to use less magical behavior**.  In the regul
 
 In `django-vanilla-views`, if `template_name` is defined that will be used, otherwise if `model` is defined it'll use `{app}/{model_name}{suffix}.html`.  If neither is defined it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_template_names()`.
 
+[base-views]: base-views.md
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues

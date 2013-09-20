@@ -24,7 +24,7 @@
 
 Django's generic class based view implementation is unneccesarily complicated.
 
-Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
+Django vanilla views gives you **exactly the same functionality**, in a vastly simplified, easier-to-use package, including:
 
 * No mixin classes.
 * No calls to `super()`.
@@ -36,7 +36,7 @@ Remember, even though the API has been greatly simplified, everything you're abl
 
 If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see [the migration guide][migration].
 
-For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].
+For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].  There are also slides to a talk ['Design by minimalism'][design-by-minimalism] which introduces `django-vanilla-views` and was presented at the Django User Group, London.  You can also view the Django class heirarchy for the same set of views that `django-vanilla-views` provides, [here][django-cbv-heirarchy].
 
 ## Helping you to code smarter
 
@@ -260,6 +260,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
 [migration]: docs/migration.md
 [release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
+[design-by-minimalism]: http://slid.es/tomchristie/design-by-minimalism
+[django-cbv-heirarchy]: img/djangocbv.png
 [model_views.py]: https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py
 [base.py]: https://github.com/django/django/tree/master/django/views/generic/base.py
 [detail.py]: https://github.com/django/django/tree/master/django/views/generic/detail.py
