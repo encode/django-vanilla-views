@@ -295,7 +295,7 @@ class TestCreate(BaseTestCase):
         with warnings.catch_warnings(record=True) as warned:
             warnings.simplefilter("always")
             self.post(view, data={'text': 'example'})
-            assert len(warned) == 1
+            self.assertTrue(bool(warned))
 
 class TestUpdate(BaseTestCase):
     def test_update(self):
@@ -358,7 +358,7 @@ class TestUpdate(BaseTestCase):
         with warnings.catch_warnings(record=True) as warned:
             warnings.simplefilter("always")
             self.post(view, pk=pk, data={'text': 'example'})
-            assert len(warned) == 1
+            self.assertTrue(bool(warned))
 
 class TestDelete(BaseTestCase):
     def test_delete(self):

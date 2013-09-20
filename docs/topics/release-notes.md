@@ -30,4 +30,32 @@ You can determine your currently installed version using `pip freeze`:
 
 **Released**: **PENDING**
 
+* Introduced `get_success_url()` for easier mixin overriding of view behavior.
+* Introduced `**kwargs` arguments to `get_form` for easier mixin overriding.
+* Introduced 1.6's behavior of pending deprecation for `.fields` not specified when auto-generating model forms.
+
+## 0.2.1
+
+* **Beta release.**
+* Fix method names to match Django's.
+
+## 0.2.0
+
+* Fix some messaging.
+* Python 3 compatiblity.
+* Use Django's `RedirectView`.
+
+## 0.1.2
+
+* Simple module names.
+* Refactored pagination.
+
+## 0.1.1
+
+* Fix missing arguments.
+
+## 0.1.0
+
+* **Alpha release.**
+
 [django-deprecation-policy]: https://docs.djangoproject.com/en/dev/internals/release-process/#internal-release-deprecation-policy
