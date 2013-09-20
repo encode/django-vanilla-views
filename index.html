@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Django Vanilla Views - Beautifully simple class based views</title>
+    <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Django Vanilla Views">
+    <meta name="author" content="Tom Christie">
+
+    <!-- Le styles -->
+    <link href="http://django-vanilla-views.org/css/prettify.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/default.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18852272-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+    </script>
+  </head>
+  <body onload="prettyPrint()" class="index-page">
+
+  <div class="wrapper">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
+            <a class="repo-link btn btn-inverse btn-small " href="api/base-views">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small disabled" href="#"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="http://django-vanilla-views.org">Django Vanilla Views</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://django-vanilla-views.org">Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/api/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/api/model-views">Model Views</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Migration Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/migration/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav pull-right">
+              <!-- TODO
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Version: 2.0.0 <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Trunk</a></li>
+                  <li><a href="#">2.0.0</a></li>
+                </ul>
+              </li>
+            -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="body-content">
+      <div class="container-fluid">
+
+<!-- Search Modal -->
+<div id="searchModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="myModalLabel">Documentation search</h3>
+  </div>
+  <div class="modal-body">
+    <!-- Custom google search -->
+    <script>
+      (function() {
+        var cx = '015016005043623903336:rxraeohqk6w';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+    <gcse:search></gcse:search>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+        <div class="row-fluid">
+
+          <div class="span3">
+            <!-- TODO
+            <p style="margin-top: -12px">
+              <a class="btn btn-mini btn-primary" style="width: 60px">&laquo; previous</a>
+              <a class="btn btn-mini btn-primary" style="float: right; margin-right: 8px; width: 60px;">next &raquo;</a>
+            </p>
+          -->
+            <div id="table-of-contents">
+              <ul class="nav nav-list side-nav well sidebar-nav-fixed">
+                <li class="main"><a href="#django-vanilla-views">Django Vanilla Views</a></li>
+<li><a href="#helping-you-to-code-smarter">Helping you to code smarter</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#compare-and-contrast">Compare and contrast</a></li>
+<li><a href="#example-project">Example project</a></li>
+<li><a href="#license">License</a></li>
+
+              </ul>
+            </div>
+          </div>
+
+          <div id="main-content" class="span9">
+            <h1 id="django-vanilla-views">Django Vanilla Views</h1>
+<p><strong>Beautifully simple class based views.</strong></p>
+<p><strong>Author:</strong> Tom Christie. Follow me on Twitter, <a href="http://twitter.com/_tomchristie">here</a>.</p>
+<p><a href="https://travis-ci.org/tomchristie/django-vanilla-views"><img alt="Build Status" src="https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master" /></a> <a href="https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master" /></a> <a href="http://badge.fury.io/py/django-vanilla-views"><img alt="PyPI version" src="https://badge.fury.io/py/django-vanilla-views.png" /></a></p>
+<pre class="prettyprint lang-py"><code>View --+------------------------- RedirectView
+       |
+       +-- GenericView -------+-- TemplateView
+       |                      |
+       |                      +-- FormView
+       |
+       +-- GenericModelView --+-- ListView
+                              |
+                              +-- DetailView
+                              |
+                              +-- CreateView
+                              |
+                              +-- UpdateView
+                              |
+                              +-- DeleteView
+</code></pre>
+<p>Django's generic class based view implementation is unneccesarily complicated.</p>
+<p>Django vanilla views gives you <strong>exactly the same functionality</strong>, in a vastly simplified, easier-to-use package, including:</p>
+<ul>
+<li>No mixin classes.</li>
+<li>No calls to <code>super()</code>.</li>
+<li>A sane class heirarchy.</li>
+<li>A stripped down API.</li>
+<li>Simpler method implementations, with less magical behavior.</li>
+</ul>
+<p>Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in <code>django-vanilla-views</code>.  Although note that the package does not yet include the date based generic views.</p>
+<p>If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please <a href="https://github.com/tomchristie/django-vanilla-views/issues">open a ticket</a>, and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see <a href="docs/migration">the migration guide</a>.</p>
+<p>For further background, the original release announcement for <code>django-vanilla-views</code> is <a href="http://dabapps.com/blog/fixing-djangos-generic-class-based-views/">available here</a>.  There are also slides to a talk <a href="http://slid.es/tomchristie/design-by-minimalism">'Design by minimalism'</a> which introduces <code>django-vanilla-views</code> and was presented at the Django User Group, London.  You can also view the Django class heirarchy for the same set of views that <code>django-vanilla-views</code> provides, <a href="img/djangocbv.png">here</a>.</p>
+<h2 id="helping-you-to-code-smarter">Helping you to code smarter</h2>
+<p>Django Vanilla Views isn't just easier to use.  I'd contest that because it presents fewer points of API to override, you'll also end up writing better, more maintainable code as a result.  You'll be working from a smaller set of repeated patterns throughout your projects, and with a much more obvious flow control in your views.</p>
+<p>As an example, a custom view implemented against Django's <code>CreateView</code> class might typically look something like this:</p>
+<pre class="prettyprint lang-py"><code>class AccountCreateView(CreateView):
+    model = Account
+    form_class = AccountForm
+
+    def get_success_url(self):
+        return self.object.account_activated_url()
+
+    def get_form_kwargs(self):
+        kwargs = super(AccountView, self).get_form_kwargs()
+        kwargs['owner'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        send_activation_email(self.request.user)
+        return super(AccountCreateView, self).form_valid(form)
+</code></pre>
+<p>Writing the same code with <code>django-vanilla-views</code>, you'd instead arrive at a simpler, more concise, and more direct style:</p>
+<pre class="prettyprint lang-py"><code>class AccountCreateView(CreateView):
+    model = Account
+
+    def get_form(self, data=None, files=None, instance=None):
+        return AccountForm(data, files, instance=instance, owner=self.request.user)
+
+    def form_valid(self, form):
+        send_activation_email(self.request.user)
+        account = form.save()
+        return HttpResponseRedirect(account.account_activated_url())
+</code></pre>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><strong>Django</strong>: 1.3, 1.4, 1.5, 1.6</li>
+<li><strong>Python</strong>: 2.6, 2.7, 3.2, 3.3</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Install using pip.</p>
+<pre class="prettyprint lang-py"><code>pip install django-vanilla-views
+</code></pre>
+<h2 id="usage">Usage</h2>
+<p>Import and use the views.</p>
+<pre class="prettyprint lang-py"><code>from vanilla import ListView, DetailView
+</code></pre>
+<p>For example:</p>
+<pre class="prettyprint lang-py"><code>from django.core.urlresolvers import reverse_lazy
+from example.notes.models import Note
+from vanilla import CreateView, DeleteView, ListView, UpdateView
+
+class ListNotes(ListView):
+    model = Note
+
+
+class CreateNote(CreateView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+
+
+class EditNote(UpdateView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+
+
+class DeleteNote(DeleteView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+</code></pre>
+<h2 id="compare-and-contrast">Compare and contrast</h2>
+<p>To help give you an idea of the relative complexity of <code>django-vanilla-views</code> against Django's existing implementations, let's compare the two.</p>
+<h4 id="inheritance-hierachy-vanilla-style">Inheritance hierachy, Vanilla style.</h4>
+<p>The inheritance hierarchy of the views in <code>django-vanilla-views</code> is trivial, making it easy to figure out the control flow in the view.</p>
+<pre class="prettyprint lang-py"><code>CreateView --&gt; GenericModelView --&gt; View
+</code></pre>
+<p><strong>Total number of source files</strong>: 1 (<a href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py">model_views.py</a>)</p>
+<h4 id="inheritance-hierachy-django-style">Inheritance hierachy, Django style.</h4>
+<p>Here's the corresponding inheritance hiearchy in Django's implementation of <code>CreateView</code>.</p>
+<pre class="prettyprint lang-py"><code>             +--&gt; SingleObjectTemplateResponseMixin --&gt; TemplateResponseMixin
+             |
+CreateView --+                     +--&gt; ProcessFormView --&gt; View
+             |                     |                                       
+             +--&gt; BaseCreateView --+
+                                   |                     +--&gt; FormMixin ----------+
+                                   +--&gt; ModelFormMixin --+                        +--&gt; ContextMixin
+                                                         +--&gt; SingleObjectMixin --+
+</code></pre>
+<p><strong>Total number of source files</strong>: 3 (<a href="https://github.com/django/django/tree/master/django/views/generic/edit.py">edit.py</a>, <a href="https://github.com/django/django/tree/master/django/views/generic/detail.py">detail.py</a>, <a href="https://github.com/django/django/tree/master/django/views/generic/base.py">base.py</a>)</p>
+<hr />
+<h4 id="calling-hierarchy-vanilla-style">Calling hierarchy, Vanilla style.</h4>
+<p>Let's take a look at the calling hierarchy when making an HTTP <code>GET</code> request to <code>CreateView</code>.</p>
+<pre class="prettyprint lang-py"><code>CreateView.get()
+|
++--&gt; GenericModelView.get_form()
+|    |
+|    +--&gt; GenericModelView.get_form_class()
+|
++--&gt; GenericModelView.get_context_data()
+|    |
+|    +--&gt; GenericModelView.get_context_object_name()
+|
++--&gt; GenericModelView.render_to_response()
+     |
+     +--&gt; GenericModelView.get_template_names()
+</code></pre>
+<p><strong>Total number of code statements covered</strong>: 30</p>
+<h4 id="calling-hierarchy-django-style">Calling hierarchy, Django style.</h4>
+<p>Here's the equivelent calling hierarchy in Django's <code>CreateView</code> implmentation.</p>
+<pre class="prettyprint lang-py"><code>CreateView.get()
+|
++--&gt; ProcessFormView.get()
+     |
+     +--&gt; ModelFormMixin.get_form_class()
+     |    |
+     |    +--&gt; SingleObjectMixin.get_queryset()
+     |
+     +--&gt; FormMixin.get_form()
+     |    |
+     |    +--&gt; ModelFormMixin.get_form_kwargs()
+     |    |    |
+     |    |    +--&gt; FormMixin.get_form_kwargs()
+     |    |
+     |    +--&gt; FormMixin.get_initial()
+     |
+     +--&gt; ModelFormMixin.get_context_data()
+     |    |
+     |    +--&gt; SingleObjectMixin.get_context_object_name()
+     |    |
+     |    +--&gt; SingleObjectMixin.get_context_data()
+     |         |
+     |         +--&gt; SingleObjectMixin.get_context_object_name()
+     |         |
+     |         +--&gt; ContextMixin.get_context_data()
+     |
+     +--&gt; TemplateResponseMixin.render_to_response()
+          |
+          +--&gt; SingleObjectTemplateResponseMixin.get_template_names()
+          |
+          +--&gt; TemplateResponseMixin.get_template_names()
+</code></pre>
+<p><strong>Total number of code statements covered</strong>: 72</p>
+<h2 id="example-project">Example project</h2>
+<p>This repository includes an example project in the <a href="https://github.com/tomchristie/django-vanilla-views/tree/master/example">example</a> directory.</p>
+<p>You can run the example locally by following these steps:</p>
+<pre class="prettyprint lang-py"><code>git clone git://github.com/tomchristie/django-vanilla-views.git
+cd django-vanilla-views/example
+
+# Create a clean virtualenv environment and install Django
+virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+
+# Ensure the local copy of the 'vanilla' pacakge is on our path
+export PYTHONPATH=..:.
+
+# Run the project
+python ./manage.py syncdb --noinput
+python ./manage.py runserver
+</code></pre>
+<p>Open a browser and navigate to <code>http://127.0.0.1:8000</code>.</p>
+<p>Once you've added a few notes you should see something like the following:</p>
+<p><img alt="image" src="img/example.png" /></p>
+<hr />
+<h2 id="license">License</h2>
+<p>Copyright © Tom Christie.</p>
+<p>All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are met:</p>
+<p>Redistributions of source code must retain the above copyright notice, this 
+list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this 
+list of conditions and the following disclaimer in the documentation and/or 
+other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+          </div><!--/span-->
+        </div><!--/row-->
+      </div><!--/.fluid-container-->
+    </div><!--/.body content-->
+
+      <div id="push"></div>
+  </div><!--/.wrapper -->
+
+  <footer class="span12">
+    <p>Sponsored by <a href="http://dabapps.com/">DabApps</a>.</a></p>
+  </footer>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://django-vanilla-views.org/js/jquery-1.8.1-min.js"></script>
+    <script src="http://django-vanilla-views.org/js/prettify-1.0.js"></script>
+    <script src="http://django-vanilla-views.org/js/bootstrap-2.1.1-min.js"></script>
+    <script>
+      //$('.side-nav').scrollspy()
+      var shiftWindow = function() { scrollBy(0, -50) };
+      if (location.hash) shiftWindow();
+      window.addEventListener("hashchange", shiftWindow);
+
+      $('.dropdown-menu').on('click touchstart', function(event) {
+        event.stopPropagation();
+      });
+
+      // Dynamically force sidenav to no higher than browser window
+      $('.side-nav').css('max-height', window.innerHeight - 130);
+
+      $(function(){
+        $(window).resize(function(){
+          $('.side-nav').css('max-height', window.innerHeight - 130);
+        });
+      });
+    </script>
+</body></html>

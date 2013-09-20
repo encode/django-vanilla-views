@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Django Vanilla Views - Migration Guide</title>
+    <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Migration Guide">
+    <meta name="author" content="Tom Christie">
+
+    <!-- Le styles -->
+    <link href="http://django-vanilla-views.org/css/prettify.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/default.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18852272-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+    </script>
+  </head>
+  <body onload="prettyPrint()" class="base-views-page">
+
+  <div class="wrapper">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
+            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small " href="../api/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="http://django-vanilla-views.org">Django Vanilla Views</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://django-vanilla-views.org">Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/api/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/api/model-views">Model Views</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Migration Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/migration/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav pull-right">
+              <!-- TODO
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Version: 2.0.0 <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Trunk</a></li>
+                  <li><a href="#">2.0.0</a></li>
+                </ul>
+              </li>
+            -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="body-content">
+      <div class="container-fluid">
+
+<!-- Search Modal -->
+<div id="searchModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="myModalLabel">Documentation search</h3>
+  </div>
+  <div class="modal-body">
+    <!-- Custom google search -->
+    <script>
+      (function() {
+        var cx = '015016005043623903336:rxraeohqk6w';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+    <gcse:search></gcse:search>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+        <div class="row-fluid">
+
+          <div class="span3">
+            <!-- TODO
+            <p style="margin-top: -12px">
+              <a class="btn btn-mini btn-primary" style="width: 60px">&laquo; previous</a>
+              <a class="btn btn-mini btn-primary" style="float: right; margin-right: 8px; width: 60px;">next &raquo;</a>
+            </p>
+          -->
+            <div id="table-of-contents">
+              <ul class="nav nav-list side-nav well sidebar-nav-fixed">
+                <li class="main"><a href="#migration-guide">Migration Guide</a></li>
+<li><a href="#base-views">Base Views</a></li>
+
+              </ul>
+            </div>
+          </div>
+
+          <div id="main-content" class="span9">
+            <h1 id="migration-guide">Migration Guide</h1>
+<h2 id="base-views">Base Views</h2>
+<p>This document provides the complete set of API changes between Django's existing basic generic views and the corresponding <code>django-vanilla-views</code> implementations.</p>
+<p>It covers <code>RedirectView</code>, <code>TemplateView</code> and <code>FormView</code>.  For the model views please <a href="model-views">see here</a>.</p>
+<p>Wherever API points have been removed, we provide examples of what you should be using instead.</p>
+<p>Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please [open a ticket][tickets], and we'll treat it as a bug.</p>
+<hr />
+<h4 id="initial-get_initial-get_form_kwargs"><code>initial</code>, <code>get_initial()</code>, <code>get_form_kwargs()</code></h4>
+<hr />
+<p><strong>These are all removed</strong>.  If you need to override how the form is intialized, just override <code>get_form()</code>.</p>
+<p>For example, instead of this:</p>
+<pre class="prettyprint lang-py"><code>def get_form_kwargs(self):
+    kwargs = super(AccountEditView, self).get_form_kwargs
+    kwargs['user'] = self.request.user
+    return kwargs
+</code></pre>
+<p>You should write this:</p>
+<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
+    return AccountForm(data, files, user=self.request.user)
+</code></pre>
+<p>Or this:</p>
+<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
+    cls = self.get_form_class()
+    return cls(data, files, user=self.request.user)
+</code></pre>
+<hr />
+<h4 id="content_type-response_cls"><code>content_type</code>, <code>response_cls</code></h4>
+<hr />
+<p><strong>These are removed</strong>.  If you need to customize how responses are rendered, you should override <code>render_to_response()</code>.</p>
+<pre class="prettyprint lang-py"><code>def render_to_response(context):
+    return JSONResponse(self.request, context)
+</code></pre>
+<p>If you needed to override the content type, you might write:</p>
+<pre class="prettyprint lang-py"><code>def render_to_response(context):
+    template = self.get_template_names()
+    return TemplateResponse(self.request, template, context, content_type='text/plain')
+</code></pre>
+<hr />
+<h4 id="get_success_url"><code>get_success_url()</code></h4>
+<hr />
+<p><strong>This is removed</strong>, as it introduces an uneccessary layer of indirection.  It's cleaner to override <code>form_valid()</code> instead.  So, instead of this:</p>
+<pre class="prettyprint lang-py"><code>def get_success_url():
+    return self.object.account_activated_url()
+</code></pre>
+<p>Write this:</p>
+<pre class="prettyprint lang-py"><code>def form_valid(form):
+    account = form.save()
+    return HttpResponseRedirect(account.account_activated_url())
+</code></pre>
+<p>It's hardly any more code, and there's no indirection or implicit behavior going on anymore.</p>
+<hr />
+<h4 id="get_form"><code>get_form()</code></h4>
+<hr />
+<p><strong>This is refactored</strong>, instead of taking a single <code>form_class</code> argument it instead takes the form <code>data</code> and <code>files</code> arguments.  This results in a simpler, more direct control flow in the implementation.</p>
+<p>Instead of this in your views:</p>
+<pre class="prettyprint lang-py"><code>form_cls = self.get_form_class()
+form = self.get_form(form_cls)
+</code></pre>
+<p>You should write this:</p>
+<pre class="prettyprint lang-py"><code>form = self.get_form(request.DATA, request.FILES)
+</code></pre>
+          </div><!--/span-->
+        </div><!--/row-->
+      </div><!--/.fluid-container-->
+    </div><!--/.body content-->
+
+      <div id="push"></div>
+  </div><!--/.wrapper -->
+
+  <footer class="span12">
+    <p>Sponsored by <a href="http://dabapps.com/">DabApps</a>.</a></p>
+  </footer>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://django-vanilla-views.org/js/jquery-1.8.1-min.js"></script>
+    <script src="http://django-vanilla-views.org/js/prettify-1.0.js"></script>
+    <script src="http://django-vanilla-views.org/js/bootstrap-2.1.1-min.js"></script>
+    <script>
+      //$('.side-nav').scrollspy()
+      var shiftWindow = function() { scrollBy(0, -50) };
+      if (location.hash) shiftWindow();
+      window.addEventListener("hashchange", shiftWindow);
+
+      $('.dropdown-menu').on('click touchstart', function(event) {
+        event.stopPropagation();
+      });
+
+      // Dynamically force sidenav to no higher than browser window
+      $('.side-nav').css('max-height', window.innerHeight - 130);
+
+      $(function(){
+        $(window).resize(function(){
+          $('.side-nav').css('max-height', window.innerHeight - 130);
+        });
+      });
+    </script>
+</body></html>

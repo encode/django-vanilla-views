@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Django Vanilla Views - Base Views</title>
+    <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Base Views">
+    <meta name="author" content="Tom Christie">
+
+    <!-- Le styles -->
+    <link href="http://django-vanilla-views.org/css/prettify.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="http://django-vanilla-views.org/css/default.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18852272-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+    </script>
+  </head>
+  <body onload="prettyPrint()" class="base-views-page">
+
+  <div class="wrapper">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
+            <a class="repo-link btn btn-inverse btn-small " href="../api/model-views">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small " href="../index"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="http://django-vanilla-views.org">Django Vanilla Views</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://django-vanilla-views.org">Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/api/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/api/model-views">Model Views</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Migration Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://django-vanilla-views.org/migration/base-views">Base Views</a></li>
+                  <li><a href="http://django-vanilla-views.org/migration/model-views">Model Views</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav pull-right">
+              <!-- TODO
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Version: 2.0.0 <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Trunk</a></li>
+                  <li><a href="#">2.0.0</a></li>
+                </ul>
+              </li>
+            -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="body-content">
+      <div class="container-fluid">
+
+<!-- Search Modal -->
+<div id="searchModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="myModalLabel">Documentation search</h3>
+  </div>
+  <div class="modal-body">
+    <!-- Custom google search -->
+    <script>
+      (function() {
+        var cx = '015016005043623903336:rxraeohqk6w';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+    <gcse:search></gcse:search>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+        <div class="row-fluid">
+
+          <div class="span3">
+            <!-- TODO
+            <p style="margin-top: -12px">
+              <a class="btn btn-mini btn-primary" style="width: 60px">&laquo; previous</a>
+              <a class="btn btn-mini btn-primary" style="float: right; margin-right: 8px; width: 60px;">next &raquo;</a>
+            </p>
+          -->
+            <div id="table-of-contents">
+              <ul class="nav nav-list side-nav well sidebar-nav-fixed">
+                <li class="main"><a href="#base-views">Base Views</a></li>
+<li><a href="#genericview">GenericView</a></li>
+<li><a href="#redirectview">RedirectView</a></li>
+<li><a href="#templateview">TemplateView</a></li>
+<li><a href="#formview">FormView</a></li>
+
+              </ul>
+            </div>
+          </div>
+
+          <div id="main-content" class="span9">
+            <h1 id="base-views">Base Views</h1>
+<p>The base views provide a simple set of generic views for working with Django querysets and model instances.</p>
+<p>They replicate the functionality of Django's existing <code>TemplateView</code> and <code>FormView</code> but present a simpler API and implementation.  Django's standard <code>RedirectView</code> is also included for completeness.</p>
+<pre class="prettyprint lang-py"><code>View --+-------------------- RedirectView
+       |
+       +-- GenericView --+-- TemplateView
+                         |
+                         +-- FormView
+</code></pre>
+<hr />
+<h2 id="genericview">GenericView</h2>
+<p>The <code>GenericView</code> class is used as the base class for both <code>TemplateView</code> and <code>FormView</code>, and provides methods allowing for a default set of simple template and form actions.</p>
+<h3 id="attributes">Attributes</h3>
+<h4 id="form_class">form_class</h4>
+<p>The form class that should be used for edit views.  If you are using <code>FormView</code>, or your own custom view that calls <code>.get_form()</code>, then you should either set this attribute, or override one of the form generation methods.  Defaults to <code>None</code>.</p>
+<h4 id="template_name">template_name</h4>
+<p>A string representing the template name that should be used when rendering the response content.  You should either set this attribute or override one of the methods controlling how responses are rendered.  Defaults to <code>None</code>.</p>
+<h3 id="methods">Methods</h3>
+<h4 id="get_form_classself">.get_form_class(self)</h4>
+<p>This method returns the class that should be used for generating forms.</p>
+<p>The default behavior for this method is:</p>
+<ul>
+<li>If <code>.form_class</code> is specified on the view then use that.</li>
+<li>Otherwise raise a configuration error.</li>
+</ul>
+<p>You can customize how the form class for the view is determined by overriding this method.  For example:</p>
+<pre class="prettyprint lang-py"><code>def get_form_class(self):
+    is self.request.user.is_staff():
+        return AccountForm
+    return BasicAccountForm
+</code></pre>
+<h4 id="get_formself-datanone-filesnone">.get_form(self, data=None, files=None)</h4>
+<p>The method instantiates and returns the form instance that should be used for the view.</p>
+<p>By default this method simply calls <code>.get_form_class()</code>, and then instantiates the class with the parameters that have been passed to it.</p>
+<p>You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:</p>
+<pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None):
+    return AccountForm(data, files, user=self.request.user)
+</code></pre>
+<h4 id="get_context_dataself-kwargs">.get_context_data(self, **kwargs)</h4>
+<p>This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.</p>
+<p>The default behavior of this method is to return a dictionary populated with the following keys:</p>
+<ul>
+<li><code>view</code> - A reference to the view instance.</li>
+<li>Any additional keyword arguments supplied to the method.  In particular, <code>FormView</code> includes the <code>form</code> context key. </li>
+</ul>
+<p>You can override the method either to add additional context data:</p>
+<pre class="prettyprint lang-py"><code>def get_context_data(self, **kwargs):
+    context = super(MyView, self).get_context_data(**kwargs)
+    context['is_admin'] = self.request.user.is_admin
+    return context
+</code></pre>
+<p>Or to specify the complete set of context data explicitly:</p>
+<pre class="prettyprint lang-py"><code>def get_context_data(self, **kwargs):
+    kwargs['view'] = self
+    kwargs['is_admin'] = self.request.user.is_admin
+    kwargs['account'] = self.object
+    return kwargs
+</code></pre>
+<h4 id="get_template_namesself">.get_template_names(self)</h4>
+<p>Returns a list of strings that should be used for determining the template name when rendering the response.</p>
+<p>The default behavior for this method is:</p>
+<ul>
+<li>If <code>.template_name</code> is specified on the view then use that.</li>
+<li>Otherwise raise a configuration error.</li>
+</ul>
+<h4 id="render_to_responseself-context">.render_to_response(self, context)</h4>
+<p>Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.</p>
+<p>The default behaviour of this method is to return an instance of Django's standard <code>TemplateResponse</code>.</p>
+<p>You can override this method if you need to customize how the response is generated.  For example, to return a response with the <code>text/plain</code> content type instead of the standard <code>text/html</code>, you could write something like this:</p>
+<pre class="prettyprint lang-py"><code>def render_to_response(context):
+    template = self.get_template_names()
+    return TemplateResponse(self.request, template, context, content_type='text/plain')
+</code></pre>
+<p>You can also override this class in order to use a subclass of Django's standard <code>HttpResponse</code> or <code>TemplateResponse</code>.  For example, if you had a written a custom <code>JSONResponse</code> class, you might override the method like this:</p>
+<pre class="prettyprint lang-py"><code>def render_to_response(context):
+    return JSONResponse(self.request, context)
+</code></pre>
+<hr />
+<h2 id="redirectview">RedirectView</h2>
+<p>For completeness, Django's standard <code>RedirectView</code> is included in the <code>django-vanilla-views</code> package.  The class does not have any implementation or API differences from Django's implementation.</p>
+<p>You should <a href="https://docs.djangoproject.com/en/dev/ref/class-based-views/base/#redirectview">refer to the Django documentation</a> for further information.</p>
+<hr />
+<h2 id="templateview">TemplateView</h2>
+<p>A page which simply returns a template response.</p>
+<p>The context passed to the response template will be:</p>
+<ul>
+<li><code>view</code> - The view instance.</li>
+</ul>
+<hr />
+<h2 id="formview">FormView</h2>
+<p>A page which allows the user to preview and submit a form.</p>
+<p>The context passed to the response template will be:</p>
+<ul>
+<li><code>view</code> - The view instance.</li>
+<li><code>form</code> - The form instance.</li>
+</ul>
+<h4 id="success_url">success_url</h4>
+<p>The URL that should be used when redirecting after a successful form submission.</p>
+<h4 id="form_validself-form">form_valid(self, form)</h4>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will use the <code>success_url</code> attribute if it is set, or will otherwise raise a configuration error.</p>
+<h4 id="form_invalidself-form">form_invalid(self, form)</h4>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+          </div><!--/span-->
+        </div><!--/row-->
+      </div><!--/.fluid-container-->
+    </div><!--/.body content-->
+
+      <div id="push"></div>
+  </div><!--/.wrapper -->
+
+  <footer class="span12">
+    <p>Sponsored by <a href="http://dabapps.com/">DabApps</a>.</a></p>
+  </footer>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://django-vanilla-views.org/js/jquery-1.8.1-min.js"></script>
+    <script src="http://django-vanilla-views.org/js/prettify-1.0.js"></script>
+    <script src="http://django-vanilla-views.org/js/bootstrap-2.1.1-min.js"></script>
+    <script>
+      //$('.side-nav').scrollspy()
+      var shiftWindow = function() { scrollBy(0, -50) };
+      if (location.hash) shiftWindow();
+      window.addEventListener("hashchange", shiftWindow);
+
+      $('.dropdown-menu').on('click touchstart', function(event) {
+        event.stopPropagation();
+      });
+
+      // Dynamically force sidenav to no higher than browser window
+      $('.side-nav').css('max-height', window.innerHeight - 130);
+
+      $(function(){
+        $(window).resize(function(){
+          $('.side-nav').css('max-height', window.innerHeight - 130);
+        });
+      });
+    </script>
+</body></html>
