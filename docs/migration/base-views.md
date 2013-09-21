@@ -12,7 +12,7 @@ Although a large amount of API has been removed, the functionality that the view
 
 ---
 
-#### `initial`, `get_initial()`, `get_form_kwargs()`
+#### `initial`, `prefix`, `get_initial()`, `get_prefix()`, `get_form_kwargs()`
 
 ---
 
