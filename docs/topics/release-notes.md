@@ -36,10 +36,14 @@ You can determine your currently installed version using `pip freeze`:
 
 ## 0.2.1
 
+**Released**: 10th September 2013
+
 * **Beta release.**
 * Fix method names to match Django's.
 
 ## 0.2.0
+
+**Released**: 9th September 2013
 
 * Fix some messaging.
 * Python 3 compatiblity.
@@ -47,14 +51,20 @@ You can determine your currently installed version using `pip freeze`:
 
 ## 0.1.2
 
+**Released**: 7th September 2013
+
 * Simple module names.
 * Refactored pagination.
 
 ## 0.1.1
 
+**Released**: 2nd September 2013
+
 * Fix missing arguments.
 
 ## 0.1.0
+
+**Released**: 2nd September 2013
 
 * **Alpha release.**
 
