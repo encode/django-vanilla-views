@@ -176,13 +176,9 @@
     return kwargs
 </code></pre>
 <p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files, instance=None):
-    return AccountForm(data, files, user=self.request.user, instance=instance)
-</code></pre>
-<p>Or this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files, instance=None):
-    cls = self.get_form_class()
-    return cls(data, files, user=self.request.user, instance=instance)
+<pre class="prettyprint lang-py"><code>def get_form(self, data, files, **kwargs):
+    kwargs['user'] = self.request.user
+    return AccountForm(data, files, **kwargs)
 </code></pre>
 <hr />
 <h4 id="template_name_field"><code>template_name_field</code></h4>
@@ -219,7 +215,7 @@
 <p>You should write this:</p>
 <pre class="prettyprint lang-py"><code>page = self.paginate_queryset(queryset, page_size)
 </code></pre>
-<p>The page object contains a <code>.paginator</code> attribute, an <code>.object_list</code> attribute, and a <code>has_other_pages()</code> method, so you still have access to the same set of information that is available in the 4-tuple return style.</p>
+<p>The page object contains a <code>paginator</code> attribute, an <code>object_list</code> attribute, and a <code>has_other_pages()</code> method, so you still have access to the same set of information that is available in the 4-tuple return style.</p>
 <hr />
 <h4 id="get_object"><code>get_object()</code></h4>
 <hr />
@@ -232,7 +228,7 @@
 <hr />
 <h4 id="get_template_names"><code>get_template_names()</code></h4>
 <hr />
-<p>The behavior has been <strong>refactored to use less magical behavior</strong>.  In the regular Django implementation if <code>template_name</code> has been defined that will be the preferred option.  Failing that, if <code>template_name_field</code> is defined, and <code>.object</code> is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if <code>.object</code> is set on the view then <code>{app}/{model_name}{suffix}.html</code> will be used based on the class of the object.  Finally if <code>.model</code> is set on the view then  <code>{app}/{model_name}{suffix}.html</code> will be used.</p>
+<p>The behavior has been <strong>refactored to use less magical behavior</strong>.  In the regular Django implementation if <code>template_name</code> has been defined that will be the preferred option.  Failing that, if <code>template_name_field</code> is defined, and <code>object</code> is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if <code>object</code> is set on the view then <code>{app}/{model_name}{suffix}.html</code> will be used based on the class of the object.  Finally if <code>model</code> is set on the view then  <code>{app}/{model_name}{suffix}.html</code> will be used.</p>
 <p>In <code>django-vanilla-views</code>, if <code>template_name</code> is defined that will be used, otherwise if <code>model</code> is defined it'll use <code>{app}/{model_name}{suffix}.html</code>.  If neither is defined it'll raise a configuration error.  If you need any more complex behavior that that, you should override <code>get_template_names()</code>.</p>
 <hr />
 <h4 id="get_form"><code>get_form()</code></h4>

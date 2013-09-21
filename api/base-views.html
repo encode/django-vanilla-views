@@ -155,15 +155,15 @@
 <p>The <code>GenericView</code> class is used as the base class for both <code>TemplateView</code> and <code>FormView</code>, and provides methods allowing for a default set of simple template and form actions.</p>
 <h3 id="attributes">Attributes</h3>
 <h4 id="form_class">form_class</h4>
-<p>The form class that should be used for edit views.  If you are using <code>FormView</code>, or your own custom view that calls <code>.get_form()</code>, then you should either set this attribute, or override one of the form generation methods.  Defaults to <code>None</code>.</p>
+<p>The form class that should be used for edit views.  If you are using <code>FormView</code>, or your own custom view that calls <code>get_form()</code>, then you should either set this attribute, or override one of the form generation methods.  Defaults to <code>None</code>.</p>
 <h4 id="template_name">template_name</h4>
 <p>A string representing the template name that should be used when rendering the response content.  You should either set this attribute or override one of the methods controlling how responses are rendered.  Defaults to <code>None</code>.</p>
 <h3 id="methods">Methods</h3>
-<h4 id="get_form_classself">.get_form_class(self)</h4>
+<h4 id="get_form_classself">get_form_class(self)</h4>
 <p>This method returns the class that should be used for generating forms.</p>
 <p>The default behavior for this method is:</p>
 <ul>
-<li>If <code>.form_class</code> is specified on the view then use that.</li>
+<li>If <code>form_class</code> is specified on the view then use that.</li>
 <li>Otherwise raise a configuration error.</li>
 </ul>
 <p>You can customize how the form class for the view is determined by overriding this method.  For example:</p>
@@ -172,15 +172,15 @@
         return AccountForm
     return BasicAccountForm
 </code></pre>
-<h4 id="get_formself-datanone-filesnone-kwargs">.get_form(self, data=None, files=None, **kwargs)</h4>
+<h4 id="get_formself-datanone-filesnone-kwargs">get_form(self, data=None, files=None, **kwargs)</h4>
 <p>The method instantiates and returns the form instance that should be used for the view.</p>
-<p>By default this method simply calls <code>.get_form_class()</code>, and then instantiates the class with the parameters that have been passed to it.</p>
+<p>By default this method simply calls <code>get_form_class()</code>, and then instantiates the class with the parameters that have been passed to it.</p>
 <p>You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:</p>
 <pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None, **kwargs):
     kwargs['user'] = self.request.user
     return AccountForm(data, files, **kwargs)
 </code></pre>
-<h4 id="get_context_dataself-kwargs">.get_context_data(self, **kwargs)</h4>
+<h4 id="get_context_dataself-kwargs">get_context_data(self, **kwargs)</h4>
 <p>This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.</p>
 <p>The default behavior of this method is to return a dictionary populated with the following keys:</p>
 <ul>
@@ -200,14 +200,14 @@
     kwargs['account'] = self.object
     return kwargs
 </code></pre>
-<h4 id="get_template_namesself">.get_template_names(self)</h4>
+<h4 id="get_template_namesself">get_template_names(self)</h4>
 <p>Returns a list of strings that should be used for determining the template name when rendering the response.</p>
 <p>The default behavior for this method is:</p>
 <ul>
-<li>If <code>.template_name</code> is specified on the view then use that.</li>
+<li>If <code>template_name</code> is specified on the view then use that.</li>
 <li>Otherwise raise a configuration error.</li>
 </ul>
-<h4 id="render_to_responseself-context">.render_to_response(self, context)</h4>
+<h4 id="render_to_responseself-context">render_to_response(self, context)</h4>
 <p>Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.</p>
 <p>The default behaviour of this method is to return an instance of Django's standard <code>TemplateResponse</code>.</p>
 <p>You can override this method if you need to customize how the response is generated.  For example, to return a response with the <code>text/plain</code> content type instead of the standard <code>text/html</code>, you could write something like this:</p>
@@ -245,7 +245,7 @@
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url">get_success_url()</h4>
-<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute.</p>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
           </div><!--/span-->
         </div><!--/row-->

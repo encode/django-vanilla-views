@@ -154,13 +154,9 @@
     return kwargs
 </code></pre>
 <p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
-    return AccountForm(data, files, user=self.request.user)
-</code></pre>
-<p>Or this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files):
-    cls = self.get_form_class()
-    return cls(data, files, user=self.request.user)
+<pre class="prettyprint lang-py"><code>def get_form(self, data, files, **kwargs):
+    kwargs['user'] = self.request.user
+    return AccountForm(data, files, **kwargs)
 </code></pre>
 <hr />
 <h4 id="content_type-response_cls"><code>content_type</code>, <code>response_cls</code></h4>

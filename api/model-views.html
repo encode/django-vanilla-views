@@ -163,34 +163,34 @@
 <h4 id="model">model</h4>
 <p>The model class that the view operates on.  This is used as a shortcut to provide default behavior for the view.  The default behaviour may be overridden by setting more specific attributes, or by overriding methods on the view.</p>
 <h4 id="queryset">queryset</h4>
-<p>The base queryset that should be used for list views, or used when performing object lookups for detail views.  If set to <code>None</code> then a default queryset will be used based on the <code>.model</code> attribute.  Defaults to <code>None</code>.</p>
+<p>The base queryset that should be used for list views, or used when performing object lookups for detail views.  If set to <code>None</code> then a default queryset will be used based on the <code>model</code> attribute.  Defaults to <code>None</code>.</p>
 <h4 id="lookup_field">lookup_field</h4>
 <p>The name of the model field that should be used for object lookups.  Defaults to <code>'pk'</code>.</p>
 <h4 id="lookup_url_kwarg">lookup_url_kwarg</h4>
 <p>The name of the URLconf keyword argument that should be used for object lookups.  If unset this defaults to the same value as <code>lookup_field</code>.</p>
 <h4 id="form_class">form_class</h4>
-<p>The form class that should be used for create or update views.  If set to <code>None</code> then a default form class will be used based on the <code>.model</code> and <code>.fields</code> attributes.  Defaults to <code>None</code>.</p>
+<p>The form class that should be used for create or update views.  If set to <code>None</code> then a default form class will be used based on the <code>model</code> and <code>fields</code> attributes.  Defaults to <code>None</code>.</p>
 <h4 id="fields">fields</h4>
-<p>A list of strings, representing the fields that should be displayed by the form.  This may be used along with the <code>.model</code> attribute, as a shortcut to setting the <code>.form_class</code> attribute.  Defaults to <code>None</code>.</p>
+<p>A list of strings, representing the fields that should be displayed by the form.  This may be used along with the <code>model</code> attribute, as a shortcut to setting the <code>form_class</code> attribute.  Defaults to <code>None</code>.</p>
 <h4 id="paginate_by">paginate_by</h4>
 <p>The number of items to return in each page.  Set to a positive integer value to enable pagination.  If set to <code>None</code> then pagination is disabled.  Defaults to <code>None</code>.</p>
 <h4 id="page_kwarg">page_kwarg</h4>
 <p>The name of the URL query parameter that is used to select the active page in a paginated list.  For example: <code>http://example.com/widget_list?page=6</code>.  Defaults to <code>'page'</code>.</p>
 <h4 id="template_name">template_name</h4>
-<p>A string representing the template name that should be used when rendering the response content.  If set to <code>None</code>, then the template name will be automatically generated based on the <code>.model</code> attribute.  Defaults to <code>None</code>.</p>
+<p>A string representing the template name that should be used when rendering the response content.  If set to <code>None</code>, then the template name will be automatically generated based on the <code>model</code> attribute.  Defaults to <code>None</code>.</p>
 <h4 id="template_name_suffix">template_name_suffix</h4>
-<p>A suffix that should be appended when automatically generating template names based on the <code>.model</code> attribute.  Defaults to <code>None</code>, but is set to an appropriate value of either <code>'_detail'</code>, <code>'_list'</code> or <code>'_form'</code> by each of the model view subclasses.</p>
+<p>A suffix that should be appended when automatically generating template names based on the <code>model</code> attribute.  Defaults to <code>None</code>, but is set to an appropriate value of either <code>'_detail'</code>, <code>'_list'</code> or <code>'_form'</code> by each of the model view subclasses.</p>
 <h4 id="context_object_name">context_object_name</h4>
-<p>A key to use when passing the queryset or instance as context to the response.  If set to <code>None</code> then the context object name will be automatically generated based on the <code>.model</code> attribute.  Defaults to <code>None</code>.</p>
+<p>A key to use when passing the queryset or instance as context to the response.  If set to <code>None</code> then the context object name will be automatically generated based on the <code>model</code> attribute.  Defaults to <code>None</code>.</p>
 <hr />
 <h3 id="methods">Methods</h3>
-<h4 id="get_querysetself">.get_queryset(self)</h4>
+<h4 id="get_querysetself">get_queryset(self)</h4>
 <p>This method should return a queryset representing the set of instances that the view should operate on.</p>
 <p>The default behavior of this method is:</p>
 <ul>
-<li>If the <code>.queryset</code> attribute is set, then return that.</li>
-<li>Otherwise fallback to returning the default queryset for the model class as determined by the <code>.model</code> atttibute.</li>
-<li>If neither the <code>.queryset</code> or <code>.model</code> attributes are set then a configuration error will be raised.</li>
+<li>If the <code>queryset</code> attribute is set, then return that.</li>
+<li>Otherwise fallback to returning the default queryset for the model class as determined by the <code>model</code> atttibute.</li>
+<li>If neither the <code>queryset</code> or <code>model</code> attributes are set then a configuration error will be raised.</li>
 </ul>
 <p>You can customize how the querysets for the view are determined by overriding this method.  For example:</p>
 <pre class="prettyprint lang-py"><code>def get_queryset(self):
@@ -199,11 +199,11 @@
     """
     return Book.objects.filter(owner=self.request.user)
 </code></pre>
-<h4 id="get_objectself">.get_object(self)</h4>
+<h4 id="get_objectself">get_object(self)</h4>
 <p>This method should return a single model instance that the view should operate on, and is used by <code>DetailView</code>, <code>UpdateView</code> and <code>DeleteView</code>.</p>
 <p>The default behavior for this method is:</p>
 <ul>
-<li>Call <code>.get_queryset()</code> to determine the base queryset to use for the lookup.</li>
+<li>Call <code>get_queryset()</code> to determine the base queryset to use for the lookup.</li>
 <li>Perform the object lookup based on the <code>lookup_field</code> and  <code>lookup_url_kwarg</code> attributes.</li>
 <li>Raise an <code>HTTP 404 Not Found</code> response if the instance does not exist.</li>
 </ul>
@@ -218,13 +218,13 @@
     slug = self.kwargs['slug']
     return get_object_or_404(queryset, account=account, slug=slug)
 </code></pre>
-<h4 id="get_form_classself">.get_form_class(self)</h4>
+<h4 id="get_form_classself">get_form_class(self)</h4>
 <p>This method returns the class that should be used for generating forms.</p>
 <p>The default behavior of this method is:</p>
 <ul>
-<li>If the <code>.form_class</code> attribute is set, then return that.</li>
-<li>Otherwise fallback to returning an automatically generated form class based on the <code>.model</code> atttibute.</li>
-<li>If neither the <code>.form_class</code> or <code>.model</code> attributes are set then a configuration error will be raised.</li>
+<li>If the <code>form_class</code> attribute is set, then return that.</li>
+<li>Otherwise fallback to returning an automatically generated form class based on the <code>model</code> atttibute.</li>
+<li>If neither the <code>form_class</code> or <code>model</code> attributes are set then a configuration error will be raised.</li>
 </ul>
 <p>You can customize how the form class for the view is determined by overriding this method.  For example:</p>
 <pre class="prettyprint lang-py"><code>def get_form_class(self):
@@ -232,17 +232,17 @@
         return AccountForm
     return BasicAccountForm
 </code></pre>
-<h4 id="get_formself-datanone-filesnone-kwargs">.get_form(self, data=None, files=None, **kwargs)</h4>
+<h4 id="get_formself-datanone-filesnone-kwargs">get_form(self, data=None, files=None, **kwargs)</h4>
 <p>The method instantiates and returns the form instance that should be used for the view.</p>
-<p>By default this method simply calls <code>.get_form_class</code>, and then instantiates the class with the parameters that have been passed to it.</p>
+<p>By default this method simply calls <code>get_form_class</code>, and then instantiates the class with the parameters that have been passed to it.</p>
 <p>You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:</p>
 <pre class="prettyprint lang-py"><code>def get_form(self, data=None, files=None, **kwargs):
     kwargs['user'] = self.request.user
     return AccountForm(data, files, **kwargs)
 </code></pre>
-<h4 id="get_paginate_byself">.get_paginate_by(self)</h4>
+<h4 id="get_paginate_byself">get_paginate_by(self)</h4>
 <p>Returns an integer representing the number of items to display on each page of a paginated list.  Returns <code>None</code> if pagination is not enabled.</p>
-<p>By default this method simply returns value of the <code>.paginate_by</code> attribute.</p>
+<p>By default this method simply returns value of the <code>paginate_by</code> attribute.</p>
 <p>You can override this method to provide more complex behavior.  For example, to allow the user to override the default pagination size using a query parameter in the URL, you might write something like this:</p>
 <pre class="prettyprint lang-py"><code>def get_paginate_by(self):
     try:
@@ -250,25 +250,25 @@
     except ValueError:
         return None
 </code></pre>
-<h4 id="get_paginatorself-queryset-page_size">.get_paginator(self, queryset, page_size)</h4>
+<h4 id="get_paginatorself-queryset-page_size">get_paginator(self, queryset, page_size)</h4>
 <p>Given a queryset and a page size, returns a paginator instance to use for a paginated list view.</p>
 <p>By default this method simply instantiates Django's standard <code>Paginator</code> class with the arugments passed.</p>
 <p>If you need to customize how the paginator is instantiated you can override this method.  For example to ensure that the final page must always contain more than a single item, you could write something like this:</p>
 <pre class="prettyprint lang-py"><code>def get_paginator(self, queryset, page_size):
     return Paginator(queryset, page_size, orphans=2)
 </code></pre>
-<h4 id="paginate_querysetself-queryset-page_size">.paginate_queryset(self, queryset, page_size)</h4>
+<h4 id="paginate_querysetself-queryset-page_size">paginate_queryset(self, queryset, page_size)</h4>
 <p>Given a queryset and a page size, this method should return a <code>page</code> instance representing the current page that should be displayed in a paginated list view.  You can override this method if you need to customize how the page object is determined, but the default behavior should typically be sufficient.</p>
-<h4 id="get_context_object_nameself-is_listfalse">.get_context_object_name(self, is_list=False)</h4>
+<h4 id="get_context_object_nameself-is_listfalse">get_context_object_name(self, is_list=False)</h4>
 <p>This method returns a descriptive name that should be used when passing the object or object list as context to the template.  The name is used <em>in addition</em> to the default <code>'object'</code> or <code>'object_list'</code> context name.</p>
 <p>The method takes a single parameter <code>is_list</code>, which is a boolean indicating if the context object should be named as representing a list of data, or if it should be named as representing a single object.</p>
 <p>The default behavior of this method is:</p>
 <ul>
-<li>If the <code>.context_object_name</code> attribute is set, then use that.</li>
-<li>Otherwise fallback to automatically using <code>&lt;model_name&gt;</code> or <code>&lt;model_name&gt;_list</code> based on the <code>.model</code> attribute.</li>
-<li>If neither the <code>.context_object_name</code> or <code>.model</code> attributes are set, then only the standard <code>'object'</code> or <code>'object_list'</code> key will be used.  </li>
+<li>If the <code>context_object_name</code> attribute is set, then use that.</li>
+<li>Otherwise fallback to automatically using <code>&lt;model_name&gt;</code> or <code>&lt;model_name&gt;_list</code> based on the <code>model</code> attribute.</li>
+<li>If neither the <code>context_object_name</code> or <code>model</code> attributes are set, then only the standard <code>'object'</code> or <code>'object_list'</code> key will be used.  </li>
 </ul>
-<h4 id="get_context_dataself-kwargs">.get_context_data(self, **kwargs)</h4>
+<h4 id="get_context_dataself-kwargs">get_context_data(self, **kwargs)</h4>
 <p>This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.</p>
 <p>The default behavior of this method is to return a dictionary populated with the following keys:</p>
 <ul>
@@ -290,15 +290,15 @@
     kwargs['account'] = self.object
     return kwargs
 </code></pre>
-<h4 id="get_template_namesself">.get_template_names(self)</h4>
+<h4 id="get_template_namesself">get_template_names(self)</h4>
 <p>Returns a list of strings that should be used for determining the template name when rendering the response.</p>
 <p>The default behavior for this method is:</p>
 <ul>
-<li>If <code>.template_name</code> is specified on the view then use that.</li>
-<li>Otherwise fallback to automatically generating a template name as <code>{app_label}/{model_name}{suffix}.html</code>, using the <code>.model</code> attribute as set on the view.</li>
-<li>If neither of <code>.template_name</code> or <code>.model</code> attributes are set then raise a configuration error.</li>
+<li>If <code>template_name</code> is specified on the view then use that.</li>
+<li>Otherwise fallback to automatically generating a template name as <code>{app_label}/{model_name}{suffix}.html</code>, using the <code>model</code> attribute as set on the view.</li>
+<li>If neither of <code>template_name</code> or <code>model</code> attributes are set then raise a configuration error.</li>
 </ul>
-<h4 id="render_to_responseself-context">.render_to_response(self, context)</h4>
+<h4 id="render_to_responseself-context">render_to_response(self, context)</h4>
 <p>Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.</p>
 <p>The default behaviour of this method is to return an instance of Django's standard <code>TemplateResponse</code>.</p>
 <p>You can override this method if you need to customize how the response is generated.  For example, to return a response with the <code>text/plain</code> content type instead of the standard <code>text/html</code>, you could write something like this:</p>
@@ -313,46 +313,46 @@
 <hr />
 <h2 id="listview">ListView</h2>
 <p>A page representing a list of objects.  Optionally this may be present a paginated view onto the list.</p>
-<p>The <code>.object_list</code> attribute will be set on this view, and will typically be a queryset instance.</p>
+<p>The <code>object_list</code> attribute will be set on this view, and will typically be a queryset instance.</p>
 <h4 id="allow_empty">allow_empty</h4>
 <p>A boolean indicating if empty lists may be returned using the standard page template, or if they should cause an <code>HTTP 404 Not Found</code> response to be returned.  Defaults to <code>True</code>, indicating that empty pages should be allowed.</p>
 <hr />
 <h2 id="detailview">DetailView</h2>
 <p>A page representing a single object.</p>
-<p>The <code>.object</code> attribute will be set on this view, and will typically be a model instance.</p>
+<p>The <code>object</code> attribute will be set on this view, and will typically be a model instance.</p>
 <hr />
 <h2 id="createview">CreateView</h2>
 <p>A page which allows the user to create objects.</p>
-<p>If successfully created, then the <code>.object</code> attribute will be set on this view.</p>
+<p>If successfully created, then the <code>object</code> attribute will be set on this view.</p>
 <h4 id="success_url">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="form_validself-form">form_valid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling <code>.get_success_url()</code>.</p>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling <code>get_success_url()</code>.</p>
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url">get_success_url()</h4>
-<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
 <hr />
 <h2 id="updateview">UpdateView</h2>
 <p>A page which allows the user to update an existing object.</p>
-<p>The <code>.object</code> attribute will be set on this view.</p>
+<p>The <code>object</code> attribute will be set on this view.</p>
 <h4 id="success_url_1">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="form_validself-form_1">form_valid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling <code>.get_success_url()</code>.</p>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling <code>get_success_url()</code>.</p>
 <h4 id="form_invalidself-form_1">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url_1">get_success_url()</h4>
-<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
 <hr />
 <h2 id="deleteview">DeleteView</h2>
-<p>The <code>.object</code> attribute will be set on this view.</p>
+<p>The <code>object</code> attribute will be set on this view.</p>
 <h4 id="success_url_2">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="get_success_url_2">get_success_url()</h4>
-<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>.success_url</code> attribute.</p>
+<p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>post()</code> methhod directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
           </div><!--/span-->
         </div><!--/row-->
