@@ -27,14 +27,9 @@ For example, instead of this:
 
 You should write this:
 
-    def get_form(self, data, files):
-        return AccountForm(data, files, user=self.request.user)
-
-Or this:
-
-    def get_form(self, data, files):
-        cls = self.get_form_class()
-        return cls(data, files, user=self.request.user)
+    def get_form(self, data, files, **kwargs):
+    	kwargs['user'] = self.request.user
+        return AccountForm(data, files, **kwargs)
 
 ---
 

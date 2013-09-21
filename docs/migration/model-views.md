@@ -57,14 +57,9 @@ For example, instead of this:
 
 You should write this:
 
-    def get_form(self, data, files, instance=None):
-        return AccountForm(data, files, user=self.request.user, instance=instance)
-
-Or this:
-
-    def get_form(self, data, files, instance=None):
-        cls = self.get_form_class()
-        return cls(data, files, user=self.request.user, instance=instance)
+    def get_form(self, data, files, **kwargs):
+        kwargs['user'] = self.request.user
+        return AccountForm(data, files, **kwargs)
 
 ---
 
@@ -119,7 +114,7 @@ You should write this:
 
     page = self.paginate_queryset(queryset, page_size)
 
-The page object contains a `.paginator` attribute, an `.object_list` attribute, and a `has_other_pages()` method, so you still have access to the same set of information that is available in the 4-tuple return style.
+The page object contains a `paginator` attribute, an `object_list` attribute, and a `has_other_pages()` method, so you still have access to the same set of information that is available in the 4-tuple return style.
 
 ---
 
@@ -145,7 +140,7 @@ In `django-vanilla-views`, if neither the `model` or `form_class` is specified, 
 
 ---
 
-The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation if `template_name` has been defined that will be the preferred option.  Failing that, if `template_name_field` is defined, and `.object` is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if `.object` is set on the view then `{app}/{model_name}{suffix}.html` will be used based on the class of the object.  Finally if `.model` is set on the view then  `{app}/{model_name}{suffix}.html` will be used.
+The behavior has been **refactored to use less magical behavior**.  In the regular Django implementation if `template_name` has been defined that will be the preferred option.  Failing that, if `template_name_field` is defined, and `object` is set on the view, then a template name given by a field on the object will be the next most preferred option.  Next, if `object` is set on the view then `{app}/{model_name}{suffix}.html` will be used based on the class of the object.  Finally if `model` is set on the view then  `{app}/{model_name}{suffix}.html` will be used.
 
 In `django-vanilla-views`, if `template_name` is defined that will be used, otherwise if `model` is defined it'll use `{app}/{model_name}{suffix}.html`.  If neither is defined it'll raise a configuration error.  If you need any more complex behavior that that, you should override `get_template_names()`.
 

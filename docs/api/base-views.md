@@ -22,7 +22,7 @@ The `GenericView` class is used as the base class for both `TemplateView` and `F
 
 #### form_class
 
-The form class that should be used for edit views.  If you are using `FormView`, or your own custom view that calls `.get_form()`, then you should either set this attribute, or override one of the form generation methods.  Defaults to `None`.
+The form class that should be used for edit views.  If you are using `FormView`, or your own custom view that calls `get_form()`, then you should either set this attribute, or override one of the form generation methods.  Defaults to `None`.
 
 #### template_name
 
@@ -30,13 +30,13 @@ A string representing the template name that should be used when rendering the r
 
 ### Methods
 
-#### .get_form_class(self)
+#### get_form_class(self)
 
 This method returns the class that should be used for generating forms.
 
 The default behavior for this method is:
 
-* If `.form_class` is specified on the view then use that.
+* If `form_class` is specified on the view then use that.
 * Otherwise raise a configuration error.
 
 You can customize how the form class for the view is determined by overriding this method.  For example:
@@ -46,11 +46,11 @@ You can customize how the form class for the view is determined by overriding th
             return AccountForm
         return BasicAccountForm
 
-#### .get_form(self, data=None, files=None, **kwargs)
+#### get_form(self, data=None, files=None, **kwargs)
 
 The method instantiates and returns the form instance that should be used for the view.
 
-By default this method simply calls `.get_form_class()`, and then instantiates the class with the parameters that have been passed to it.
+By default this method simply calls `get_form_class()`, and then instantiates the class with the parameters that have been passed to it.
 
 You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:
 
@@ -58,7 +58,7 @@ You can customize this method in order to supply additional arguments to the for
         kwargs['user'] = self.request.user
         return AccountForm(data, files, **kwargs) 
 
-#### .get_context_data(self, **kwargs)
+#### get_context_data(self, **kwargs)
 
 This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.
 
@@ -82,16 +82,16 @@ Or to specify the complete set of context data explicitly:
         kwargs['account'] = self.object
         return kwargs
 
-#### .get_template_names(self)
+#### get_template_names(self)
 
 Returns a list of strings that should be used for determining the template name when rendering the response.
 
 The default behavior for this method is:
 
-* If `.template_name` is specified on the view then use that.
+* If `template_name` is specified on the view then use that.
 * Otherwise raise a configuration error.
 
-#### .render_to_response(self, context)
+#### render_to_response(self, context)
 
 Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.
 
@@ -152,7 +152,7 @@ This method will be run when a valid form submission occurs, and should return a
 
 #### get_success_url()
 
-Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute.
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `success_url` attribute.
 
 **Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 

@@ -30,7 +30,7 @@ The model class that the view operates on.  This is used as a shortcut to provid
 
 #### queryset
 
-The base queryset that should be used for list views, or used when performing object lookups for detail views.  If set to `None` then a default queryset will be used based on the `.model` attribute.  Defaults to `None`.
+The base queryset that should be used for list views, or used when performing object lookups for detail views.  If set to `None` then a default queryset will be used based on the `model` attribute.  Defaults to `None`.
 
 #### lookup_field
 
@@ -42,11 +42,11 @@ The name of the URLconf keyword argument that should be used for object lookups.
 
 #### form_class
 
-The form class that should be used for create or update views.  If set to `None` then a default form class will be used based on the `.model` and `.fields` attributes.  Defaults to `None`.
+The form class that should be used for create or update views.  If set to `None` then a default form class will be used based on the `model` and `fields` attributes.  Defaults to `None`.
 
 #### fields
 
-A list of strings, representing the fields that should be displayed by the form.  This may be used along with the `.model` attribute, as a shortcut to setting the `.form_class` attribute.  Defaults to `None`.
+A list of strings, representing the fields that should be displayed by the form.  This may be used along with the `model` attribute, as a shortcut to setting the `form_class` attribute.  Defaults to `None`.
 
 #### paginate_by
 
@@ -58,29 +58,29 @@ The name of the URL query parameter that is used to select the active page in a 
 
 #### template_name
 
-A string representing the template name that should be used when rendering the response content.  If set to `None`, then the template name will be automatically generated based on the `.model` attribute.  Defaults to `None`.
+A string representing the template name that should be used when rendering the response content.  If set to `None`, then the template name will be automatically generated based on the `model` attribute.  Defaults to `None`.
 
 #### template_name_suffix
 
-A suffix that should be appended when automatically generating template names based on the `.model` attribute.  Defaults to `None`, but is set to an appropriate value of either `'_detail'`, `'_list'` or `'_form'` by each of the model view subclasses.
+A suffix that should be appended when automatically generating template names based on the `model` attribute.  Defaults to `None`, but is set to an appropriate value of either `'_detail'`, `'_list'` or `'_form'` by each of the model view subclasses.
 
 #### context_object_name
 
-A key to use when passing the queryset or instance as context to the response.  If set to `None` then the context object name will be automatically generated based on the `.model` attribute.  Defaults to `None`.
+A key to use when passing the queryset or instance as context to the response.  If set to `None` then the context object name will be automatically generated based on the `model` attribute.  Defaults to `None`.
 
 ---
 
 ### Methods
 
-#### .get_queryset(self)
+#### get_queryset(self)
 
 This method should return a queryset representing the set of instances that the view should operate on.
 
 The default behavior of this method is:
 
-* If the `.queryset` attribute is set, then return that.
-* Otherwise fallback to returning the default queryset for the model class as determined by the `.model` atttibute.
-* If neither the `.queryset` or `.model` attributes are set then a configuration error will be raised.
+* If the `queryset` attribute is set, then return that.
+* Otherwise fallback to returning the default queryset for the model class as determined by the `model` atttibute.
+* If neither the `queryset` or `model` attributes are set then a configuration error will be raised.
 
 You can customize how the querysets for the view are determined by overriding this method.  For example:
 
@@ -90,13 +90,13 @@ You can customize how the querysets for the view are determined by overriding th
         """
         return Book.objects.filter(owner=self.request.user)
 
-#### .get_object(self)
+#### get_object(self)
 
 This method should return a single model instance that the view should operate on, and is used by `DetailView`, `UpdateView` and `DeleteView`.
 
 The default behavior for this method is:
 
-* Call `.get_queryset()` to determine the base queryset to use for the lookup.
+* Call `get_queryset()` to determine the base queryset to use for the lookup.
 * Perform the object lookup based on the `lookup_field` and  `lookup_url_kwarg` attributes.
 * Raise an `HTTP 404 Not Found` response if the instance does not exist.
 
@@ -112,15 +112,15 @@ You can perform custom object lookups by overriding this method.  For example:
         slug = self.kwargs['slug']
         return get_object_or_404(queryset, account=account, slug=slug)
 
-#### .get_form_class(self)
+#### get_form_class(self)
 
 This method returns the class that should be used for generating forms.
 
 The default behavior of this method is:
 
-* If the `.form_class` attribute is set, then return that.
-* Otherwise fallback to returning an automatically generated form class based on the `.model` atttibute.
-* If neither the `.form_class` or `.model` attributes are set then a configuration error will be raised.
+* If the `form_class` attribute is set, then return that.
+* Otherwise fallback to returning an automatically generated form class based on the `model` atttibute.
+* If neither the `form_class` or `model` attributes are set then a configuration error will be raised.
 
 You can customize how the form class for the view is determined by overriding this method.  For example:
 
@@ -129,11 +129,11 @@ You can customize how the form class for the view is determined by overriding th
             return AccountForm
         return BasicAccountForm
 
-#### .get_form(self, data=None, files=None, **kwargs)
+#### get_form(self, data=None, files=None, **kwargs)
 
 The method instantiates and returns the form instance that should be used for the view.
 
-By default this method simply calls `.get_form_class`, and then instantiates the class with the parameters that have been passed to it.
+By default this method simply calls `get_form_class`, and then instantiates the class with the parameters that have been passed to it.
 
 You can customize this method in order to supply additional arguments to the form class, add initial data, or other customizations.  For example:
 
@@ -141,11 +141,11 @@ You can customize this method in order to supply additional arguments to the for
         kwargs['user'] = self.request.user
         return AccountForm(data, files, **kwargs)
 
-#### .get_paginate_by(self)
+#### get_paginate_by(self)
 
 Returns an integer representing the number of items to display on each page of a paginated list.  Returns `None` if pagination is not enabled.
 
-By default this method simply returns value of the `.paginate_by` attribute.
+By default this method simply returns value of the `paginate_by` attribute.
 
 You can override this method to provide more complex behavior.  For example, to allow the user to override the default pagination size using a query parameter in the URL, you might write something like this:
 
@@ -155,7 +155,7 @@ You can override this method to provide more complex behavior.  For example, to 
         except ValueError:
             return None
 
-#### .get_paginator(self, queryset, page_size)
+#### get_paginator(self, queryset, page_size)
 
 Given a queryset and a page size, returns a paginator instance to use for a paginated list view.
 
@@ -166,11 +166,11 @@ If you need to customize how the paginator is instantiated you can override this
     def get_paginator(self, queryset, page_size):
         return Paginator(queryset, page_size, orphans=2)
 
-#### .paginate_queryset(self, queryset, page_size)
+#### paginate_queryset(self, queryset, page_size)
 
 Given a queryset and a page size, this method should return a `page` instance representing the current page that should be displayed in a paginated list view.  You can override this method if you need to customize how the page object is determined, but the default behavior should typically be sufficient.
 
-#### .get_context_object_name(self, is_list=False)
+#### get_context_object_name(self, is_list=False)
 
 This method returns a descriptive name that should be used when passing the object or object list as context to the template.  The name is used *in addition* to the default `'object'` or `'object_list'` context name.
 
@@ -178,11 +178,11 @@ The method takes a single parameter `is_list`, which is a boolean indicating if 
 
 The default behavior of this method is:
 
-* If the `.context_object_name` attribute is set, then use that.
-* Otherwise fallback to automatically using `<model_name>` or `<model_name>_list` based on the `.model` attribute.
-* If neither the `.context_object_name` or `.model` attributes are set, then only the standard `'object'` or `'object_list'` key will be used.  
+* If the `context_object_name` attribute is set, then use that.
+* Otherwise fallback to automatically using `<model_name>` or `<model_name>_list` based on the `model` attribute.
+* If neither the `context_object_name` or `model` attributes are set, then only the standard `'object'` or `'object_list'` key will be used.  
 
-#### .get_context_data(self, **kwargs)
+#### get_context_data(self, **kwargs)
 
 This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.
 
@@ -208,17 +208,17 @@ Or to specify the complete set of context data explicitly:
         kwargs['account'] = self.object
         return kwargs
 
-#### .get_template_names(self)
+#### get_template_names(self)
 
 Returns a list of strings that should be used for determining the template name when rendering the response.
 
 The default behavior for this method is:
 
-* If `.template_name` is specified on the view then use that.
-* Otherwise fallback to automatically generating a template name as `{app_label}/{model_name}{suffix}.html`, using the `.model` attribute as set on the view.
-* If neither of `.template_name` or `.model` attributes are set then raise a configuration error.
+* If `template_name` is specified on the view then use that.
+* Otherwise fallback to automatically generating a template name as `{app_label}/{model_name}{suffix}.html`, using the `model` attribute as set on the view.
+* If neither of `template_name` or `model` attributes are set then raise a configuration error.
 
-#### .render_to_response(self, context)
+#### render_to_response(self, context)
 
 Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.
 
@@ -241,7 +241,7 @@ You can also override this class in order to use a subclass of Django's standard
 
 A page representing a list of objects.  Optionally this may be present a paginated view onto the list.
 
-The `.object_list` attribute will be set on this view, and will typically be a queryset instance.
+The `object_list` attribute will be set on this view, and will typically be a queryset instance.
 
 #### allow_empty
 
@@ -253,7 +253,7 @@ A boolean indicating if empty lists may be returned using the standard page temp
 
 A page representing a single object.
 
-The `.object` attribute will be set on this view, and will typically be a model instance.
+The `object` attribute will be set on this view, and will typically be a model instance.
 
 ---
 
@@ -261,7 +261,7 @@ The `.object` attribute will be set on this view, and will typically be a model 
 
 A page which allows the user to create objects.
 
-If successfully created, then the `.object` attribute will be set on this view.
+If successfully created, then the `object` attribute will be set on this view.
 
 #### success_url
 
@@ -269,7 +269,7 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### form_valid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling `.get_success_url()`.
+This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling `get_success_url()`.
 
 #### form_invalid(self, form)
 
@@ -277,7 +277,7 @@ This method will be run when a valid form submission occurs, and should return a
 
 #### get_success_url()
 
-Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
 
 **Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 
@@ -287,7 +287,7 @@ Returns the URL that should be used when redirecting after a successful form sub
 
 A page which allows the user to update an existing object.
 
-The `.object` attribute will be set on this view.
+The `object` attribute will be set on this view.
 
 #### success_url
 
@@ -295,7 +295,7 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### form_valid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling `.get_success_url()`.
+This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling `get_success_url()`.
 
 #### form_invalid(self, form)
 
@@ -303,7 +303,7 @@ This method will be run when a valid form submission occurs, and should return a
 
 #### get_success_url()
 
-Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `success_url` attribute if it is set, or will be the return value of calling `get_absolute_url()` on the object instance.
 
 **Note**: If you are customizing the view behavior, we'd typically recommend overriding the `form_valid()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
 
@@ -311,7 +311,7 @@ Returns the URL that should be used when redirecting after a successful form sub
 
 ## DeleteView
 
-The `.object` attribute will be set on this view.
+The `object` attribute will be set on this view.
 
 #### success_url
 
@@ -319,6 +319,6 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### get_success_url()
 
-Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `.success_url` attribute.
+Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `success_url` attribute.
 
 **Note**: If you are customizing the view behavior, we'd typically recommend overriding the `post()` methhod directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
