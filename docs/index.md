@@ -51,6 +51,8 @@ Django Vanilla Views isn't just easier to use.  I'd contest that because it pres
 
 As an example, a custom view implemented against Django's `CreateView` class might typically look something like this:
 
+    from django.views.generic import CreateView
+
 	class AccountCreateView(CreateView):
 	    model = Account
 
@@ -63,7 +65,7 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 		    return AccountForm
 
 	    def get_form_kwargs(self):
-	        kwargs = super(AccountView, self).get_form_kwargs()
+	        kwargs = super(AccountCreateView, self).get_form_kwargs()
 	        kwargs['owner'] = self.request.user
 	        return kwargs
  
@@ -73,11 +75,14 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 
 Writing the same code with `django-vanilla-views`, you'd instead arrive at a simpler, more concise, and more direct style:
 
+    from vanilla import CreateView
+	from django.http import HttpResponseRedirect
+
 	class AccountCreateView(CreateView):
 	    model = Account
 
 	    def get_form(self, data=None, files=None, **kwargs):
-	        user = self.request.user
+	        user = self.request.user	        
 	        if user.is_staff:
 	            return AdminAccountForm(data, files, owner=user, **kwargs)
 	        return AccountForm(data, files, owner=user, **kwargs)
