@@ -185,7 +185,9 @@
 <h2 id="helping-you-to-code-smarter">Helping you to code smarter</h2>
 <p>Django Vanilla Views isn't just easier to use.  I'd contest that because it presents fewer points of API to override, you'll also end up writing better, more maintainable code as a result.  You'll be working from a smaller set of repeated patterns throughout your projects, and with a much more obvious flow control in your views.</p>
 <p>As an example, a custom view implemented against Django's <code>CreateView</code> class might typically look something like this:</p>
-<pre class="prettyprint lang-py"><code>class AccountCreateView(CreateView):
+<pre class="prettyprint lang-py"><code>from django.views.generic import CreateView
+
+class AccountCreateView(CreateView):
     model = Account
 
     def get_success_url(self):
@@ -197,7 +199,7 @@
         return AccountForm
 
     def get_form_kwargs(self):
-        kwargs = super(AccountView, self).get_form_kwargs()
+        kwargs = super(AccountCreateView, self).get_form_kwargs()
         kwargs['owner'] = self.request.user
         return kwargs
 
@@ -206,11 +208,14 @@
         return super(AccountCreateView, self).form_valid(form)
 </code></pre>
 <p>Writing the same code with <code>django-vanilla-views</code>, you'd instead arrive at a simpler, more concise, and more direct style:</p>
-<pre class="prettyprint lang-py"><code>class AccountCreateView(CreateView):
+<pre class="prettyprint lang-py"><code>from vanilla import CreateView
+from django.http import HttpResponseRedirect
+
+class AccountCreateView(CreateView):
     model = Account
 
     def get_form(self, data=None, files=None, **kwargs):
-        user = self.request.user
+        user = self.request.user            
         if user.is_staff:
             return AdminAccountForm(data, files, owner=user, **kwargs)
         return AccountForm(data, files, owner=user, **kwargs)
