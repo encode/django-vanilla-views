@@ -41,7 +41,7 @@ Django vanilla views gives you **exactly the same functionality**, in a vastly s
 
 Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in `django-vanilla-views`.  Although note that the package does not yet include the date based generic views.
 
-If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see [the migration guide][migration].
+If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
 
 For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].  There are also slides to a talk ['Design by minimalism'][design-by-minimalism] which introduces `django-vanilla-views` and was presented at the Django User Group, London.  You can also view the Django class heirarchy for the same set of views that `django-vanilla-views` provides, [here][django-cbv-heirarchy].
 
@@ -53,10 +53,14 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 
 	class AccountCreateView(CreateView):
 	    model = Account
-	    form_class = AccountForm
 
 	    def get_success_url(self):
 	        return self.object.account_activated_url()
+
+		def get_form_class(self):
+		    if self.request.user.is_staff:
+		        return AdminAccountForm
+		    return AccountForm
 
 	    def get_form_kwargs(self):
 	        kwargs = super(AccountView, self).get_form_kwargs()
@@ -72,8 +76,11 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 	class AccountCreateView(CreateView):
 	    model = Account
 
-	    def get_form(self, data=None, files=None, instance=None):
-	        return AccountForm(data, files, instance=instance, owner=self.request.user)
+	    def get_form(self, data=None, files=None, **kwargs):
+	        user = self.request.user
+	        if user.is_staff:
+	            return AdminAccountForm(data, files, owner=user, **kwargs)
+	        return AccountForm(data, files, owner=user, **kwargs)
 
 	    def form_valid(self, form):
 	        send_activation_email(self.request.user)
@@ -267,7 +274,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 [twitter]: http://twitter.com/_tomchristie
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
-[migration]: docs/migration.md
+[base-views-migration]: migration/base-views.md
+[model-views-migration]: migration/model-views.md
 [release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
 [design-by-minimalism]: http://slid.es/tomchristie/design-by-minimalism
 [django-cbv-heirarchy]: img/djangocbv.png

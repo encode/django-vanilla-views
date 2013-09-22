@@ -34,7 +34,7 @@ Django vanilla views gives you all the same functionality, in a vastly simplifie
 
 Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in `django-vanilla-views`.  Although note that the package does not yet include the date based generic views.
 
-If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see [the migration guide][migration].
+If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
 
 For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].
 
@@ -46,10 +46,14 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 
 	class AccountCreateView(CreateView):
 	    model = Account
-	    form_class = AccountForm
 
 	    def get_success_url(self):
 	        return self.object.account_activated_url()
+
+		def get_form_class(self):
+		    if self.request.user.is_staff:
+		        return AdminAccountForm
+		    return AccountForm
 
 	    def get_form_kwargs(self):
 	        kwargs = super(AccountView, self).get_form_kwargs()
@@ -65,8 +69,11 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 	class AccountCreateView(CreateView):
 	    model = Account
 
-	    def get_form(self, data=None, files=None, instance=None):
-	        return AccountForm(data, files, instance=instance, owner=self.request.user)
+	    def get_form(self, data=None, files=None, **kwargs):
+	        user = self.request.user
+	        if user.is_staff:
+	            return AdminAccountForm(data, files, owner=user, **kwargs)
+	        return AccountForm(data, files, owner=user, **kwargs)
 
 	    def form_valid(self, form):
 	        send_activation_email(self.request.user)
@@ -256,7 +263,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 [twitter]: http://twitter.com/_tomchristie
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
-[migration]: docs/migration.md
+[base-views-migration]: http://django-vanilla-views/migration/base-views
+[model-views-migration]: http://django-vanilla-views/migration/model-views
 [release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
 [model_views.py]: https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py
 [base.py]: https://github.com/django/django/tree/master/django/views/generic/base.py
