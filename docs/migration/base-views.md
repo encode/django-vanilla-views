@@ -66,3 +66,4 @@ You should write this:
     form = self.get_form(request.DATA, request.FILES)
 
 [model-views]: model-views.md
+[tickets]: https://github.com/tomchristie/django-vanilla-views/issues
