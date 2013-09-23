@@ -2,10 +2,10 @@
 <html lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Django Vanilla Views - Migration Guide</title>
+    <title>Django Vanilla Views - Django Extra Views Compatibility</title>
     <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Migration Guide">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Django Extra Views Compatibility">
     <meta name="author" content="Tom Christie">
 
     <!-- Le styles -->
@@ -30,7 +30,7 @@
 
     </script>
   </head>
-  <body onload="prettyPrint()" class="base-views-page">
+  <body onload="prettyPrint()" class="django-extra-views-compatibility-page">
 
   <div class="wrapper">
 
@@ -38,8 +38,8 @@
       <div class="navbar-inner">
         <div class="container-fluid">
             <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
-            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views">Next <i class="icon-arrow-right icon-white"></i></a>
-            <a class="repo-link btn btn-inverse btn-small " href="../api/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small " href="../topics/release-notes">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small " href="../topics/django-braces-compatibility"><i class="icon-arrow-left icon-white"></i> Previous</a>
             <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -131,58 +131,24 @@
           -->
             <div id="table-of-contents">
               <ul class="nav nav-list side-nav well sidebar-nav-fixed">
-                <li class="main"><a href="#migration-guide">Migration Guide</a></li>
-<li><a href="#base-views">Base Views</a></li>
+                <li class="main"><a href="#django-extra-views-compatibility">Django Extra Views Compatibility</a></li>
+<li><a href="#mixin-classes">Mixin classes</a></li>
 
               </ul>
             </div>
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="migration-guide">Migration Guide</h1>
-<h2 id="base-views">Base Views</h2>
-<p>This document provides the complete set of API changes between Django's existing basic generic views and the corresponding <code>django-vanilla-views</code> implementations.</p>
-<p>It covers <code>RedirectView</code>, <code>TemplateView</code> and <code>FormView</code>.  For the model views please <a href="model-views">see here</a>.</p>
-<p>Wherever API points have been removed, we provide examples of what you should be using instead.</p>
-<p>Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please [open a ticket][tickets], and we'll treat it as a bug.</p>
-<hr />
-<h4 id="initial-prefix-get_initial-get_prefix-get_form_kwargs"><code>initial</code>, <code>prefix</code>, <code>get_initial()</code>, <code>get_prefix()</code>, <code>get_form_kwargs()</code></h4>
-<hr />
-<p><strong>These are all removed</strong>.  If you need to override how the form is intialized, just override <code>get_form()</code>.</p>
-<p>For example, instead of this:</p>
-<pre class="prettyprint lang-py"><code>def get_form_kwargs(self):
-    kwargs = super(AccountEditView, self).get_form_kwargs
-    kwargs['user'] = self.request.user
-    return kwargs
-</code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files, **kwargs):
-    kwargs['user'] = self.request.user
-    return AccountForm(data, files, **kwargs)
-</code></pre>
-<hr />
-<h4 id="content_type-response_cls"><code>content_type</code>, <code>response_cls</code></h4>
-<hr />
-<p><strong>These are removed</strong>.  If you need to customize how responses are rendered, you should override <code>render_to_response()</code>.</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    return JSONResponse(self.request, context)
-</code></pre>
-<p>If you needed to override the content type, you might write:</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    template = self.get_template_names()
-    return TemplateResponse(self.request, template, context, content_type='text/plain')
-</code></pre>
-<hr />
-<h4 id="get_form"><code>get_form()</code></h4>
-<hr />
-<p><strong>This is refactored</strong>, instead of taking a single <code>form_class</code> argument it instead takes the form <code>data</code> and <code>files</code> arguments, plus optional extra keyword arguments.  This results in a simpler, more direct control flow in the implementation.</p>
-<p>Instead of this in your views:</p>
-<pre class="prettyprint lang-py"><code>form_cls = self.get_form_class()
-form = self.get_form(form_cls)
-</code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>form = self.get_form(request.DATA, request.FILES)
-</code></pre>
+            <h1 id="django-extra-views-compatibility">Django Extra Views Compatibility</h1>
+<p>You can use the views in <code>django-vanilla-views</code> alongside the additional views that are supplied by <a href="https://github.com/andrewingram/django-extra-views"><code>django-extra-views</code></a> just fine, although it will mean that you'll be working with Django's mixin style for some of your views, and the Vanilla style for other views.</p>
+<p>A good candidate for a future PyPI package would be a version of <a href="https://github.com/andrewingram/django-extra-views"><code>django-extra-views</code></a>, that uses the <code>django-vanilla-views</code> views as the base and is implemented in a more vanilla-like style.</p>
+<p>There are also a couple of stand-alone mixin classes provided by <a href="https://github.com/andrewingram/django-extra-views"><code>django-extra-views</code></a>, both of which are fully API compatible with <code>django-vanilla-views</code>.  The mixins are listed below.  If you believe either of these entries to be incorrect, or if new mixins are added that are not listed here, then please <a href="https://github.com/tomchristie/django-vanilla-views/issues">open an issue on GitHub</a> so we can keep the information up to date.</p>
+<h2 id="mixin-classes">Mixin classes</h2>
+<table border=1>
+<tr><th>Mixin class</th><th>API compatible</th></tr>
+<tr><td>SortableListMixin</td><td>Yes</td></tr>
+<tr><td>SearchableListMixin</td><td>Yes</td></tr>
+</table>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->

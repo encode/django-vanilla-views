@@ -2,10 +2,10 @@
 <html lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Django Vanilla Views - Migration Guide</title>
+    <title>Django Vanilla Views - Frequently Asked Questions</title>
     <link href="http://django-vanilla-views.org/img/favicon.ico" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Migration Guide">
+    <meta name="description" content="Django, CBV, GCBV, Generic class based views, Frequently Asked Questions">
     <meta name="author" content="Tom Christie">
 
     <!-- Le styles -->
@@ -30,7 +30,7 @@
 
     </script>
   </head>
-  <body onload="prettyPrint()" class="base-views-page">
+  <body onload="prettyPrint()" class="frequently-asked-questions-page">
 
   <div class="wrapper">
 
@@ -38,8 +38,8 @@
       <div class="navbar-inner">
         <div class="container-fluid">
             <a class="repo-link btn btn-primary btn-small" href="https://github.com/tomchristie/django-vanilla-views/tree/master">GitHub</a>
-            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views">Next <i class="icon-arrow-right icon-white"></i></a>
-            <a class="repo-link btn btn-inverse btn-small " href="../api/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
+            <a class="repo-link btn btn-inverse btn-small " href="../topics/django-braces-compatibility">Next <i class="icon-arrow-right icon-white"></i></a>
+            <a class="repo-link btn btn-inverse btn-small " href="../migration/model-views"><i class="icon-arrow-left icon-white"></i> Previous</a>
             <a class="repo-link btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><i class="icon-search icon-white"></i> Search</a>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -131,58 +131,33 @@
           -->
             <div id="table-of-contents">
               <ul class="nav nav-list side-nav well sidebar-nav-fixed">
-                <li class="main"><a href="#migration-guide">Migration Guide</a></li>
-<li><a href="#base-views">Base Views</a></li>
+                <li class="main"><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#design">Design</a></li>
 
               </ul>
             </div>
           </div>
 
           <div id="main-content" class="span9">
-            <h1 id="migration-guide">Migration Guide</h1>
-<h2 id="base-views">Base Views</h2>
-<p>This document provides the complete set of API changes between Django's existing basic generic views and the corresponding <code>django-vanilla-views</code> implementations.</p>
-<p>It covers <code>RedirectView</code>, <code>TemplateView</code> and <code>FormView</code>.  For the model views please <a href="model-views">see here</a>.</p>
-<p>Wherever API points have been removed, we provide examples of what you should be using instead.</p>
-<p>Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please [open a ticket][tickets], and we'll treat it as a bug.</p>
+            <h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h2 id="usage">Usage</h2>
+<h3 id="wont-i-lose-functionality-or-flexiblity">Won't I lose functionality or flexiblity?</h3>
+<p>No.  Everything you can do with Django's standard class based views you can also do with <code>django-vanilla-views</code>.  The migration guides cover all the bits of API that have been removed, and explain how you can easily achieve the same functionality with vanilla views.</p>
+<h3 id="can-i-still-use-mixin-classes">Can I still use mixin classes?</h3>
+<p>Sure.  The <code>django-vanilla-views</code> package doesn't happen to use mixin classes, but there's no reason you shouldn't do so in your own code.  Overuse of mixin classes can make for poor style, but when used in moderation they're a powerful and useful tool.</p>
+<h3 id="ive-already-learnt-djangos-gcbvs-is-this-worth-my-time">I've already learnt Django's GCBVs, is this worth my time?</h3>
+<p>Absolutely.  The API presented by <code>django-vanilla-views</code> is pretty simple so it shouldn't take you long to get up and running with it.  The generic class based views are the bread and butter of our web sites, and the small investment in time you'll make learning <code>django-vanilla-views</code> should pay of quickly as you'll be using simpler, more obvious views throughout.</p>
+<h3 id="is-it-stable">Is it stable?</h3>
+<p>The <code>django-vanilla-views</code> package has issued a 1.0 release and now has a <a href="release-notes">formal deprecation policy</a>.  You should be free to use it knowing that package upgrades will be fully documented and will not break API compatibility between releases.  We also have 100% code coverage and fully intend to quickly deal with any issues reported.</p>
 <hr />
-<h4 id="initial-prefix-get_initial-get_prefix-get_form_kwargs"><code>initial</code>, <code>prefix</code>, <code>get_initial()</code>, <code>get_prefix()</code>, <code>get_form_kwargs()</code></h4>
-<hr />
-<p><strong>These are all removed</strong>.  If you need to override how the form is intialized, just override <code>get_form()</code>.</p>
-<p>For example, instead of this:</p>
-<pre class="prettyprint lang-py"><code>def get_form_kwargs(self):
-    kwargs = super(AccountEditView, self).get_form_kwargs
-    kwargs['user'] = self.request.user
-    return kwargs
-</code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>def get_form(self, data, files, **kwargs):
-    kwargs['user'] = self.request.user
-    return AccountForm(data, files, **kwargs)
-</code></pre>
-<hr />
-<h4 id="content_type-response_cls"><code>content_type</code>, <code>response_cls</code></h4>
-<hr />
-<p><strong>These are removed</strong>.  If you need to customize how responses are rendered, you should override <code>render_to_response()</code>.</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    return JSONResponse(self.request, context)
-</code></pre>
-<p>If you needed to override the content type, you might write:</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
-    template = self.get_template_names()
-    return TemplateResponse(self.request, template, context, content_type='text/plain')
-</code></pre>
-<hr />
-<h4 id="get_form"><code>get_form()</code></h4>
-<hr />
-<p><strong>This is refactored</strong>, instead of taking a single <code>form_class</code> argument it instead takes the form <code>data</code> and <code>files</code> arguments, plus optional extra keyword arguments.  This results in a simpler, more direct control flow in the implementation.</p>
-<p>Instead of this in your views:</p>
-<pre class="prettyprint lang-py"><code>form_cls = self.get_form_class()
-form = self.get_form(form_cls)
-</code></pre>
-<p>You should write this:</p>
-<pre class="prettyprint lang-py"><code>form = self.get_form(request.DATA, request.FILES)
-</code></pre>
+<h2 id="design">Design</h2>
+<h3 id="isnt-a-mixin-less-style-less-dry">Isn't a mixin-less style less DRY?</h3>
+<p>Actually not really.  The base views and the model views do share some common implementation, but there's only a very small amount of duplication.</p>
+<p>It's also worth noting that Django's existing class based views also include duplication despite being implemented using a mixin style.  For example, both <code>SingleObjectMixin</code> and <code>MultipleObjectMixin</code> implement a functionally identical <code>get_queryset()</code> method.</p>
+<h3 id="what-about-seperation-of-concerns">What about seperation of concerns?</h3>
+<p>The base classes used by vanilla views include a small core set of functionality.  In the author's opinion there's no real practical issue introduced here, and the design trade-off should favor simplicity of implementation.</p>
+<p>It's also worth noting that Django's existing class based views also include unused methods in base classes despite being implemented using a mixin style.  For example, <code>CreateView</code> inherits from <code>SingleObjectMixin</code> and includes <code>get_object()</code> which is never used.</p>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->
