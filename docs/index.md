@@ -185,7 +185,7 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 
 #### Calling hierarchy, Django style.
 
-Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
+Here's the equivalent calling hierarchy in Django's `CreateView` implementation.
 
 	BaseCreateView.get()
 	|
