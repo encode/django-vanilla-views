@@ -1,6 +1,8 @@
-# Django Vanilla Views
+# [Django Vanilla Views][docs]
 
 **Beautifully simple class based views.**
+
+**Documentation**: Full documentation is at [django-vanilla-views.org][docs]
 
 **Author:** Tom Christie. Follow me on Twitter, [here][twitter].
 
@@ -266,6 +268,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+[docs]: http://django-vanilla-views.org
 [twitter]: http://twitter.com/_tomchristie
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
 [base-views-migration]: http://django-vanilla-views/migration/base-views

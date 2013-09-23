@@ -28,7 +28,7 @@ You can determine your currently installed version using `pip freeze`:
 
 ## 1.0.0
 
-**Released**: **PENDING**
+**Released**: 23rd September 2013
 
 * Introduced `get_success_url()` for easier mixin overriding of view behavior.
 * Introduced `**kwargs` arguments to `get_form` to kee API identicatal between base and model views, and for easier mixin overriding.

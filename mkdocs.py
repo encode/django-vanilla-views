@@ -45,7 +45,9 @@ path_list = [
     'api/model-views.md',
     'migration/base-views.md',
     'migration/model-views.md',
+    'topics/frequently-asked-questions.md',
     'topics/django-braces-compatibility.md',
+    'topics/django-extra-views-compatibility.md',
     'topics/release-notes.md',
 ]
 
