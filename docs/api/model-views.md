@@ -119,7 +119,7 @@ This method returns the class that should be used for generating forms.
 The default behavior of this method is:
 
 * If the `form_class` attribute is set, then return that.
-* Otherwise fallback to returning an automatically generated form class based on the `model` atttibute.
+* Otherwise fallback to returning an automatically generated form class based on the `model` attribute.
 * If neither the `form_class` or `model` attributes are set then a configuration error will be raised.
 
 You can customize how the form class for the view is determined by overriding this method.  For example:
