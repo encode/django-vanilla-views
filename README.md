@@ -30,7 +30,7 @@ Django vanilla views gives you all the same functionality, in a vastly simplifie
 
 * No mixin classes.
 * No calls to `super()`.
-* A sane class heirarchy.
+* A sane class hierarchy.
 * A stripped down API.
 * Simpler method implementations, with less magical behavior.
 
