@@ -7,7 +7,7 @@
 
 # Django Vanilla Views
 
-**Beautifully simple class based views.**
+**Beautifully simple class-based views.**
 
 **Author:** Tom Christie. Follow me on Twitter, [here][twitter].
 
@@ -29,21 +29,21 @@
                                   |
                                   +-- DeleteView
 
-Django's generic class based view implementation is unneccesarily complicated.
+Django's generic class-based view implementation is unneccesarily complicated.
 
 Django vanilla views gives you **exactly the same functionality**, in a vastly simplified, easier-to-use package, including:
 
 * No mixin classes.
 * No calls to `super()`.
-* A sane class heirarchy.
+* A sane class hierarchy.
 * A stripped down API.
 * Simpler method implementations, with less magical behavior.
 
 Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in `django-vanilla-views`.  Although note that the package does not yet include the date based generic views.
 
-If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
+If you believe you've found some behavior in Django's generic class-based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
 
-For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].  There are also slides to a talk ['Design by minimalism'][design-by-minimalism] which introduces `django-vanilla-views` and was presented at the Django User Group, London.  You can also view the Django class heirarchy for the same set of views that `django-vanilla-views` provides, [here][django-cbv-heirarchy].
+For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].  There are also slides to a talk ['Design by minimalism'][design-by-minimalism] which introduces `django-vanilla-views` and was presented at the Django User Group, London.  You can also view the Django class hierarchy for the same set of views that `django-vanilla-views` provides, [here][django-cbv-hierarchy].
 
 ## Helping you to code smarter
 
@@ -283,7 +283,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 [model-views-migration]: migration/model-views.md
 [release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
 [design-by-minimalism]: http://slid.es/tomchristie/design-by-minimalism
-[django-cbv-heirarchy]: img/djangocbv.png
+[django-cbv-hierarchy]: img/djangocbv.png
 [model_views.py]: https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py
 [base.py]: https://github.com/django/django/tree/master/django/views/generic/base.py
 [detail.py]: https://github.com/django/django/tree/master/django/views/generic/detail.py
