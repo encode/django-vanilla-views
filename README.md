@@ -1,6 +1,6 @@
 # [Django Vanilla Views][docs]
 
-**Beautifully simple class based views.**
+**Beautifully simple class-based views.**
 
 **Documentation**: Full documentation is at [django-vanilla-views.org][docs]
 
@@ -24,19 +24,19 @@
                                   |
                                   +-- DeleteView
 
-Django's generic class based view implementation is unneccesarily complicated.
+Django's generic class-based view implementation is unneccesarily complicated.
 
 Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
 
 * No mixin classes.
 * No calls to `super()`.
-* A sane class heirarchy.
+* A sane class hierarchy.
 * A stripped down API.
 * Simpler method implementations, with less magical behavior.
 
 Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in `django-vanilla-views`.  Although note that the package does not yet include the date based generic views.
 
-If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
+If you believe you've found some behavior in Django's generic class-based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the [base views][base-views-migration], and the [model views][model-views-migration].
 
 For further background, the original release announcement for `django-vanilla-views` is [available here][release-announcement].
 
