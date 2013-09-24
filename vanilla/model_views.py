@@ -153,7 +153,7 @@ class GenericModelView(View):
             fmt = '%s_list' if is_list else '%s'
             return fmt % self.model._meta.object_name.lower()
 
-        return None 
+        return None
 
     def get_context_data(self, **kwargs):
         """
@@ -325,7 +325,7 @@ class UpdateView(GenericModelView):
 
 class DeleteView(GenericModelView):
     success_url = None
-    template_name_suffix = '_detail'
+    template_name_suffix = '_confirm_delete'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
