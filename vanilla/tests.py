@@ -384,7 +384,7 @@ class TestDelete(BaseTestCase):
         response = self.get(view, pk=pk)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name, ['vanilla/example_detail.html'])
+        self.assertEqual(response.template_name, ['vanilla/example_confirm_delete.html'])
         self.assertContext(response, {
             'object': Example.objects.get(pk=pk),
             'example': Example.objects.get(pk=pk),
