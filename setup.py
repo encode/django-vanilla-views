@@ -11,7 +11,7 @@ import sys
 name = 'django-vanilla-views'
 package = 'vanilla'
 description = 'Beautifully simple class based views.'
-url = 'http://github.com/tomchristie/django-vanilla-views/'
+url = 'http://django-vanilla-views.org'
 author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
@@ -25,8 +25,9 @@ Django vanilla views gives you all the same functionality, in a vastly simplifie
 * No calls to super().
 * A sane class heirarchy.
 * A stripped down API.
-* Simpler method implementations, with less magical behavior."""
+* Simpler method implementations, with less magical behavior.
 
+Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in django-vanilla-views."""
 
 def get_version(package):
     """

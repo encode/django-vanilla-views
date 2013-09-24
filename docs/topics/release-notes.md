@@ -26,6 +26,12 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## 1.0.1
+
+**Released**: 24th September 2013
+
+* Fix `DeleteView.template_name_suffix` by changing it to `'_confirm_delete'`.
+
 ## 1.0.0
 
 **Released**: 23rd September 2013
