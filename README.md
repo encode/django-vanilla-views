@@ -2,7 +2,7 @@
 
 **Beautifully simple class-based views.**
 
-**Documentation**: Full documentation is at [django-vanilla-views.org][docs]
+**Documentation**: [django-vanilla-views.org][docs]
 
 **Author:** Tom Christie. Follow me on Twitter, [here][twitter].
 
