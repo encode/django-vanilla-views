@@ -176,7 +176,7 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 	     |
 	     +--> GenericModelView.get_template_names()
 
-**Total number of code statements covered**: 30
+**Total number of code statements covered**: ~40
 
 #### Calling hierarchy, Django style.
 
@@ -214,7 +214,7 @@ Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 	          |
 	          +--> TemplateResponseMixin.get_template_names()
 
-**Total number of code statements covered**: 72
+**Total number of code statements covered**: ~70
 
 ## Example project
 
