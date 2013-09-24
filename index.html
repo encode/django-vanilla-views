@@ -153,7 +153,7 @@
 </p>
 
 <h1 id="django-vanilla-views">Django Vanilla Views</h1>
-<p><strong>Beautifully simple class based views.</strong></p>
+<p><strong>Beautifully simple class-based views.</strong></p>
 <p><strong>Author:</strong> Tom Christie. Follow me on Twitter, <a href="http://twitter.com/_tomchristie">here</a>.</p>
 <p><a href="https://travis-ci.org/tomchristie/django-vanilla-views"><img alt="Build Status" src="https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master" /></a> <a href="https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master" /></a> <a href="http://badge.fury.io/py/django-vanilla-views"><img alt="PyPI version" src="https://badge.fury.io/py/django-vanilla-views.png" /></a></p>
 <pre class="prettyprint lang-py"><code>View --+------------------------- RedirectView
@@ -172,18 +172,18 @@
                               |
                               +-- DeleteView
 </code></pre>
-<p>Django's generic class based view implementation is unneccesarily complicated.</p>
+<p>Django's generic class-based view implementation is unneccesarily complicated.</p>
 <p>Django vanilla views gives you <strong>exactly the same functionality</strong>, in a vastly simplified, easier-to-use package, including:</p>
 <ul>
 <li>No mixin classes.</li>
 <li>No calls to <code>super()</code>.</li>
-<li>A sane class heirarchy.</li>
+<li>A sane class hierarchy.</li>
 <li>A stripped down API.</li>
 <li>Simpler method implementations, with less magical behavior.</li>
 </ul>
 <p>Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in <code>django-vanilla-views</code>.  Although note that the package does not yet include the date based generic views.</p>
-<p>If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please <a href="https://github.com/tomchristie/django-vanilla-views/issues">open a ticket</a>, and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the <a href="migration/base-views">base views</a>, and the <a href="migration/model-views">model views</a>.</p>
-<p>For further background, the original release announcement for <code>django-vanilla-views</code> is <a href="http://dabapps.com/blog/fixing-djangos-generic-class-based-views/">available here</a>.  There are also slides to a talk <a href="http://slid.es/tomchristie/design-by-minimalism">'Design by minimalism'</a> which introduces <code>django-vanilla-views</code> and was presented at the Django User Group, London.  You can also view the Django class heirarchy for the same set of views that <code>django-vanilla-views</code> provides, <a href="img/djangocbv.png">here</a>.</p>
+<p>If you believe you've found some behavior in Django's generic class-based views that can't also be trivially achieved in <code>django-vanilla-views</code>, then please <a href="https://github.com/tomchristie/django-vanilla-views/issues">open a ticket</a>, and we'll treat it as a bug.  To review the full set of API differences between the two implementations, please see the migration guide for the <a href="migration/base-views">base views</a>, and the <a href="migration/model-views">model views</a>.</p>
+<p>For further background, the original release announcement for <code>django-vanilla-views</code> is <a href="http://dabapps.com/blog/fixing-djangos-generic-class-based-views/">available here</a>.  There are also slides to a talk <a href="http://slid.es/tomchristie/design-by-minimalism">'Design by minimalism'</a> which introduces <code>django-vanilla-views</code> and was presented at the Django User Group, London.  You can also view the Django class hierarchy for the same set of views that <code>django-vanilla-views</code> provides, <a href="img/djangocbv.png">here</a>.</p>
 <h2 id="helping-you-to-code-smarter">Helping you to code smarter</h2>
 <p>Django Vanilla Views isn't just easier to use.  I'd contest that because it presents fewer points of API to override, you'll also end up writing better, more maintainable code as a result.  You'll be working from a smaller set of repeated patterns throughout your projects, and with a much more obvious flow control in your views.</p>
 <p>As an example, a custom view implemented against Django's <code>CreateView</code> class might typically look something like this:</p>
@@ -301,7 +301,7 @@ CreateView --+                     +--&gt; ProcessFormView --&gt; View
 </code></pre>
 <p><strong>Total number of code statements covered</strong>: ~40</p>
 <h4 id="calling-hierarchy-django-style">Calling hierarchy, Django style.</h4>
-<p>Here's the equivelent calling hierarchy in Django's <code>CreateView</code> implmentation.</p>
+<p>Here's the equivalent calling hierarchy in Django's <code>CreateView</code> implementation.</p>
 <pre class="prettyprint lang-py"><code>BaseCreateView.get()
 |
 +--&gt; ProcessFormView.get()
