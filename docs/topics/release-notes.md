@@ -26,6 +26,12 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## 1.0.2
+
+**Released**: 28th September 2013
+
+* Resolve PyPI packaging issue.
+
 ## 1.0.1
 
 **Released**: 24th September 2013
