@@ -271,8 +271,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 [docs]: http://django-vanilla-views.org
 [twitter]: http://twitter.com/_tomchristie
 [tickets]: https://github.com/tomchristie/django-vanilla-views/issues
-[base-views-migration]: http://django-vanilla-views/migration/base-views
-[model-views-migration]: http://django-vanilla-views/migration/model-views
+[base-views-migration]: http://django-vanilla-views.org/migration/base-views
+[model-views-migration]: http://django-vanilla-views.org/migration/model-views
 [release-announcement]: http://dabapps.com/blog/fixing-djangos-generic-class-based-views/
 [model_views.py]: https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py
 [base.py]: https://github.com/django/django/tree/master/django/views/generic/base.py
