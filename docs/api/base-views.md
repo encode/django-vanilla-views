@@ -143,7 +143,7 @@ The URL that should be used when redirecting after a successful form submission.
 
 #### form_valid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will use the `success_url` attribute if it is set, or will otherwise raise a configuration error.
+This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling `get_success_url()`.
 
 #### form_invalid(self, form)
 
