@@ -243,7 +243,7 @@
 <h4 id="success_url">success_url</h4>
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="form_validself-form">form_valid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance, and then return a redirect response.  The redirect URL will use the <code>success_url</code> attribute if it is set, or will otherwise raise a configuration error.</p>
+<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling <code>get_success_url()</code>.</p>
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url">get_success_url()</h4>
