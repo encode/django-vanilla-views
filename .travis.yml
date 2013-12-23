@@ -10,7 +10,7 @@ env:
     - DJANGO="django==1.3.7 --use-mirrors"
     - DJANGO="django==1.4.5 --use-mirrors"
     - DJANGO="django==1.5.1 --use-mirrors"
-    - DJANGO="https://www.djangoproject.com/download/1.6b1/tarball/"
+    - DJANGO="django==1.6.1 --use-mirrors"
 
 install:
     - pip install $DJANGO
