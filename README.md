@@ -245,7 +245,7 @@ You can run the example locally by following these steps:
 
 ## License
 
-Copyright © 2012-2013 Tom Christie.
+Copyright © 2013-2014 Tom Christie.
 
 All rights reserved.
 
