@@ -104,7 +104,7 @@ You can perform custom object lookups by overriding this method.  For example:
 
     def get_object(self):
         """
-        Custom object lookup that returns an instances based on both the
+        Custom object lookup that returns an instance based on both the
         'account' and 'slug' as provided in the URL keyword arguments.
         """
         queryset = self.get_queryset()
