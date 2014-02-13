@@ -239,7 +239,7 @@ You can also override this class in order to use a subclass of Django's standard
 
 ## ListView
 
-A page representing a list of objects.  Optionally this may be present a paginated view onto the list.
+A page representing a list of objects.  Optionally this may represent a paginated view onto the list.
 
 The `object_list` attribute will be set on this view, and will typically be a queryset instance.
 
