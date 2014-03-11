@@ -10,6 +10,24 @@ No.  Everything you can do with Django's standard class based views you can also
 
 Sure.  The `django-vanilla-views` package doesn't happen to use mixin classes, but there's no reason you shouldn't do so in your own code.  Overuse of mixin classes can make for poor style, but when used in moderation they're a powerful and useful tool.
 
+### Can I use decorators with Vanilla views?
+
+Yes.  Using decorators with `django-vanilla-view` is *exactly* the same as using decorators with Django's regular class-based view.  You can [wrap the decorator in the URL conf][urlconf-decorators], like so:
+
+    urlpatterns = patterns('',
+        (r'^create-report/', login_required(CreateReportView.as_view())),
+    )
+
+Alternatively you can apply a decorator to a view class itself, by [wrapping the dispatch method][dispatch-decorators]:
+
+    class CreateReportView(CreateView):
+        model = Report
+
+        @method_decorator(login_required)
+        def dispatch(self, *args, **kwargs):
+            return super(CreateReportView, self).dispatch(*args, **kwargs)
+
+
 ### I've already learnt Django's GCBVs, is this worth my time?
 
 Absolutely.  The API presented by `django-vanilla-views` is pretty simple so it shouldn't take you long to get up and running with it.  The generic class based views are the bread and butter of our web sites, and the small investment in time you'll make learning `django-vanilla-views` should pay of quickly as you'll be using simpler, more obvious views throughout.
@@ -34,4 +52,6 @@ The base classes used by vanilla views include a small core set of functionality
 
 It's also worth noting that Django's existing class based views also include unused methods in base classes despite being implemented using a mixin style.  For example, `CreateView` inherits from `SingleObjectMixin` and includes `get_object()` which is never used.
 
+[urlconf-decorators]: https://docs.djangoproject.com/en/dev/topics/class-based-views/intro/#decorating-in-urlconf
+[dispatch-decorators]: https://docs.djangoproject.com/en/dev/topics/class-based-views/intro/#decorating-the-class
 [deprecation-policy]: release-notes.md
