@@ -146,6 +146,20 @@
 <p>No.  Everything you can do with Django's standard class based views you can also do with <code>django-vanilla-views</code>.  The migration guides cover all the bits of API that have been removed, and explain how you can easily achieve the same functionality with vanilla views.</p>
 <h3 id="can-i-still-use-mixin-classes">Can I still use mixin classes?</h3>
 <p>Sure.  The <code>django-vanilla-views</code> package doesn't happen to use mixin classes, but there's no reason you shouldn't do so in your own code.  Overuse of mixin classes can make for poor style, but when used in moderation they're a powerful and useful tool.</p>
+<h3 id="can-i-use-decorators-with-vanilla-views">Can I use decorators with Vanilla views?</h3>
+<p>Yes.  Using decorators with <code>django-vanilla-view</code> is <em>exactly</em> the same as using decorators with Django's regular class-based view.  You can <a href="https://docs.djangoproject.com/en/dev/topics/class-based-views/intro/#decorating-in-urlconf">wrap the decorator in the URL conf</a>, like so:</p>
+<pre class="prettyprint lang-py"><code>urlpatterns = patterns('',
+    (r'^create-report/', login_required(CreateReportView.as_view())),
+)
+</code></pre>
+<p>Alternatively you can apply a decorator to a view class itself, by <a href="https://docs.djangoproject.com/en/dev/topics/class-based-views/intro/#decorating-the-class">wrapping the dispatch method</a>:</p>
+<pre class="prettyprint lang-py"><code>class CreateReportView(CreateView):
+    model = Report
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CreateReportView, self).dispatch(*args, **kwargs)
+</code></pre>
 <h3 id="ive-already-learnt-djangos-gcbvs-is-this-worth-my-time">I've already learnt Django's GCBVs, is this worth my time?</h3>
 <p>Absolutely.  The API presented by <code>django-vanilla-views</code> is pretty simple so it shouldn't take you long to get up and running with it.  The generic class based views are the bread and butter of our web sites, and the small investment in time you'll make learning <code>django-vanilla-views</code> should pay of quickly as you'll be using simpler, more obvious views throughout.</p>
 <h3 id="is-it-stable">Is it stable?</h3>
