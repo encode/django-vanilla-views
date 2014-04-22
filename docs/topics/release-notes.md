@@ -26,6 +26,12 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## 1.0.3
+
+**Released**: 22nd April 2014
+
+* Add missing `*args`, `**kwargs` to `FormView.post()`
+
 ## 1.0.2
 
 **Released**: 28th September 2013
