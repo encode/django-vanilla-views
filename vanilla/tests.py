@@ -491,8 +491,33 @@ class TestTemplateView(BaseTestCase):
         view = TemplateView.as_view()
         self.assertRaises(ImproperlyConfigured, self.get, view)
 
+    def test_template_view_adds_kwargs_to_context(self):
+        view = TemplateView.as_view(template_name='example.html')
+        # Should we check that arg1 and arg2 are attributes of the class,
+        # like as_view(arg1='foo', arg2='bar') does?
+        response = self.get(view, arg1='foo', arg2='bar')
+        self.assertContext(response, dict(view=InstanceOf(TemplateView),
+            arg1='foo', arg2='bar'))
+
 
 class TestFormView(BaseTestCase):
+    def test_form_get_adds_kwargs_to_context(self):
+        view = FormView.as_view(
+            form_class=ExampleForm,
+            success_url='/success/',
+            template_name='example.html'
+        )
+
+        # Should we check that arg1 and arg2 are attributes of the class,
+        # like as_view(arg1='foo', arg2='bar') does?
+        response = self.get(view, arg1='foo', arg2='bar')
+        self.assertContext(response, {
+            'view': InstanceOf(FormView),
+            'form': InstanceOf(ExampleForm),
+            'arg1': 'foo',
+            'arg2': 'bar',
+        })
+
     def test_form_success(self):
         view = FormView.as_view(
             form_class=ExampleForm,
@@ -510,14 +535,18 @@ class TestFormView(BaseTestCase):
             success_url='/success/',
             template_name='example.html'
         )
-        response = self.post(view, data={'text': 'example' * 100})
+
+        response = self.post(view, arg1='foo', arg2='bar',
+            data={'text': 'example' * 100})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['example.html'])
         self.assertFormError(response, 'form', 'text', ['Ensure this value has at most 10 characters (it has 700).'])
         self.assertContext(response, {
             'form': InstanceOf(BaseForm),
-            'view': InstanceOf(View)
+            'view': InstanceOf(View),
+            'arg1': 'foo',
+            'arg2': 'bar',
         })
 
     def test_form_preview(self):
