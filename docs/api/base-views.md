@@ -99,13 +99,13 @@ The default behaviour of this method is to return an instance of Django's standa
 
 You can override this method if you need to customize how the response is generated.  For example, to return a response with the `text/plain` content type instead of the standard `text/html`, you could write something like this:
 
-    def render_to_response(context):
+    def render_to_response(self, context):
     	template = self.get_template_names()
         return TemplateResponse(self.request, template, context, content_type='text/plain')
 
 You can also override this class in order to use a subclass of Django's standard `HttpResponse` or `TemplateResponse`.  For example, if you had a written a custom `JSONResponse` class, you might override the method like this:
 
-    def render_to_response(context):
+    def render_to_response(self, context):
         return JSONResponse(self.request, context)
 
 ---
