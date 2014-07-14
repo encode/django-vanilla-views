@@ -445,6 +445,7 @@ class TestAttributeOverrides(BaseTestCase):
     def test_form_class_override(self):
         class CustomForm(ModelForm):
             class Meta:
+                fields = ('text',)
                 model = Example
         view = CreateView.as_view(model=Example, success_url='/success/', form_class=CustomForm)
         response = self.get(view)
