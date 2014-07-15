@@ -96,6 +96,6 @@ class FormView(GenericView):
 
     def get_success_url(self):
         if self.success_url is None:
-            msg = "'%s' must define 'success_url' or override 'form_valid()'"
+            msg = "'%s' must define 'success_url' or override 'get_success_url()'"
             raise ImproperlyConfigured(msg % self.__class__.__name__)
         return self.success_url    
