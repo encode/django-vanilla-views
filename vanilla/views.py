@@ -7,34 +7,12 @@ from django.template.response import TemplateResponse
 from django.views.generic import View, RedirectView
 
 
-class GenericView(View):
+class TemplateView(View):
     """
-    A generic base class for building template and/or form views.
+    A generic base class for building template views.
     """
-    form_class = None
+
     template_name = None
-
-    # Form instantiation
-
-    def get_form_class(self):
-        """
-        Returns the form class to use in this view.
-        """
-        if self.form_class is not None:
-            return self.form_class
-
-        msg = "'%s' must either define 'form_class' or override 'get_form_class()'"
-        raise ImproperlyConfigured(msg % self.__class__.__name__)
-
-    def get_form(self, data=None, files=None, **kwargs):
-        """
-        Given `data` and `files` QueryDicts, and optionally other named
-        arguments, and returns a form.
-        """
-        cls = self.get_form_class()
-        return cls(data=data, files=files, **kwargs)
-
-    # Response rendering
 
     def get_template_names(self):
         """
@@ -66,14 +44,13 @@ class GenericView(View):
             context=context
         )
 
-
-class TemplateView(GenericView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         return self.render_to_response(context)
 
 
-class FormView(GenericView):
+class FormView(TemplateView):
+    form_class = None
     success_url = None
 
     def get(self, request, *args, **kwargs):
@@ -87,6 +64,26 @@ class FormView(GenericView):
             return self.form_valid(form)
         return self.form_invalid(form)
 
+    # Form instantiation
+
+    def get_form_class(self):
+        """
+        Returns the form class to use in this view.
+        """
+        if self.form_class is not None:
+            return self.form_class
+
+        msg = "'%s' must either define 'form_class' or override 'get_form_class()'"
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+    def get_form(self, data=None, files=None, **kwargs):
+        """
+        Given `data` and `files` QueryDicts, and optionally other named
+        arguments, and returns a form.
+        """
+        cls = self.get_form_class()
+        return cls(data=data, files=files, **kwargs)
+
     def form_valid(self, form):
         return HttpResponseRedirect(self.get_success_url())
 
@@ -98,4 +95,4 @@ class FormView(GenericView):
         if self.success_url is None:
             msg = "'%s' must define 'success_url' or override 'get_success_url()'"
             raise ImproperlyConfigured(msg % self.__class__.__name__)
-        return self.success_url    
+        return self.success_url
