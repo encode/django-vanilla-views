@@ -83,16 +83,11 @@ class GenericModelView(View):
         if self.form_class is not None:
             return self.form_class
 
-        if self.model is not None:
-            if self.fields is None:
-                msg = "'Using GenericModelView (base class of '%s) without setting" \
-                    "either 'form_class' or the 'fields' attribute is pending deprecation."
-                warnings.warn(msg % self.__class__.__name__,
-                              PendingDeprecationWarning)
+        if self.model is not None and self.fields is not None:
             return model_forms.modelform_factory(self.model, fields=self.fields)
 
         msg = "'%s' must either define 'form_class' or both 'model' and " \
-            "'fields', or override 'get_form_class()'"
+              "'fields', or override 'get_form_class()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_form(self, data=None, files=None, **kwargs):
