@@ -292,10 +292,8 @@ class TestCreate(BaseTestCase):
     def test_create_create_no_fields(self):
         # If we don't provide `.fields` then expect a `PendingDeprecation` warning.
         view = CreateView.as_view(model=Example, success_url='/success/')
-        with warnings.catch_warnings(record=True) as warned:
-            warnings.simplefilter("always")
-            self.post(view, data={'text': 'example'})
-            self.assertTrue(bool(warned))
+        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+
 
 class TestUpdate(BaseTestCase):
     def test_update(self):
@@ -355,10 +353,8 @@ class TestUpdate(BaseTestCase):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
         view = UpdateView.as_view(model=Example, success_url='/success/')
-        with warnings.catch_warnings(record=True) as warned:
-            warnings.simplefilter("always")
-            self.post(view, pk=pk, data={'text': 'example'})
-            self.assertTrue(bool(warned))
+        self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk, data={'text': 'example'})
+
 
 class TestDelete(BaseTestCase):
     def test_delete(self):
