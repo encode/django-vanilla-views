@@ -1,2 +1,6 @@
+<<<<<<< HEAD
+=======
+django-environ==0.4.0
+>>>>>>> 028be162b8f07304530953e0fa5391e2ffd3284f
 Django>=1.8
 django-vanilla-views==1.0.4
