@@ -236,7 +236,7 @@ You can run the example locally by following these steps:
     export PYTHONPATH=..:. 
     
     # Run the project
-    python ./manage.py migrate notes
+    python ./manage.py migrate
     python ./manage.py runserver
 
 #### Screenshot from the example project...

@@ -1,9 +1,7 @@
 # Django settings for example project.
-import environ
+import os
 
-ROOT_DIR = environ.Path(__file__) - 3
-APPS_DIR = ROOT_DIR.path('example')
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
@@ -108,11 +106,7 @@ WSGI_APPLICATION = 'example.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            # insert your TEMPLATE_DIRS here
-            str(APPS_DIR.path('templates')),
-
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
@@ -140,7 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'example.notes'
+    'example.notes',
 )
 
 # A sample logging configuration. The only tangible logging
