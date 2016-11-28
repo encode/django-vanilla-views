@@ -69,7 +69,7 @@ class GenericView(View):
 
 class TemplateView(GenericView):
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
+        context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 
 
@@ -78,20 +78,20 @@ class FormView(GenericView):
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
-        context = self.get_context_data(form=form)
+        context = self.get_context_data(form=form, **kwargs)
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(data=request.POST, files=request.FILES)
         if form.is_valid():
-            return self.form_valid(form)
-        return self.form_invalid(form)
+            return self.form_valid(form, **kwargs)
+        return self.form_invalid(form, **kwargs)
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form):
-        context = self.get_context_data(form=form)
+    def form_invalid(self, form, **kwargs):
+        context = self.get_context_data(form=form, **kwargs)
         return self.render_to_response(context)
 
     def get_success_url(self):
