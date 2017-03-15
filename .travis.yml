@@ -38,17 +38,14 @@ matrix:
       - env: DJANGO=1.11
 
 install:
-    - pip install Django==$DJANGO
-    - pip install coverage==3.6
-    - pip install python-coveralls==2.4.0
-    - export PYTHONPATH=.
+    - pip install tox tox-travis
 
-before_script: coverage erase
+script:
+    - tox
 
-script: coverage run --source=vanilla manage.py test
-
-after_success: coverage report; coveralls
+after_success:
+    - pip install codecov
+    - codecov -e TOXENV,DJANGO
 
 notifications:
     email: false
-
