@@ -8,7 +8,7 @@
 
 **Status**: Django Vanilla Views is stable and feature complete. There is unlikely to be much commit activity on the project, but this does not indicate lack of interest or support.
 
-[![Build Status](https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master)](https://travis-ci.org/tomchristie/django-vanilla-views) [![Coverage Status](https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master)](https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master) [![PyPI version](https://badge.fury.io/py/django-vanilla-views.png)](http://badge.fury.io/py/django-vanilla-views)
+[![Build Status](https://travis-ci.org/tomchristie/django-vanilla-views.svg?branch=master)](https://travis-ci.org/tomchristie/django-vanilla-views) [![Coverage Status](https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.svg?branch=master)](https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master) [![PyPI version](https://badge.fury.io/py/django-vanilla-views.svg)](http://badge.fury.io/py/django-vanilla-views)
 
     View --+------------------------- RedirectView
            |
@@ -48,46 +48,50 @@ Django Vanilla Views isn't just easier to use.  I'd contest that because it pres
 
 As an example, a custom view implemented against Django's `CreateView` class might typically look something like this:
 
-    from django.views.generic import CreateView
+```python
+from django.views.generic import CreateView
 
-	class AccountCreateView(CreateView):
-	    model = Account
+class AccountCreateView(CreateView):
+    model = Account
 
-	    def get_success_url(self):
-	        return self.object.account_activated_url()
+    def get_success_url(self):
+        return self.object.account_activated_url()
 
-		def get_form_class(self):
-		    if self.request.user.is_staff:
-		        return AdminAccountForm
-		    return AccountForm
+    def get_form_class(self):
+        if self.request.user.is_staff:
+            return AdminAccountForm
+        return AccountForm
 
-	    def get_form_kwargs(self):
-	        kwargs = super(AccountCreateView, self).get_form_kwargs()
-	        kwargs['owner'] = self.request.user
-	        return kwargs
- 
-	    def form_valid(self, form):
-	        send_activation_email(self.request.user)
-	        return super(AccountCreateView, self).form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super(AccountCreateView, self).get_form_kwargs()
+        kwargs['owner'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        send_activation_email(self.request.user)
+        return super(AccountCreateView, self).form_valid(form)
+```
 
 Writing the same code with `django-vanilla-views`, you'd instead arrive at a simpler, more concise, and more direct style:
 
-    from vanilla import CreateView
-	from django.http import HttpResponseRedirect
+```python
+from vanilla import CreateView
+from django.http import HttpResponseRedirect
 
-	class AccountCreateView(CreateView):
-	    model = Account
+class AccountCreateView(CreateView):
+    model = Account
 
-	    def get_form(self, data=None, files=None, **kwargs):
-	        user = self.request.user	        
-	        if user.is_staff:
-	            return AdminAccountForm(data, files, owner=user, **kwargs)
-	        return AccountForm(data, files, owner=user, **kwargs)
+    def get_form(self, data=None, files=None, **kwargs):
+        user = self.request.user            
+        if user.is_staff:
+            return AdminAccountForm(data, files, owner=user, **kwargs)
+        return AccountForm(data, files, owner=user, **kwargs)
 
-	    def form_valid(self, form):
-	        send_activation_email(self.request.user)
-	        account = form.save()
-	        return HttpResponseRedirect(account.account_activated_url())
+    def form_valid(self, form):
+        send_activation_email(self.request.user)
+        account = form.save()
+        return HttpResponseRedirect(account.account_activated_url())
+```
 
 ## Requirements
 
@@ -98,37 +102,43 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 Install using pip.
 
-    pip install django-vanilla-views
+```bash
+pip install django-vanilla-views
+```
 
 ## Usage
 
 Import and use the views.
 
-    from vanilla import ListView, DetailView
+```python
+from vanilla import ListView, DetailView
+```
 
 For example:
 
-	from django.core.urlresolvers import reverse_lazy
-	from example.notes.models import Note
-	from vanilla import CreateView, DeleteView, ListView, UpdateView
-	
-	class ListNotes(ListView):
-	    model = Note
-	
-	
-	class CreateNote(CreateView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
-	
-	
-	class EditNote(UpdateView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
-	
-	
-	class DeleteNote(DeleteView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
+```python
+from django.core.urlresolvers import reverse_lazy
+from example.notes.models import Note
+from vanilla import CreateView, DeleteView, ListView, UpdateView
+
+class ListNotes(ListView):
+    model = Note
+
+
+class CreateNote(CreateView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+
+
+class EditNote(UpdateView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+
+
+class DeleteNote(DeleteView):
+    model = Note
+    success_url = reverse_lazy('list_notes')
+```
 
 
 ## Compare and contrast
@@ -224,20 +234,22 @@ This repository includes an example project in the [example][example] directory.
 
 You can run the example locally by following these steps:
 
-    git clone git://github.com/tomchristie/django-vanilla-views.git
-    cd django-vanilla-views/example
-    
-    # Create a clean virtualenv environment and install Django
-    virtualenv env
-    source env/bin/activate
-    pip install -r requirements.txt
-    
-    # Ensure local copy of 'vanilla' is in our path
-    export PYTHONPATH=..:. 
-    
-    # Run the project
-    python ./manage.py migrate notes
-    python ./manage.py runserver
+```bash
+git clone git://github.com/tomchristie/django-vanilla-views.git
+cd django-vanilla-views/example
+
+# Create a clean virtualenv environment and install Django
+virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+
+# Ensure local copy of 'vanilla' is in our path
+export PYTHONPATH=..:. 
+
+# Run the project
+python ./manage.py migrate notes
+python ./manage.py runserver
+```
 
 #### Screenshot from the example project...
 
