@@ -8,7 +8,7 @@
 
 **Status**: Django Vanilla Views is stable and feature complete. There is unlikely to be much commit activity on the project, but this does not indicate lack of interest or support.
 
-[![Build Status](https://travis-ci.org/tomchristie/django-vanilla-views.png?branch=master)](https://travis-ci.org/tomchristie/django-vanilla-views) [![Coverage Status](https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.png?branch=master)](https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master) [![PyPI version](https://badge.fury.io/py/django-vanilla-views.png)](http://badge.fury.io/py/django-vanilla-views)
+[![Build Status](https://travis-ci.org/tomchristie/django-vanilla-views.svg?branch=master)](https://travis-ci.org/tomchristie/django-vanilla-views) [![Coverage Status](https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.svg?branch=master)](https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master) [![PyPI version](https://badge.fury.io/py/django-vanilla-views.svg)](http://badge.fury.io/py/django-vanilla-views)
 
     View --+------------------------- RedirectView
            |
