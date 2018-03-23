@@ -2,31 +2,50 @@ language: python
 
 python:
     - "2.7"
-    - "3.2"
-    - "3.3"
     - "3.4"
     - "3.5"
 
+sudo: false
+
 env:
-    - DJANGO="1.9.6"
-    - DJANGO="1.8.13"
-
-install:
-    - pip install Django==$DJANGO
-    - pip install coverage==3.6
-    - pip install python-coveralls==2.4.0
-    - export PYTHONPATH=.
-
-before_script: coverage erase
-
-script: coverage run --source=vanilla manage.py test
-
-after_success: coverage report; coveralls
+    - DJANGO=1.8
+    - DJANGO=1.9
+    - DJANGO=1.10
+    - DJANGO=1.11
+    - DJANGO=master
 
 matrix:
+    fast_finish: true
+    include:
+      - python: "3.6"
+        env: DJANGO=master
+      - python: "3.6"
+        env: DJANGO=1.11
+      - python: "3.3"
+        env: DJANGO=1.8
+      - python: "2.7"
+        env: TOXENV="lint"
+      - python: "2.7"
+        env: TOXENV="docs"
     exclude:
-        - python: "3.2"
-          env: DJANGO="1.9.6"
-        - python: "3.3"
-          env: DJANGO="1.9.6"
+      - python: "2.7"
+        env: DJANGO=master
+      - python: "3.4"
+        env: DJANGO=master
 
+    allow_failures:
+      - env: DJANGO=master
+      - env: DJANGO=1.11
+
+install:
+    - pip install tox tox-travis
+
+script:
+    - tox
+
+after_success:
+    - pip install codecov
+    - codecov -e TOXENV,DJANGO
+
+notifications:
+    email: false
