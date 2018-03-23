@@ -8,6 +8,7 @@ python:
     - "3.5"
 
 env:
+    - DJANGO="2.0.3"
     - DJANGO="1.9.6"
     - DJANGO="1.8.13"
 
@@ -29,4 +30,10 @@ matrix:
           env: DJANGO="1.9.6"
         - python: "3.3"
           env: DJANGO="1.9.6"
-
+    exclude:
+        - python: "2.7"
+          env: DJANGO="2.0.3"
+        - python: "3.2"
+          env: DJANGO="2.0.3"
+        - python: "3.3"
+          env: DJANGO="2.0.3"
