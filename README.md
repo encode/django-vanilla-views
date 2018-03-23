@@ -65,7 +65,7 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 	        kwargs = super(AccountCreateView, self).get_form_kwargs()
 	        kwargs['owner'] = self.request.user
 	        return kwargs
- 
+
 	    def form_valid(self, form):
 	        send_activation_email(self.request.user)
 	        return super(AccountCreateView, self).form_valid(form)
@@ -91,7 +91,7 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 ## Requirements
 
-* **Django**: 1.8, 1.9
+* **Django**: 1.8, 1.9, 2.0
 * **Python**: 2.7, 3.2, 3.3, 3.4, 3.5
 
 ## Installation
@@ -111,21 +111,21 @@ For example:
 	from django.core.urlresolvers import reverse_lazy
 	from example.notes.models import Note
 	from vanilla import CreateView, DeleteView, ListView, UpdateView
-	
+
 	class ListNotes(ListView):
 	    model = Note
-	
-	
+
+
 	class CreateNote(CreateView):
 	    model = Note
 	    success_url = reverse_lazy('list_notes')
-	
-	
+
+
 	class EditNote(UpdateView):
 	    model = Note
 	    success_url = reverse_lazy('list_notes')
-	
-	
+
+
 	class DeleteNote(DeleteView):
 	    model = Note
 	    success_url = reverse_lazy('list_notes')
@@ -226,15 +226,15 @@ You can run the example locally by following these steps:
 
     git clone git://github.com/tomchristie/django-vanilla-views.git
     cd django-vanilla-views/example
-    
+
     # Create a clean virtualenv environment and install Django
     virtualenv env
     source env/bin/activate
     pip install -r requirements.txt
-    
+
     # Ensure local copy of 'vanilla' is in our path
-    export PYTHONPATH=..:. 
-    
+    export PYTHONPATH=..:.
+
     # Run the project
     python ./manage.py migrate notes
     python ./manage.py runserver
@@ -251,23 +251,23 @@ Copyright © 2013-2016 Tom Christie.
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
+Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this 
+Redistributions of source code must retain the above copyright notice, this
 list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this 
-list of conditions and the following disclaimer in the documentation and/or 
+Redistributions in binary form must reproduce the above copyright notice, this
+list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 [docs]: http://django-vanilla-views.org
