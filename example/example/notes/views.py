@@ -1,7 +1,11 @@
-from django.core.urlresolvers import reverse_lazy
 from example.notes.models import Note
 from example.notes.forms import NoteForm
 from vanilla import CreateView, DeleteView, ListView, UpdateView
+
+try:
+    from django.urls import reverse_lazy  # django 1.11+
+except ImportError:
+    from django.core.urlresolvers import reverse_lazy
 
 
 class ListNotes(ListView):

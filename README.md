@@ -230,13 +230,13 @@ You can run the example locally by following these steps:
     # Create a clean virtualenv environment and install Django
     virtualenv env
     source env/bin/activate
-    pip install -r requirements.txt
+    pip install django
 
     # Ensure local copy of 'vanilla' is in our path
     export PYTHONPATH=..:.
 
     # Run the project
-    python ./manage.py migrate notes
+    python ./manage.py migrate
     python ./manage.py runserver
 
 #### Screenshot from the example project...
