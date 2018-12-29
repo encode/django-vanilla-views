@@ -213,12 +213,12 @@
 <p>Generates the response that should be returned by the view.  Takes a single argument which should be a dictionary of context data to use when rendering the response template.</p>
 <p>The default behaviour of this method is to return an instance of Django's standard <code>TemplateResponse</code>.</p>
 <p>You can override this method if you need to customize how the response is generated.  For example, to return a response with the <code>text/plain</code> content type instead of the standard <code>text/html</code>, you could write something like this:</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
+<pre class="prettyprint lang-py"><code>def render_to_response(self, context):
     template = self.get_template_names()
     return TemplateResponse(self.request, template, context, content_type='text/plain')
 </code></pre>
 <p>You can also override this class in order to use a subclass of Django's standard <code>HttpResponse</code> or <code>TemplateResponse</code>.  For example, if you had a written a custom <code>JSONResponse</code> class, you might override the method like this:</p>
-<pre class="prettyprint lang-py"><code>def render_to_response(context):
+<pre class="prettyprint lang-py"><code>def render_to_response(self, context):
     return JSONResponse(self.request, context)
 </code></pre>
 <hr />
