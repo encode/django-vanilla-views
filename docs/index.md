@@ -82,7 +82,7 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 	    model = Account
 
 	    def get_form(self, data=None, files=None, **kwargs):
-	        user = self.request.user	        
+	        user = self.request.user
 	        if user.is_staff:
 	            return AdminAccountForm(data, files, owner=user, **kwargs)
 	        return AccountForm(data, files, owner=user, **kwargs)
@@ -94,8 +94,8 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 ## Requirements
 
-* **Django**: 1.8, 1.9, 2.0
-* **Python**: 2.7, 3.2, 3.3, 3.4, 3.5
+* **Django**: 1.8, 1.9, 1.10, 1.11, 2.0, 2.1
+* **Python**: 2.7, 3.4, 3.5, 3.6
 
 ## Installation
 
@@ -153,7 +153,7 @@ Here's the corresponding inheritance hiearchy in Django's implementation of `Cre
                  +--> SingleObjectTemplateResponseMixin --> TemplateResponseMixin
                  |
     CreateView --+                     +--> ProcessFormView --> View
-                 |                     |                                       
+                 |                     |
                  +--> BaseCreateView --+
                                        |                     +--> FormMixin ----------+
                                        +--> ModelFormMixin --+                        +--> ContextMixin
@@ -235,13 +235,13 @@ You can run the example locally by following these steps:
     # Create a clean virtualenv environment and install Django
     virtualenv env
     source env/bin/activate
-    pip install -r requirements.txt
+    pip install django
 
     # Ensure the local copy of the 'vanilla' pacakge is on our path
     export PYTHONPATH=..:.
 
     # Run the project
-    python ./manage.py syncdb --noinput
+    python ./manage.py migrate
     python ./manage.py runserver
 
 Open a browser and navigate to `http://127.0.0.1:8000`.

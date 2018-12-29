@@ -79,7 +79,7 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 	    model = Account
 
 	    def get_form(self, data=None, files=None, **kwargs):
-	        user = self.request.user	        
+	        user = self.request.user
 	        if user.is_staff:
 	            return AdminAccountForm(data, files, owner=user, **kwargs)
 	        return AccountForm(data, files, owner=user, **kwargs)
@@ -150,7 +150,7 @@ Here's the corresponding inheritance hiearchy in Django's implementation of `Cre
                  +--> SingleObjectTemplateResponseMixin --> TemplateResponseMixin
                  |
     CreateView --+                     +--> ProcessFormView --> View
-                 |                     |                                       
+                 |                     |
                  +--> BaseCreateView --+
                                        |                     +--> FormMixin ----------+
                                        +--> ModelFormMixin --+                        +--> ContextMixin
@@ -239,7 +239,9 @@ You can run the example locally by following these steps:
     python ./manage.py migrate
     python ./manage.py runserver
 
-#### Screenshot from the example project...
+Open a browser and navigate to `http://127.0.0.1:8000`.
+
+Once you've added a few notes you should see something like the following:
 
 ![image](example.png)
 
