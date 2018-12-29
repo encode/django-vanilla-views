@@ -1,13 +1,14 @@
 #coding: utf-8
 from django.core.exceptions import ImproperlyConfigured
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse  # django 2.0
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.generic import View, RedirectView
+
+try:
+    from django.urls import reverse  # django 1.11+
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 
 class GenericView(View):

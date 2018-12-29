@@ -91,8 +91,8 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 ## Requirements
 
-* **Django**: 1.8, 1.9, 2.0
-* **Python**: 2.7, 3.2, 3.3, 3.4, 3.5
+* **Django**: 1.8, 1.9, 1.10, 1.11, 2.0, 2.1
+* **Python**: 2.7, 3.4, 3.5, 3.6
 
 ## Installation
 
@@ -230,13 +230,13 @@ You can run the example locally by following these steps:
     # Create a clean virtualenv environment and install Django
     virtualenv env
     source env/bin/activate
-    pip install -r requirements.txt
+    pip install django
 
     # Ensure local copy of 'vanilla' is in our path
     export PYTHONPATH=..:.
 
     # Run the project
-    python ./manage.py migrate notes
+    python ./manage.py migrate
     python ./manage.py runserver
 
 #### Screenshot from the example project...
