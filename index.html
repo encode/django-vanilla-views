@@ -217,7 +217,7 @@ class AccountCreateView(CreateView):
     model = Account
 
     def get_form(self, data=None, files=None, **kwargs):
-        user = self.request.user            
+        user = self.request.user
         if user.is_staff:
             return AdminAccountForm(data, files, owner=user, **kwargs)
         return AccountForm(data, files, owner=user, **kwargs)
@@ -229,8 +229,8 @@ class AccountCreateView(CreateView):
 </code></pre>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li><strong>Django</strong>: 1.3, 1.4, 1.5, 1.6, 1.7, 1.8</li>
-<li><strong>Python</strong>: 2.6, 2.7, 3.2, 3.3</li>
+<li><strong>Django</strong>: 1.8, 1.9, 1.10, 1.11, 2.0, 2.1</li>
+<li><strong>Python</strong>: 2.7, 3.4, 3.5, 3.6</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Install using pip.</p>
@@ -275,7 +275,7 @@ class DeleteNote(DeleteView):
 <pre class="prettyprint lang-py"><code>             +--&gt; SingleObjectTemplateResponseMixin --&gt; TemplateResponseMixin
              |
 CreateView --+                     +--&gt; ProcessFormView --&gt; View
-             |                     |                                       
+             |                     |
              +--&gt; BaseCreateView --+
                                    |                     +--&gt; FormMixin ----------+
                                    +--&gt; ModelFormMixin --+                        +--&gt; ContextMixin
@@ -346,13 +346,13 @@ cd django-vanilla-views/example
 # Create a clean virtualenv environment and install Django
 virtualenv env
 source env/bin/activate
-pip install -r requirements.txt
+pip install django
 
 # Ensure the local copy of the 'vanilla' pacakge is on our path
 export PYTHONPATH=..:.
 
 # Run the project
-python ./manage.py syncdb --noinput
+python ./manage.py migrate
 python ./manage.py runserver
 </code></pre>
 <p>Open a browser and navigate to <code>http://127.0.0.1:8000</code>.</p>
@@ -362,22 +362,22 @@ python ./manage.py runserver
 <h2 id="license">License</h2>
 <p>Copyright © Tom Christie.</p>
 <p>All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without 
+<p>Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:</p>
-<p>Redistributions of source code must retain the above copyright notice, this 
+<p>Redistributions of source code must retain the above copyright notice, this
 list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this 
-list of conditions and the following disclaimer in the documentation and/or 
+Redistributions in binary form must reproduce the above copyright notice, this
+list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
           </div><!--/span-->
         </div><!--/row-->
