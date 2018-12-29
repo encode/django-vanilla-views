@@ -1,16 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import markdown
 import os
 import re
 import shutil
 import sys
+import webbrowser
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 docs_dir = os.path.join(root_dir, 'docs')
 html_dir = os.path.join(root_dir, 'html')
 
-local = not '--deploy' in sys.argv
+local = '--deploy' not in sys.argv
 preview = '-p' in sys.argv
 
 if local:
@@ -27,7 +28,8 @@ main_header = '<li class="main"><a href="#{{ anchor }}">{{ title }}</a></li>'
 sub_header = '<li><a href="#{{ anchor }}">{{ title }}</a></li>'
 code_label = r'<a class="github" href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/\1"><span class="label label-info">\1</span></a>'
 
-page = open(os.path.join(docs_dir, 'template.html'), 'r').read()
+with open(os.path.join(docs_dir, 'template.html'), 'r') as fp:
+    page = fp.read()
 
 # Copy static files
 # for static in ['css', 'js', 'img']:
@@ -84,7 +86,8 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
         output_path = os.path.join(build_dir, filename[:-3] + '.html')
 
         toc = ''
-        text = open(path, 'r').read().decode('utf-8')
+        with open(path, 'r') as fp:
+            text = fp.read()
         main_title = None
         description = 'Django, CBV, GCBV, Generic class based views'
         for line in text.splitlines():
@@ -113,7 +116,7 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
         prev_url = prev_url_map.get(relative_path)
         next_url = next_url_map.get(relative_path)
 
-        content = markdown.markdown(text, ['headerid'])
+        content = markdown.markdown(text, extensions=['toc'])
 
         output = page.replace('{{ content }}', content).replace('{{ toc }}', toc).replace('{{ base_url }}', base_url).replace('{{ suffix }}', suffix).replace('{{ index }}', index)
         output = output.replace('{{ title }}', main_title)
@@ -138,16 +141,8 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
         output = re.sub(r'<pre><code>:::bash', r'<pre class="prettyprint lang-bsh">', output)
         output = re.sub(r'<pre>', r'<pre class="prettyprint lang-py">', output)
         output = re.sub(r'<a class="github" href="([^"]*)"></a>', code_label, output)
-        open(output_path, 'w').write(output.encode('utf-8'))
+        with open(output_path, 'w') as fp:
+            fp.write(output)
 
 if preview:
-    import subprocess
-
-    url = 'html/index.html'
-
-    try:
-        subprocess.Popen(["open", url])  # Mac
-    except OSError:
-        subprocess.Popen(["xdg-open", url])  # Linux
-    except:
-        os.startfile(url)  # Windows
+    webbrowser.open_new_tab('html/index.html')
