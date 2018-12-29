@@ -26,6 +26,29 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## 1.0.6
+
+**Released**: 29th December 2018
+
+* Support Django 2.1
+* Don't throw warnings on any version of Django
+
+## 1.0.5
+
+**Released**: 23rd March 2018
+
+* Update example to work with Django 1.8+
+* Test on Django 1.8+
+* Support Django 2.0
+
+## 1.0.4
+
+**Released**: 11th May 2015
+
+* Support Django 1.7 and 1.8
+* Support Python 3.4
+* Fix error message in `get_success_url()`
+
 ## 1.0.3
 
 **Released**: 22nd April 2014
