@@ -50,44 +50,44 @@ As an example, a custom view implemented against Django's `CreateView` class mig
 
     from django.views.generic import CreateView
 
-	class AccountCreateView(CreateView):
-	    model = Account
+    class AccountCreateView(CreateView):
+        model = Account
 
-	    def get_success_url(self):
-	        return self.object.account_activated_url()
+        def get_success_url(self):
+            return self.object.account_activated_url()
 
-		def get_form_class(self):
-		    if self.request.user.is_staff:
-		        return AdminAccountForm
-		    return AccountForm
+        def get_form_class(self):
+            if self.request.user.is_staff:
+                return AdminAccountForm
+            return AccountForm
 
-	    def get_form_kwargs(self):
-	        kwargs = super(AccountCreateView, self).get_form_kwargs()
-	        kwargs['owner'] = self.request.user
-	        return kwargs
+        def get_form_kwargs(self):
+            kwargs = super(AccountCreateView, self).get_form_kwargs()
+            kwargs['owner'] = self.request.user
+            return kwargs
 
-	    def form_valid(self, form):
-	        send_activation_email(self.request.user)
-	        return super(AccountCreateView, self).form_valid(form)
+        def form_valid(self, form):
+            send_activation_email(self.request.user)
+            return super(AccountCreateView, self).form_valid(form)
 
 Writing the same code with `django-vanilla-views`, you'd instead arrive at a simpler, more concise, and more direct style:
 
     from vanilla import CreateView
-	from django.http import HttpResponseRedirect
+    from django.http import HttpResponseRedirect
 
-	class AccountCreateView(CreateView):
-	    model = Account
+    class AccountCreateView(CreateView):
+        model = Account
 
-	    def get_form(self, data=None, files=None, **kwargs):
-	        user = self.request.user
-	        if user.is_staff:
-	            return AdminAccountForm(data, files, owner=user, **kwargs)
-	        return AccountForm(data, files, owner=user, **kwargs)
+        def get_form(self, data=None, files=None, **kwargs):
+            user = self.request.user
+            if user.is_staff:
+                return AdminAccountForm(data, files, owner=user, **kwargs)
+            return AccountForm(data, files, owner=user, **kwargs)
 
-	    def form_valid(self, form):
-	        send_activation_email(self.request.user)
-	        account = form.save()
-	        return HttpResponseRedirect(account.account_activated_url())
+        def form_valid(self, form):
+            send_activation_email(self.request.user)
+            account = form.save()
+            return HttpResponseRedirect(account.account_activated_url())
 
 ## Requirements
 
@@ -108,27 +108,27 @@ Import and use the views.
 
 For example:
 
-	from django.core.urlresolvers import reverse_lazy
-	from example.notes.models import Note
-	from vanilla import CreateView, DeleteView, ListView, UpdateView
+    from django.core.urlresolvers import reverse_lazy
+    from example.notes.models import Note
+    from vanilla import CreateView, DeleteView, ListView, UpdateView
 
-	class ListNotes(ListView):
-	    model = Note
-
-
-	class CreateNote(CreateView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
+    class ListNotes(ListView):
+        model = Note
 
 
-	class EditNote(UpdateView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
+    class CreateNote(CreateView):
+        model = Note
+        success_url = reverse_lazy('list_notes')
 
 
-	class DeleteNote(DeleteView):
-	    model = Note
-	    success_url = reverse_lazy('list_notes')
+    class EditNote(UpdateView):
+        model = Note
+        success_url = reverse_lazy('list_notes')
+
+
+    class DeleteNote(DeleteView):
+        model = Note
+        success_url = reverse_lazy('list_notes')
 
 
 ## Compare and contrast
@@ -164,19 +164,19 @@ Here's the corresponding inheritance hiearchy in Django's implementation of `Cre
 
 Let's take a look at the calling hierarchy when making an HTTP `GET` request to `CreateView`.
 
-	CreateView.get()
-	|
-	+--> GenericModelView.get_form()
-	|    |
-	|    +--> GenericModelView.get_form_class()
-	|
-	+--> GenericModelView.get_context_data()
-	|    |
-	|    +--> GenericModelView.get_context_object_name()
-	|
-	+--> GenericModelView.render_to_response()
-	     |
-	     +--> GenericModelView.get_template_names()
+    CreateView.get()
+    |
+    +--> GenericModelView.get_form()
+    |    |
+    |    +--> GenericModelView.get_form_class()
+    |
+    +--> GenericModelView.get_context_data()
+    |    |
+    |    +--> GenericModelView.get_context_object_name()
+    |
+    +--> GenericModelView.render_to_response()
+         |
+         +--> GenericModelView.get_template_names()
 
 **Total number of code statements covered**: ~40
 
@@ -184,37 +184,37 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 
 Here's the equivelent calling hierarchy in Django's `CreateView` implmentation.
 
-	CreateView.get()
-	|
-	+--> ProcessFormView.get()
-	     |
-	     +--> ModelFormMixin.get_form_class()
-	     |    |
-	     |    +--> SingleObjectMixin.get_queryset()
-	     |
-	     +--> FormMixin.get_form()
-	     |    |
-	     |    +--> ModelFormMixin.get_form_kwargs()
-	     |    |    |
-	     |    |    +--> FormMixin.get_form_kwargs()
-	     |    |
-	     |    +--> FormMixin.get_initial()
-	     |
- 	     +--> ModelFormMixin.get_context_data()
-	     |    |
-	     |    +--> SingleObjectMixin.get_context_object_name()
-	     |    |
-	     |    +--> SingleObjectMixin.get_context_data()
-	     |         |
-	     |         +--> SingleObjectMixin.get_context_object_name()
-	     |         |
-	     |         +--> ContextMixin.get_context_data()
-	     |
-	     +--> TemplateResponseMixin.render_to_response()
-	          |
-	          +--> SingleObjectTemplateResponseMixin.get_template_names()
-	          |
-	          +--> TemplateResponseMixin.get_template_names()
+    CreateView.get()
+    |
+    +--> ProcessFormView.get()
+         |
+         +--> ModelFormMixin.get_form_class()
+         |    |
+         |    +--> SingleObjectMixin.get_queryset()
+         |
+         +--> FormMixin.get_form()
+         |    |
+         |    +--> ModelFormMixin.get_form_kwargs()
+         |    |    |
+         |    |    +--> FormMixin.get_form_kwargs()
+         |    |
+         |    +--> FormMixin.get_initial()
+         |
+         +--> ModelFormMixin.get_context_data()
+         |    |
+         |    +--> SingleObjectMixin.get_context_object_name()
+         |    |
+         |    +--> SingleObjectMixin.get_context_data()
+         |         |
+         |         +--> SingleObjectMixin.get_context_object_name()
+         |         |
+         |         +--> ContextMixin.get_context_data()
+         |
+         +--> TemplateResponseMixin.render_to_response()
+              |
+              +--> SingleObjectTemplateResponseMixin.get_template_names()
+              |
+              +--> TemplateResponseMixin.get_template_names()
 
 **Total number of code statements covered**: ~70
 
