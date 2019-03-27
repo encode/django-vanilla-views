@@ -132,7 +132,7 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            raise Http404(_(msg % (page_number, str(exc))))
+            raise Http404(_(msg % (page_number, unicode(exc))))
 
     # Response rendering
 
