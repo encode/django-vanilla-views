@@ -18,6 +18,7 @@ install:
     - pip install Django==$DJANGO
     - pip install coverage==4.5.1
     - pip install python-coveralls==2.9.1
+    - pip install future==0.17.1
     - export PYTHONPATH=.
 
 before_script: coverage erase
