@@ -1,5 +1,6 @@
 #coding: utf-8
-from builtins import str as text
+import sys
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator, InvalidPage
 from django.forms import models as model_forms
@@ -133,7 +134,9 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            raise Http404(_(msg % (page_number, text(exc))))
+            if sys.version_info[0] == 2:
+                raise Http404(_(msg % (page_number, unicode(exc))))
+            raise Http404(_(msg % (page_number, str(exc))))
 
     # Response rendering
 
