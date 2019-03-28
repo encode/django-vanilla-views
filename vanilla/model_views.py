@@ -12,6 +12,9 @@ from django.views.generic import View
 import warnings
 
 
+text = unicode if sys.version_info[0] == 2 else str
+
+
 class GenericModelView(View):
     """
     Base class for all model generic views.
@@ -134,9 +137,7 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            if sys.version_info[0] == 2:
-                raise Http404(_(msg % (page_number, unicode(exc))))
-            raise Http404(_(msg % (page_number, str(exc))))
+            raise Http404(_(msg % (page_number, text(exc))))
 
     # Response rendering
 
