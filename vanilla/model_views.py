@@ -1,12 +1,11 @@
 #coding: utf-8
-from django.utils import six
-
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator, InvalidPage
 from django.forms import models as model_forms
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils import six
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 import warnings
