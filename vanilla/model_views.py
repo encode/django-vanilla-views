@@ -1,5 +1,5 @@
 #coding: utf-8
-import sys
+from django.utils import six
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator, InvalidPage
@@ -10,9 +10,6 @@ from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 import warnings
-
-
-text = unicode if sys.version_info[0] == 2 else str
 
 
 class GenericModelView(View):
@@ -137,7 +134,7 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            raise Http404(_(msg % (page_number, text(exc))))
+            raise Http404(_(msg % (page_number, six.text_type(exc))))
 
     # Response rendering
 
