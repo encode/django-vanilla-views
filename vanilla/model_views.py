@@ -5,6 +5,7 @@ from django.forms import models as model_forms
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils import six
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 import warnings
@@ -132,7 +133,7 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            raise Http404(_(msg % (page_number, str(exc))))
+            raise Http404(_(msg % (page_number, six.text_type(exc))))
 
     # Response rendering
 
