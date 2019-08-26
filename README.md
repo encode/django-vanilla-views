@@ -26,7 +26,7 @@
                                   |
                                   +-- DeleteView
 
-Django's generic class-based view implementation is unneccesarily complicated.
+Django's generic class-based view implementation is unnecessarily complicated.
 
 Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
 
@@ -143,9 +143,9 @@ The inheritance hierarchy of the views in `django-vanilla-views` is trivial, mak
 
 **Total number of source files**: 1 ([model_views.py][model_views.py])
 
-#### Inheritance hierachy, Django style.
+#### Inheritance hierarchy, Django style.
 
-Here's the corresponding inheritance hiearchy in Django's implementation of `CreateView`.
+Here's the corresponding inheritance hierarchy in Django's implementation of `CreateView`.
 
                  +--> SingleObjectTemplateResponseMixin --> TemplateResponseMixin
                  |
@@ -182,7 +182,7 @@ Let's take a look at the calling hierarchy when making an HTTP `GET` request to 
 
 #### Calling hierarchy, Django style.
 
-Here's the equivelent calling hierarchy in Django's `CreateView` implementation.
+Here's the equivalent calling hierarchy in Django's `CreateView` implementation.
 
     CreateView.get()
     |
