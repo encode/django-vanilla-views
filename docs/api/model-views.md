@@ -321,4 +321,4 @@ The URL that should be used when redirecting after a successful form submission.
 
 Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the `success_url` attribute.
 
-**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `post()` methhod directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
+**Note**: If you are customizing the view behavior, we'd typically recommend overriding the `post()` method directly rather than overriding `get_success_url()`, as it will result in simpler, more obvious flow control.
