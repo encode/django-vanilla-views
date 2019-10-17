@@ -92,7 +92,7 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 ## Requirements
 
 * **Django**: 1.8, 1.9, 1.10, 1.11, 2.0, 2.1
-* **Python**: 2.7, 3.4, 3.5, 3.6
+* **Python**: 2.7, 3.4, 3.5, 3.6, 3.7, 3.8
 
 ## Installation
 
@@ -249,7 +249,7 @@ Once you've added a few notes you should see something like the following:
 
 ## License
 
-Copyright © 2013-2016 Tom Christie.
+Copyright © 2013-2019 Tom Christie.
 
 All rights reserved.
 
