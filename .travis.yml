@@ -18,7 +18,7 @@ env:
 install:
     - pip install Django==$DJANGO
     - pip install coverage==4.5.1
-    - pip install python-coveralls==2.9.1
+    - pip install python-coveralls==2.9.1 PyYAML<5.3
     - export PYTHONPATH=.
 
 before_script: coverage erase
@@ -42,4 +42,6 @@ matrix:
         - python: "3.4"
           env: DJANGO=2.2.9
         - python: "3.4"
+          env: DJANGO=3.0.2
+        - python: "3.5"
           env: DJANGO=3.0.2
