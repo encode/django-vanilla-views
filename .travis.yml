@@ -17,8 +17,8 @@ env:
 
 install:
     - pip install Django==$DJANGO
-    - pip install coverage
-    - pip install python-coveralls==2.9.1 'PyYAML<5.3'
+    # PyYAML pinned to work on Python 3.4
+    - pip install coverage python-coveralls 'PyYAML<5.3'
     - export PYTHONPATH=.
 
 before_script: coverage erase
