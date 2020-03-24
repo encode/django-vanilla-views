@@ -135,7 +135,7 @@ For example:
 
 To help give you an idea of the relative complexity of `django-vanilla-views` against Django's existing implementations, let's compare the two.
 
-#### Inheritance hierachy, Vanilla style.
+#### Inheritance hierarchy, Vanilla style.
 
 The inheritance hierarchy of the views in `django-vanilla-views` is trivial, making it easy to figure out the control flow in the view.
 
