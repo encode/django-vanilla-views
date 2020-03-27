@@ -273,7 +273,7 @@ This method will be run when a valid form submission occurs, and should return a
 
 #### form_invalid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
+This method will be run when an invalid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
 
 #### get_success_url()
 
@@ -299,7 +299,7 @@ This method will be run when a valid form submission occurs, and should return a
 
 #### form_invalid(self, form)
 
-This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
+This method will be run when an invalid form submission occurs, and should return a response object.  The default behavior is to return a `TemplateResponse` which renders the form errors.
 
 #### get_success_url()
 
