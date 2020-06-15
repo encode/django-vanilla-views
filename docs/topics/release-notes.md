@@ -26,6 +26,11 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## Pending
+
+* Stop testing on Django 1.8, 1.9, and 1.10.
+* Test on Django 2.2 and 3.0.
+
 ## 1.0.6
 
 **Released**: 29th December 2018
