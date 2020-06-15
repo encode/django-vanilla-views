@@ -82,6 +82,7 @@ setup(
     long_description=long_description,
     author=author,
     author_email=author_email,
+    license_file="LICENSE",
     packages=get_packages(package),
     package_data=get_package_data(package),
     project_urls={
