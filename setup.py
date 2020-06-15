@@ -84,6 +84,10 @@ setup(
     author_email=author_email,
     packages=get_packages(package),
     package_data=get_package_data(package),
+    project_urls={
+        "Changelog": "http://django-vanilla-views.org/topics/release-notes",
+        "Repository": "https://github.com/tomchristie/django-vanilla-views/",
+    },
     python_requires=">=3.5",
     install_requires=install_requires,
     classifiers=[
