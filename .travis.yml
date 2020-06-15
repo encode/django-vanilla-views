@@ -1,8 +1,6 @@
 language: python
 
 python:
-    - "2.7"
-    - "3.4"
     - "3.5"
     - "3.6"
     - "3.7"
@@ -17,8 +15,7 @@ env:
 
 install:
     - pip install Django==$DJANGO
-    # PyYAML pinned to work on Python 3.4
-    - pip install coverage python-coveralls 'PyYAML<5.3'
+    - pip install coverage python-coveralls
     - export PYTHONPATH=.
 
 before_script: coverage erase
@@ -29,20 +26,6 @@ after_success: coverage report; coveralls
 
 matrix:
     exclude:
-        - python: "2.7"
-          env: DJANGO=2.0.13
-        - python: "2.7"
-          env: DJANGO=2.1.15
-        - python: "2.7"
-          env: DJANGO=2.2.9
-        - python: "2.7"
-          env: DJANGO=3.0.2
-        - python: "3.4"
-          env: DJANGO=2.1.15
-        - python: "3.4"
-          env: DJANGO=2.2.9
-        - python: "3.4"
-          env: DJANGO=3.0.2
         - python: "3.5"
           env: DJANGO=3.0.2
         - python: "3.8"

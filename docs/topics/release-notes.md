@@ -26,6 +26,10 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
+## Pending
+
+* Drop Python 2.7 and 3.4 support. Only Python 3.5+ is supported now.
+
 ## 1.1.0
 
 **Released**: 15th June 2020
