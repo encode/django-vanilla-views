@@ -331,7 +331,7 @@
 <h4 id="form_validself-form">form_valid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a redirect response as determined by calling <code>get_success_url()</code>.</p>
 <h4 id="form_invalidself-form">form_invalid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+<p>This method will be run when an invalid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url">get_success_url()</h4>
 <p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
@@ -344,7 +344,7 @@
 <h4 id="form_validself-form_1">form_valid(self, form)</h4>
 <p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to save the updated object instance and then return a redirect response as determined by calling <code>get_success_url()</code>.</p>
 <h4 id="form_invalidself-form_1">form_invalid(self, form)</h4>
-<p>This method will be run when a valid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
+<p>This method will be run when an invalid form submission occurs, and should return a response object.  The default behavior is to return a <code>TemplateResponse</code> which renders the form errors.</p>
 <h4 id="get_success_url_1">get_success_url()</h4>
 <p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute if it is set, or will be the return value of calling <code>get_absolute_url()</code> on the object instance.</p>
 <p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>form_valid()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
@@ -355,7 +355,7 @@
 <p>The URL that should be used when redirecting after a successful form submission.</p>
 <h4 id="get_success_url_2">get_success_url()</h4>
 <p>Returns the URL that should be used when redirecting after a successful form submission.  Defaults to returning the value of the <code>success_url</code> attribute.</p>
-<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>post()</code> methhod directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
+<p><strong>Note</strong>: If you are customizing the view behavior, we'd typically recommend overriding the <code>post()</code> method directly rather than overriding <code>get_success_url()</code>, as it will result in simpler, more obvious flow control.</p>
           </div><!--/span-->
         </div><!--/row-->
       </div><!--/.fluid-container-->

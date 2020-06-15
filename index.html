@@ -265,12 +265,12 @@ class DeleteNote(DeleteView):
 </code></pre>
 <h2 id="compare-and-contrast">Compare and contrast</h2>
 <p>To help give you an idea of the relative complexity of <code>django-vanilla-views</code> against Django's existing implementations, let's compare the two.</p>
-<h4 id="inheritance-hierachy-vanilla-style">Inheritance hierachy, Vanilla style.</h4>
+<h4 id="inheritance-hierarchy-vanilla-style">Inheritance hierarchy, Vanilla style.</h4>
 <p>The inheritance hierarchy of the views in <code>django-vanilla-views</code> is trivial, making it easy to figure out the control flow in the view.</p>
 <pre class="prettyprint lang-py"><code>CreateView --&gt; GenericModelView --&gt; View
 </code></pre>
 <p><strong>Total number of source files</strong>: 1 (<a href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/model_views.py">model_views.py</a>)</p>
-<h4 id="inheritance-hierachy-django-style">Inheritance hierachy, Django style.</h4>
+<h4 id="inheritance-hierarchy-django-style">Inheritance hierarchy, Django style.</h4>
 <p>Here's the corresponding inheritance hiearchy in Django's implementation of <code>CreateView</code>.</p>
 <pre class="prettyprint lang-py"><code>             +--&gt; SingleObjectTemplateResponseMixin --&gt; TemplateResponseMixin
              |
