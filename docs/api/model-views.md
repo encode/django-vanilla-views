@@ -79,7 +79,7 @@ This method should return a queryset representing the set of instances that the 
 The default behavior of this method is:
 
 * If the `queryset` attribute is set, then return that.
-* Otherwise fallback to returning the default queryset for the model class as determined by the `model` atttibute.
+* Otherwise fallback to returning the default queryset for the model class as determined by the `model` attribute.
 * If neither the `queryset` or `model` attributes are set then a configuration error will be raised.
 
 You can customize how the querysets for the view are determined by overriding this method.  For example:
@@ -159,7 +159,7 @@ You can override this method to provide more complex behavior.  For example, to 
 
 Given a queryset and a page size, returns a paginator instance to use for a paginated list view.
 
-By default this method simply instantiates Django's standard `Paginator` class with the arugments passed.
+By default this method simply instantiates Django's standard `Paginator` class with the arguments passed.
 
 If you need to customize how the paginator is instantiated you can override this method.  For example to ensure that the final page must always contain more than a single item, you could write something like this:
 
@@ -180,7 +180,7 @@ The default behavior of this method is:
 
 * If the `context_object_name` attribute is set, then use that.
 * Otherwise fallback to automatically using `<model_name>` or `<model_name>_list` based on the `model` attribute.
-* If neither the `context_object_name` or `model` attributes are set, then only the standard `'object'` or `'object_list'` key will be used.  
+* If neither the `context_object_name` or `model` attributes are set, then only the standard `'object'` or `'object_list'` key will be used.
 
 #### get_context_data(self, **kwargs)
 
@@ -191,7 +191,7 @@ The default behavior of this method is to return a dictionary populated with the
 * `view` - A reference to the view instance.
 * `object` or `object_list` - The instance or queryset being operated on by the view.
 * `<context_object_name>` - A more descriptive name for the instance or queryset as returned by `get_context_object_name`.
-* Any additional keyword arguments supplied to the method.  In particular, the model editing views include the `form` context key. 
+* Any additional keyword arguments supplied to the method.  In particular, the model editing views include the `form` context key.
 
 You can override the method either to add additional context data:
 

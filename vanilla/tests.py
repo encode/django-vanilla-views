@@ -22,7 +22,7 @@ class ExampleForm(Form):
 
 class InstanceOf(object):
     """
-    We use this sentinal object together with our 'assertContext' helper method.
+    We use this sentinel object together with our 'assertContext' helper method.
 
     Used to ensure that a particular context value is an object of the given
     type, without requiring a specific fixed value.  Useful for form context,

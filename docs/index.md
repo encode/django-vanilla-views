@@ -27,7 +27,7 @@
                                   |
                                   +-- DeleteView
 
-Django's generic class-based view implementation is unneccesarily complicated.
+Django's generic class-based view implementation is unnecessarily complicated.
 
 Django vanilla views gives you **exactly the same functionality**, in a vastly simplified, easier-to-use package, including:
 
@@ -235,7 +235,7 @@ You can run the example locally by following these steps:
     source env/bin/activate
     pip install django
 
-    # Ensure the local copy of the 'vanilla' pacakge is on our path
+    # Ensure the local copy of the 'vanilla' package is on our path
     export PYTHONPATH=..:.
 
     # Run the project
