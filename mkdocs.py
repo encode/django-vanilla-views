@@ -31,15 +31,6 @@ code_label = r'<a class="github" href="https://github.com/tomchristie/django-van
 with open(os.path.join(docs_dir, 'template.html'), 'r') as fp:
     page = fp.read()
 
-# Copy static files
-# for static in ['css', 'js', 'img']:
-#     source = os.path.join(docs_dir, 'static', static)
-#     target = os.path.join(html_dir, static)
-#     if os.path.exists(target):
-#         shutil.rmtree(target)
-#     shutil.copytree(source, target)
-
-
 # Hacky, but what the hell, it'll do the job
 path_list = [
     'index.md',
