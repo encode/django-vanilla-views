@@ -26,9 +26,12 @@ You can determine your currently installed version using `pip freeze`:
 
 ---
 
-## Pending
+## 2.0.0
+
+**Released**: 10th September 2020
 
 * Drop Python 2.7 and 3.4 support. Only Python 3.5+ is supported now.
+* Support Django 3.1 (no compatibility changes were actually required).
 
 ## 1.1.0
 
