@@ -191,7 +191,7 @@
 <p>The default behavior of this method is:</p>
 <ul>
 <li>If the <code>queryset</code> attribute is set, then return that.</li>
-<li>Otherwise fallback to returning the default queryset for the model class as determined by the <code>model</code> atttibute.</li>
+<li>Otherwise fallback to returning the default queryset for the model class as determined by the <code>model</code> attribute.</li>
 <li>If neither the <code>queryset</code> or <code>model</code> attributes are set then a configuration error will be raised.</li>
 </ul>
 <p>You can customize how the querysets for the view are determined by overriding this method.  For example:</p>
@@ -254,7 +254,7 @@
 </code></pre>
 <h4 id="get_paginatorself-queryset-page_size">get_paginator(self, queryset, page_size)</h4>
 <p>Given a queryset and a page size, returns a paginator instance to use for a paginated list view.</p>
-<p>By default this method simply instantiates Django's standard <code>Paginator</code> class with the arugments passed.</p>
+<p>By default this method simply instantiates Django's standard <code>Paginator</code> class with the arguments passed.</p>
 <p>If you need to customize how the paginator is instantiated you can override this method.  For example to ensure that the final page must always contain more than a single item, you could write something like this:</p>
 <pre class="prettyprint lang-py"><code>def get_paginator(self, queryset, page_size):
     return Paginator(queryset, page_size, orphans=2)
@@ -268,7 +268,7 @@
 <ul>
 <li>If the <code>context_object_name</code> attribute is set, then use that.</li>
 <li>Otherwise fallback to automatically using <code>&lt;model_name&gt;</code> or <code>&lt;model_name&gt;_list</code> based on the <code>model</code> attribute.</li>
-<li>If neither the <code>context_object_name</code> or <code>model</code> attributes are set, then only the standard <code>'object'</code> or <code>'object_list'</code> key will be used.  </li>
+<li>If neither the <code>context_object_name</code> or <code>model</code> attributes are set, then only the standard <code>'object'</code> or <code>'object_list'</code> key will be used.</li>
 </ul>
 <h4 id="get_context_dataself-kwargs">get_context_data(self, **kwargs)</h4>
 <p>This method takes a set of keyword arguments supplied by the view and returns a dictionary to use as context when rendering the response template.</p>
@@ -277,7 +277,7 @@
 <li><code>view</code> - A reference to the view instance.</li>
 <li><code>object</code> or <code>object_list</code> - The instance or queryset being operated on by the view.</li>
 <li><code>&lt;context_object_name&gt;</code> - A more descriptive name for the instance or queryset as returned by <code>get_context_object_name</code>.</li>
-<li>Any additional keyword arguments supplied to the method.  In particular, the model editing views include the <code>form</code> context key. </li>
+<li>Any additional keyword arguments supplied to the method.  In particular, the model editing views include the <code>form</code> context key.</li>
 </ul>
 <p>You can override the method either to add additional context data:</p>
 <pre class="prettyprint lang-py"><code>def get_context_data(self, **kwargs):
