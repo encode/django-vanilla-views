@@ -12,6 +12,7 @@ env:
     - DJANGO=2.1.15
     - DJANGO=2.2.9
     - DJANGO=3.0.2
+    - DJANGO=3.1.1
 
 install:
     - pip install Django==$DJANGO
@@ -25,8 +26,13 @@ script: coverage run --source=vanilla manage.py test
 after_success: coverage report; coveralls
 
 matrix:
+    include:
+        - python: "3.9-dev"
+          env: DJANGO=3.1.1
     exclude:
         - python: "3.5"
           env: DJANGO=3.0.2
+        - python: "3.5"
+          env: DJANGO=3.1.1
         - python: "3.8"
           env: DJANGO=1.11.27
