@@ -6,7 +6,7 @@
     <body>
         <h1 style="margin: 30px">{% if note %}Edit note{% else %}Create note{% endif%}</h1>
         <div style="margin: 30px">
-        <form method="POST" action="."> 
+        <form method="POST" action=".">
         {% csrf_token %}
         {{ form }}
         <input type="submit" class="btn btn-primary" value="Save">

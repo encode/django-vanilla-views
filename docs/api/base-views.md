@@ -56,7 +56,7 @@ You can customize this method in order to supply additional arguments to the for
 
     def get_form(self, data=None, files=None, **kwargs):
         kwargs['user'] = self.request.user
-        return AccountForm(data, files, **kwargs) 
+        return AccountForm(data, files, **kwargs)
 
 #### get_context_data(self, **kwargs)
 
@@ -65,7 +65,7 @@ This method takes a set of keyword arguments supplied by the view and returns a 
 The default behavior of this method is to return a dictionary populated with the following keys:
 
 * `view` - A reference to the view instance.
-* Any additional keyword arguments supplied to the method.  In particular, `FormView` includes the `form` context key. 
+* Any additional keyword arguments supplied to the method.  In particular, `FormView` includes the `form` context key.
 
 You can override the method either to add additional context data:
 
