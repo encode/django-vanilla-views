@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.generic import View
 import warnings
-import six
 
 # Avoid RemovedInDjango40Warning on Django 3.0+
 if django.VERSION >= (3, 0):
@@ -139,7 +138,7 @@ class GenericModelView(View):
             return paginator.page(page_number)
         except InvalidPage as exc:
             msg = 'Invalid page (%s): %s'
-            raise Http404(_(msg) % (page_number, six.text_type(exc)))
+            raise Http404(_(msg) % (page_number, str(exc)))
 
     # Response rendering
 
