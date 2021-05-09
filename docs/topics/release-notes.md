@@ -29,6 +29,7 @@ You can determine your currently installed version using `pip freeze`:
 ## Pending
 
 * Support Django 3.2.
+* Drop Python 3.5 support.
 
 ## 2.0.0
 

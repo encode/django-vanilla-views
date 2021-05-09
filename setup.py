@@ -89,7 +89,7 @@ setup(
         "Changelog": "http://django-vanilla-views.org/topics/release-notes",
         "Repository": "https://github.com/tomchristie/django-vanilla-views/",
     },
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     install_requires=install_requires,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
