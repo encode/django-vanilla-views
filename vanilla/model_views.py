@@ -6,7 +6,6 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.generic import View
-import warnings
 
 # Avoid RemovedInDjango40Warning on Django 3.0+
 if django.VERSION >= (3, 0):
@@ -42,9 +41,8 @@ class GenericModelView(View):
     paginate_by = None
     page_kwarg = 'page'
 
-    # Suffix that should be appended to automatically generated template names.
+    # Suffix that should be appended to automatically generated template names.
     template_name_suffix = None
-
 
     # Queryset and object lookup
 
@@ -59,7 +57,9 @@ class GenericModelView(View):
             lookup = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         except KeyError:
             msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
-            raise ImproperlyConfigured(msg % (lookup_url_kwarg, self.__class__.__name__))
+            raise ImproperlyConfigured(
+                msg % (lookup_url_kwarg, self.__class__.__name__)
+            )
 
         return get_object_or_404(queryset, **lookup)
 
@@ -76,7 +76,10 @@ class GenericModelView(View):
         if self.model is not None:
             return self.model._default_manager.all()
 
-        msg = "'%s' must either define 'queryset' or 'model', or override 'get_queryset()'"
+        msg = (
+            "'%s' must either define 'queryset' or 'model', or override "
+            + "'get_queryset()'"
+        )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     # Form instantiation
@@ -214,7 +217,7 @@ class GenericModelView(View):
         )
 
 
-## The concrete model views
+# The concrete model views
 
 class ListView(GenericModelView):
     template_name_suffix = '_list'
@@ -228,7 +231,7 @@ class ListView(GenericModelView):
             raise Http404
 
         if paginate_by is None:
-            # Unpaginated response
+            # Unpaginated response
             self.object_list = queryset
             context = self.get_context_data(
                 page_obj=None,
@@ -301,7 +304,11 @@ class UpdateView(GenericModelView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form(data=request.POST, files=request.FILES, instance=self.object)
+        form = self.get_form(
+            data=request.POST,
+            files=request.FILES,
+            instance=self.object,
+        )
         if form.is_valid():
             return self.form_valid(form)
         return self.form_invalid(form)

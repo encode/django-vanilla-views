@@ -13,24 +13,20 @@ author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
 
-long_description = """Django's generic class based view implementation is unneccesarily complicated.
+with open("README.md", "r") as fp:
+    long_description = fp.read()
 
-Django vanilla views gives you all the same functionality, in a vastly simplified, easier-to-use package, including:
-
-* No mixin classes.
-* No calls to super().
-* A sane class hierarchy.
-* A stripped down API.
-* Simpler method implementations, with less magical behavior.
-
-Remember, even though the API has been greatly simplified, everything you're able to do with Django's existing implementation is also supported in django-vanilla-views."""
 
 def get_version(package):
     """
     Return package version as listed in `__version__` in `init.py`.
     """
     init_py = open(os.path.join(package, '__init__.py')).read()
-    return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+    return re.search(
+        r"^__version__ = ['\"]([^'\"]+)['\"]",
+        init_py,
+        re.MULTILINE,
+    ).group(1)
 
 
 def get_packages(package):
@@ -74,6 +70,7 @@ setup(
     license=license,
     description=description,
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author=author,
     author_email=author_email,
     license_file="LICENSE",

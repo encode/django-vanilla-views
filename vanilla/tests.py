@@ -4,9 +4,10 @@ from django.db import models
 from django.forms import fields, BaseForm, Form, ModelForm
 from django.http import Http404
 from django.test import RequestFactory, TestCase
-from vanilla import *
-import types
-import warnings
+from vanilla import (
+    CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
+    TemplateView, View
+)
 
 
 class Example(models.Model):
@@ -47,16 +48,20 @@ class BaseTestCase(TestCase):
         # Hack to get around the fact that we're using request factory,
         # instead of the full test client.
         response.context = response.context_data
-        return super(BaseTestCase, self).assertFormError(response, form, field, errors, msg_prefix)
+        return super(BaseTestCase, self).assertFormError(
+            response, form, field, errors, msg_prefix
+        )
 
     def assertContext(self, response, expected):
         # Ensure the keys all match.
         # Note that this style ensures we get nice descriptive failures.
         for key in expected.keys():
-            self.assertTrue(key in response.context_data,
+            self.assertTrue(
+                key in response.context_data,
                 "context missing key '%s'" % key)
         for key in response.context_data.keys():
-            self.assertTrue(key in expected,
+            self.assertTrue(
+                key in expected,
                 "context contains unexpected key '%s'" % key)
 
         # Ensure all the values match.
@@ -68,11 +73,13 @@ class BaseTestCase(TestCase):
                 expected_val = list(expected_val)
 
             if isinstance(expected_val, InstanceOf):
-                self.assertTrue(isinstance(val, expected_val.expected_type),
+                self.assertTrue(
+                    isinstance(val, expected_val.expected_type),
                     "context['%s'] contained type '%s', but expected type '%s'"
                     % (key, type(val), expected_val.expected_type))
             else:
-                self.assertEqual(val, expected_val,
+                self.assertEqual(
+                    val, expected_val,
                     "context['%s'] contained '%s', but expected '%s'" %
                     (key, val, expected_val))
 
@@ -134,7 +141,10 @@ class TestDetail(BaseTestCase):
         # then the context will only contain the 'object' key.
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = DetailView.as_view(queryset=Example.objects.all(), template_name='example.html')
+        view = DetailView.as_view(
+            queryset=Example.objects.all(),
+            template_name='example.html',
+        )
         response = self.get(view, pk=pk)
 
         self.assertEqual(response.status_code, 200)
@@ -242,7 +252,9 @@ class TestList(BaseTestCase):
 
 class TestCreate(BaseTestCase):
     def test_create(self):
-        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = CreateView.as_view(
+            model=Example, fields=('text',), success_url='/success/'
+        )
         response = self.post(view, data={'text': 'example'})
 
         self.assertEqual(response.status_code, 302)
@@ -251,12 +263,19 @@ class TestCreate(BaseTestCase):
         self.assertEqual(Example.objects.get().text, 'example')
 
     def test_create_failed(self):
-        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = CreateView.as_view(
+            model=Example, fields=('text',), success_url='/success/',
+        )
         response = self.post(view, data={'text': 'example' * 100})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['vanilla/example_form.html'])
-        self.assertFormError(response, 'form', 'text', ['Ensure this value has at most 10 characters (it has 700).'])
+        self.assertFormError(
+            response,
+            'form',
+            'text',
+            ['Ensure this value has at most 10 characters (it has 700).']
+        )
         self.assertContext(response, {
             'form': InstanceOf(BaseForm),
             'view': InstanceOf(View)
@@ -264,7 +283,9 @@ class TestCreate(BaseTestCase):
         self.assertFalse(Example.objects.exists())
 
     def test_create_preview(self):
-        view = CreateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = CreateView.as_view(
+            model=Example, fields=('text',), success_url='/success/',
+        )
         response = self.get(view)
 
         self.assertEqual(response.status_code, 200)
@@ -277,7 +298,8 @@ class TestCreate(BaseTestCase):
 
     def test_create_no_success_url(self):
         view = CreateView.as_view(model=Example, fields=('text',))
-        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, data={'text': 'example'})
 
     def test_create_misconfigured_form_class(self):
         # If don't provide 'model' or 'form_class',
@@ -287,19 +309,23 @@ class TestCreate(BaseTestCase):
             template_name='example.html',
             success_url='/success/'
         )
-        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, data={'text': 'example'})
 
     def test_create_create_no_fields(self):
         # If we don't provide `.fields` then expect a `PendingDeprecation` warning.
         view = CreateView.as_view(model=Example, success_url='/success/')
-        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, data={'text': 'example'})
 
 
 class TestUpdate(BaseTestCase):
     def test_update(self):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = UpdateView.as_view(
+            model=Example, fields=('text',), success_url='/success/',
+        )
         response = self.post(view, pk=pk, data={'text': 'example'})
 
         self.assertEqual(response.status_code, 302)
@@ -311,12 +337,19 @@ class TestUpdate(BaseTestCase):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
         original_text = Example.objects.all()[0].text
-        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = UpdateView.as_view(
+            model=Example, fields=('text',), success_url='/success/',
+        )
         response = self.post(view, pk=pk, data={'text': 'example' * 100})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['vanilla/example_form.html'])
-        self.assertFormError(response, 'form', 'text', ['Ensure this value has at most 10 characters (it has 700).'])
+        self.assertFormError(
+            response,
+            'form',
+            'text',
+            ['Ensure this value has at most 10 characters (it has 700).'],
+        )
         self.assertContext(response, {
             'object': Example.objects.get(pk=pk),
             'example': Example.objects.get(pk=pk),
@@ -329,7 +362,9 @@ class TestUpdate(BaseTestCase):
     def test_update_preview(self):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
-        view = UpdateView.as_view(model=Example, fields=('text',), success_url='/success/')
+        view = UpdateView.as_view(
+            model=Example, fields=('text',), success_url='/success/',
+        )
         response = self.get(view, pk=pk)
 
         self.assertEqual(response.status_code, 200)
@@ -346,14 +381,16 @@ class TestUpdate(BaseTestCase):
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
         view = UpdateView.as_view(model=Example, fields=('text',))
-        self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, pk=pk, data={'text': 'example'})
 
     def test_update_no_fields(self):
         # If we don't provide `.fields` then expect a `PendingDeprecation` warning.
         create_instance(quantity=3)
         pk = Example.objects.all()[0].pk
         view = UpdateView.as_view(model=Example, success_url='/success/')
-        self.assertRaises(ImproperlyConfigured, self.post, view, pk=pk, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, pk=pk, data={'text': 'example'})
 
 
 class TestDelete(BaseTestCase):
@@ -380,7 +417,10 @@ class TestDelete(BaseTestCase):
         response = self.get(view, pk=pk)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name, ['vanilla/example_confirm_delete.html'])
+        self.assertEqual(
+            response.template_name,
+            ['vanilla/example_confirm_delete.html'],
+        )
         self.assertContext(response, {
             'object': Example.objects.get(pk=pk),
             'example': Example.objects.get(pk=pk),
@@ -443,7 +483,9 @@ class TestAttributeOverrides(BaseTestCase):
             class Meta:
                 fields = ('text',)
                 model = Example
-        view = CreateView.as_view(model=Example, success_url='/success/', form_class=CustomForm)
+        view = CreateView.as_view(
+            model=Example, success_url='/success/', form_class=CustomForm,
+        )
         response = self.get(view)
 
         self.assertEqual(response.status_code, 200)
@@ -457,7 +499,9 @@ class TestAttributeOverrides(BaseTestCase):
     def test_queryset_override(self):
         create_instance(text='abc', quantity=3)
         create_instance(text='def', quantity=3)
-        view = ListView.as_view(model=Example, queryset=Example.objects.filter(text='abc'))
+        view = ListView.as_view(
+            model=Example, queryset=Example.objects.filter(text='abc'),
+        )
         response = self.get(view)
 
         self.assertEqual(response.status_code, 200)
@@ -511,7 +555,12 @@ class TestFormView(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['example.html'])
-        self.assertFormError(response, 'form', 'text', ['Ensure this value has at most 10 characters (it has 700).'])
+        self.assertFormError(
+            response,
+            'form',
+            'text',
+            ['Ensure this value has at most 10 characters (it has 700).'],
+        )
         self.assertContext(response, {
             'form': InstanceOf(BaseForm),
             'view': InstanceOf(View)
@@ -546,4 +595,5 @@ class TestFormView(BaseTestCase):
             form_class=ExampleForm,
             template_name='example.html'
         )
-        self.assertRaises(ImproperlyConfigured, self.post, view, data={'text': 'example'})
+        with self.assertRaises(ImproperlyConfigured):
+            self.post(view, data={'text': 'example'})

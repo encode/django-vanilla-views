@@ -1,13 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.views.generic import View, RedirectView
-
-try:
-    from django.urls import reverse  # django 1.11+
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.views.generic import View
 
 
 class GenericView(View):
@@ -47,7 +41,10 @@ class GenericView(View):
         if self.template_name is not None:
             return [self.template_name]
 
-        msg = "'%s' must either define 'template_name' or override 'get_template_names()'"
+        msg = (
+            "'%s' must either define 'template_name' or override "
+            + "'get_template_names()'"
+        )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_context_data(self, **kwargs):
