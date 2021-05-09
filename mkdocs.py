@@ -26,7 +26,10 @@ else:
 
 main_header = '<li class="main"><a href="#{{ anchor }}">{{ title }}</a></li>'
 sub_header = '<li><a href="#{{ anchor }}">{{ title }}</a></li>'
-code_label = r'<a class="github" href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/\1"><span class="label label-info">\1</span></a>'
+code_label = (
+    r'<a class="github" href="https://github.com/encode/django-vanilla-views'
+    + r'/tree/master/vanilla/\1"><span class="label label-info">\1</span></a>'
+)
 
 with open(os.path.join(docs_dir, 'template.html'), 'r') as fp:
     page = fp.read()
@@ -57,7 +60,7 @@ for idx in range(len(path_list)):
         next_url_map[path] = rel + path_list[idx + 1][:-3] + suffix
 
 
-for (dirpath, dirnames, filenames) in os.walk(docs_dir):
+for (dirpath, _dirnames, filenames) in os.walk(docs_dir):
     relative_dir = dirpath.replace(docs_dir, '').lstrip(os.path.sep)
     build_dir = os.path.join(html_dir, relative_dir)
 
@@ -94,7 +97,15 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
 
             if not main_title:
                 main_title = title
-            anchor = title.lower().replace(' ', '-').replace(':-', '-').replace("'", '').replace('?', '').replace('.', '')
+            anchor = (
+                title
+                .lower()
+                .replace(' ', '-')
+                .replace(':-', '-')
+                .replace("'", '')
+                .replace('?', '')
+                .replace('.', '')
+            )
             template = template.replace('{{ title }}', title)
             template = template.replace('{{ anchor }}', anchor)
             toc += template + '\n'
@@ -109,7 +120,14 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
 
         content = markdown.markdown(text, extensions=['toc'])
 
-        output = page.replace('{{ content }}', content).replace('{{ toc }}', toc).replace('{{ base_url }}', base_url).replace('{{ suffix }}', suffix).replace('{{ index }}', index)
+        output = (
+            page
+            .replace('{{ content }}', content)
+            .replace('{{ toc }}', toc)
+            .replace('{{ base_url }}', base_url)
+            .replace('{{ suffix }}', suffix)
+            .replace('{{ index }}', index)
+        )
         output = output.replace('{{ title }}', main_title)
         output = output.replace('{{ description }}', description)
         output = output.replace('{{ page_id }}', filename[:-3])
@@ -129,7 +147,11 @@ for (dirpath, dirnames, filenames) in os.walk(docs_dir):
             output = output.replace('{{ next_url_disabled }}', 'disabled')
 
         output = re.sub(r'a href="([^"]*)\.md"', r'a href="\1%s"' % suffix, output)
-        output = re.sub(r'<pre><code>:::bash', r'<pre class="prettyprint lang-bsh">', output)
+        output = re.sub(
+            r'<pre><code>:::bash',
+            r'<pre class="prettyprint lang-bsh">',
+            output,
+        )
         output = re.sub(r'<pre>', r'<pre class="prettyprint lang-py">', output)
         output = re.sub(r'<a class="github" href="([^"]*)"></a>', code_label, output)
         with open(output_path, 'w') as fp:

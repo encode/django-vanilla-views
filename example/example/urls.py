@@ -1,5 +1,4 @@
-from django.conf.urls import include, url
-from example.notes.models import Note
+from django.conf.urls import url
 from example.notes.views import ListNotes, CreateNote, EditNote, DeleteNote
 
 urlpatterns = [
