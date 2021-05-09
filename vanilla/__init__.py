@@ -10,7 +10,7 @@ from vanilla.model_views import (
 )
 from vanilla.views import FormView, GenericView, TemplateView
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __all__ = (
     "View",
     "GenericView",
