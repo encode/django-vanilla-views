@@ -1,4 +1,15 @@
 repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.4.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-case-conflict
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-symlinks
+  - id: check-toml
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
 - repo: https://github.com/psf/black
   rev: 21.4b2
   hooks:
@@ -16,3 +27,8 @@ repos:
     - flake8-bugbear
     - flake8-comprehensions
     - flake8-tidy-imports
+- repo: https://github.com/mgedmin/check-manifest
+  rev: "0.46"
+  hooks:
+  - id: check-manifest
+    args: [--no-build-isolation]
