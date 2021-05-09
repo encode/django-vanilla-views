@@ -92,7 +92,7 @@ Writing the same code with `django-vanilla-views`, you'd instead arrive at a sim
 
 ## Requirements
 
-* **Django**: 1.11, 2.0, 2.1, 3.0, 3.1
+* **Django**: 1.11, 2.0, 2.1, 3.0, 3.1, 3.2
 * **Python**: 3.5, 3.6, 3.7, 3.8, 3.9
 
 ## Installation

@@ -23,3 +23,6 @@ else:
     ]
 
 SECRET_KEY = 'abcde12345'
+
+if django.VERSION >= (3, 2):
+    DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
