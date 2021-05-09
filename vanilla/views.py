@@ -1,4 +1,3 @@
-#coding: utf-8
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
@@ -102,4 +101,4 @@ class FormView(GenericView):
         if self.success_url is None:
             msg = "'%s' must define 'success_url' or override 'get_success_url()'"
             raise ImproperlyConfigured(msg % self.__class__.__name__)
-        return self.success_url    
+        return self.success_url

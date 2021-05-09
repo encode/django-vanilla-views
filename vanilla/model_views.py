@@ -1,4 +1,3 @@
-#coding: utf-8
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator, InvalidPage
