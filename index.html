@@ -14,11 +14,6 @@
     <link href="http://django-vanilla-views.org/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="http://django-vanilla-views.org/css/default.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -148,13 +143,11 @@
             <p class="badges">
 <iframe src="http://ghbtns.com/github-btn.html?user=tomchristie&amp;repo=django-vanilla-views&amp;type=watch&amp;count=true" class="github-star-button" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="django-vanilla-views.org" data-text="Django Vanilla Views... http://django-vanilla-views.org" data-count="none"></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </p>
 
 <h1 id="django-vanilla-views">Django Vanilla Views</h1>
 <p><strong>Beautifully simple class-based views.</strong></p>
-<p><a href="https://travis-ci.org/tomchristie/django-vanilla-views"><img alt="Build Status" src="https://travis-ci.org/tomchristie/django-vanilla-views.svg?branch=master" /></a> <a href="https://coveralls.io/r/tomchristie/django-vanilla-views?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/tomchristie/django-vanilla-views/badge.svg?branch=master" /></a> <a href="http://badge.fury.io/py/django-vanilla-views"><img alt="PyPI version" src="https://badge.fury.io/py/django-vanilla-views.svg" /></a></p>
+<p><a href="https://github.com/encode/django-vanilla-views/actions?workflow=CI"><img alt="Build Status" src="https://img.shields.io/github/workflow/status/encode/django-vanilla-views/CI/master?style=for-the-badge" /></a> <a href="https://pypi.org/project/django-vanilla-views/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/django-vanilla-views.svg?style=for-the-badge" /></a></p>
 <pre class="prettyprint lang-py"><code>View --+------------------------- RedirectView
        |
        +-- GenericView -------+-- TemplateView
@@ -228,8 +221,8 @@ class AccountCreateView(CreateView):
 </code></pre>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li><strong>Django</strong>: 1.11, 2.0, 2.1, 3.0, 3.1</li>
-<li><strong>Python</strong>: 3.5, 3.6, 3.7, 3.8, 3.9</li>
+<li><strong>Django</strong>: 2.2, 3.0, 3.1, 3.2</li>
+<li><strong>Python</strong>: 3.6, 3.7, 3.8, 3.9</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Install using pip.</p>

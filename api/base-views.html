@@ -14,11 +14,6 @@
     <link href="http://django-vanilla-views.org/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="http://django-vanilla-views.org/css/default.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -142,7 +137,7 @@
           </div>
 
           <div id="main-content" class="span9">
-            <p><a class="github" href="https://github.com/tomchristie/django-vanilla-views/tree/master/vanilla/views.py"><span class="label label-info">views.py</span></a></p>
+            <p><a class="github" href="https://github.com/encode/django-vanilla-views/tree/master/vanilla/views.py"><span class="label label-info">views.py</span></a></p>
 <h1 id="base-views">Base Views</h1>
 <p>The base views provide a simple set of generic views for working with Django querysets and model instances.</p>
 <p>They replicate the functionality of Django's existing <code>TemplateView</code> and <code>FormView</code> but present a simpler API and implementation.  Django's standard <code>RedirectView</code> is also included for completeness.</p>
@@ -187,7 +182,7 @@
 <p>The default behavior of this method is to return a dictionary populated with the following keys:</p>
 <ul>
 <li><code>view</code> - A reference to the view instance.</li>
-<li>Any additional keyword arguments supplied to the method.  In particular, <code>FormView</code> includes the <code>form</code> context key. </li>
+<li>Any additional keyword arguments supplied to the method.  In particular, <code>FormView</code> includes the <code>form</code> context key.</li>
 </ul>
 <p>You can override the method either to add additional context data:</p>
 <pre class="prettyprint lang-py"><code>def get_context_data(self, **kwargs):
