@@ -8,7 +8,7 @@ class Note(models.Model):
 
     @property
     def checkbox_character(self):
-        return '☑' if self.complete else '☐'
+        return "☑" if self.complete else "☐"
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ("-created",)

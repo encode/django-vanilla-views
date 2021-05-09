@@ -8,6 +8,7 @@ class GenericView(View):
     """
     A generic base class for building template and/or form views.
     """
+
     form_class = None
     template_name = None
 
@@ -53,7 +54,7 @@ class GenericView(View):
         returns a context dictionary to use for the view, additionally adding
         in 'view'.
         """
-        kwargs['view'] = self
+        kwargs["view"] = self
         return kwargs
 
     def render_to_response(self, context):
@@ -61,9 +62,7 @@ class GenericView(View):
         Given a context dictionary, returns an HTTP response.
         """
         return TemplateResponse(
-            request=self.request,
-            template=self.get_template_names(),
-            context=context
+            request=self.request, template=self.get_template_names(), context=context
         )
 
 

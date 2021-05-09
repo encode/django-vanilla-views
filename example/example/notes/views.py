@@ -1,5 +1,5 @@
-from example.notes.models import Note
 from example.notes.forms import NoteForm
+from example.notes.models import Note
 from vanilla import CreateView, DeleteView, ListView, UpdateView
 
 try:
@@ -15,15 +15,15 @@ class ListNotes(ListView):
 class CreateNote(CreateView):
     model = Note
     form_class = NoteForm
-    success_url = reverse_lazy('list_notes')
+    success_url = reverse_lazy("list_notes")
 
 
 class EditNote(UpdateView):
     model = Note
     form_class = NoteForm
-    success_url = reverse_lazy('list_notes')
+    success_url = reverse_lazy("list_notes")
 
 
 class DeleteNote(DeleteView):
     model = Note
-    success_url = reverse_lazy('list_notes')
+    success_url = reverse_lazy("list_notes")
