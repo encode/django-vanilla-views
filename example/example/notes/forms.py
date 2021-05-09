@@ -6,4 +6,4 @@ from .models import Note
 class NoteForm(ModelForm):
     class Meta:
         model = Note
-        fields = ['message', 'complete']
+        fields = ["message", "complete"]

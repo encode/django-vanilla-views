@@ -8,28 +8,27 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Note',
+            name="Note",
             fields=[
                 (
-                    'id',
+                    "id",
                     models.AutoField(
                         auto_created=True,
                         primary_key=True,
                         serialize=False,
-                        verbose_name='ID'
-                    )
+                        verbose_name="ID",
+                    ),
                 ),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('message', models.CharField(max_length=100)),
-                ('complete', models.BooleanField(default=False)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("message", models.CharField(max_length=100)),
+                ("complete", models.BooleanField(default=False)),
             ],
             options={
-                'ordering': ('-created',),
+                "ordering": ("-created",),
             },
         ),
     ]

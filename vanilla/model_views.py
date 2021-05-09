@@ -1,6 +1,6 @@
 import django
 from django.core.exceptions import ImproperlyConfigured
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import InvalidPage, Paginator
 from django.forms import models as model_forms
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -18,6 +18,7 @@ class GenericModelView(View):
     """
     Base class for all model generic views.
     """
+
     model = None
     fields = None
 
@@ -25,7 +26,7 @@ class GenericModelView(View):
     # performing the model instance lookup.
     # Note that if unset then `lookup_url_kwarg` defaults to using the same
     # value as `lookup_field`.
-    lookup_field = 'pk'
+    lookup_field = "pk"
     lookup_url_kwarg = None
 
     # All the following are optional, and fall back to default values
@@ -39,7 +40,7 @@ class GenericModelView(View):
     # Pagination parameters.
     # Set `paginate_by` to an integer value to turn pagination on.
     paginate_by = None
-    page_kwarg = 'page'
+    page_kwarg = "page"
 
     # Suffix that should be appended to automatically generated template names.
     template_name_suffix = None
@@ -94,8 +95,10 @@ class GenericModelView(View):
         if self.model is not None and self.fields is not None:
             return model_forms.modelform_factory(self.model, fields=self.fields)
 
-        msg = "'%s' must either define 'form_class' or both 'model' and " \
-              "'fields', or override 'get_form_class()'"
+        msg = (
+            "'%s' must either define 'form_class' or both 'model' and "
+            "'fields', or override 'get_form_class()'"
+        )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def get_form(self, data=None, files=None, **kwargs):
@@ -130,7 +133,7 @@ class GenericModelView(View):
         try:
             page_number = int(page_number)
         except ValueError:
-            if page_number == 'last':
+            if page_number == "last":
                 page_number = paginator.num_pages
             else:
                 msg = "Page is not 'last', nor can it be converted to an int."
@@ -139,7 +142,7 @@ class GenericModelView(View):
         try:
             return paginator.page(page_number)
         except InvalidPage as exc:
-            msg = 'Invalid page (%s): %s'
+            msg = "Invalid page (%s): %s"
             raise Http404(_(msg) % (page_number, str(exc)))
 
     # Response rendering
@@ -153,7 +156,7 @@ class GenericModelView(View):
             return self.context_object_name
 
         elif self.model is not None:
-            fmt = '%s_list' if is_list else '%s'
+            fmt = "%s_list" if is_list else "%s"
             return fmt % self.model._meta.object_name.lower()
 
         return None
@@ -169,16 +172,16 @@ class GenericModelView(View):
         * Optionally, 'object' or 'object_list'
         * Optionally, '{context_object_name}' or '{context_object_name}_list'
         """
-        kwargs['view'] = self
+        kwargs["view"] = self
 
-        if getattr(self, 'object', None) is not None:
-            kwargs['object'] = self.object
+        if getattr(self, "object", None) is not None:
+            kwargs["object"] = self.object
             context_object_name = self.get_context_object_name()
             if context_object_name:
                 kwargs[context_object_name] = self.object
 
-        if getattr(self, 'object_list', None) is not None:
-            kwargs['object_list'] = self.object_list
+        if getattr(self, "object_list", None) is not None:
+            kwargs["object_list"] = self.object_list
             context_object_name = self.get_context_object_name(is_list=True)
             if context_object_name:
                 kwargs[context_object_name] = self.object_list
@@ -196,14 +199,19 @@ class GenericModelView(View):
             return [self.template_name]
 
         if self.model is not None and self.template_name_suffix is not None:
-            return ["%s/%s%s.html" % (
-                self.model._meta.app_label,
-                self.model._meta.object_name.lower(),
-                self.template_name_suffix
-            )]
+            return [
+                "%s/%s%s.html"
+                % (
+                    self.model._meta.app_label,
+                    self.model._meta.object_name.lower(),
+                    self.template_name_suffix,
+                )
+            ]
 
-        msg = "'%s' must either define 'template_name' or 'model' and " \
+        msg = (
+            "'%s' must either define 'template_name' or 'model' and "
             "'template_name_suffix', or override 'get_template_names()'"
+        )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
     def render_to_response(self, context):
@@ -211,16 +219,15 @@ class GenericModelView(View):
         Given a context dictionary, returns an HTTP response.
         """
         return TemplateResponse(
-            request=self.request,
-            template=self.get_template_names(),
-            context=context
+            request=self.request, template=self.get_template_names(), context=context
         )
 
 
 # The concrete model views
 
+
 class ListView(GenericModelView):
-    template_name_suffix = '_list'
+    template_name_suffix = "_list"
     allow_empty = True
 
     def get(self, request, *args, **kwargs):
@@ -252,7 +259,7 @@ class ListView(GenericModelView):
 
 
 class DetailView(GenericModelView):
-    template_name_suffix = '_detail'
+    template_name_suffix = "_detail"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -262,7 +269,7 @@ class DetailView(GenericModelView):
 
 class CreateView(GenericModelView):
     success_url = None
-    template_name_suffix = '_form'
+    template_name_suffix = "_form"
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
@@ -287,14 +294,16 @@ class CreateView(GenericModelView):
         try:
             return self.success_url or self.object.get_absolute_url()
         except AttributeError:
-            msg = "No URL to redirect to. '%s' must provide 'success_url' " \
+            msg = (
+                "No URL to redirect to. '%s' must provide 'success_url' "
                 "or define a 'get_absolute_url()' method on the Model."
+            )
             raise ImproperlyConfigured(msg % self.__class__.__name__)
 
 
 class UpdateView(GenericModelView):
     success_url = None
-    template_name_suffix = '_form'
+    template_name_suffix = "_form"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -325,14 +334,16 @@ class UpdateView(GenericModelView):
         try:
             return self.success_url or self.object.get_absolute_url()
         except AttributeError:
-            msg = "No URL to redirect to. '%s' must provide 'success_url' " \
+            msg = (
+                "No URL to redirect to. '%s' must provide 'success_url' "
                 "or define a 'get_absolute_url()' method on the Model."
+            )
             raise ImproperlyConfigured(msg % self.__class__.__name__)
 
 
 class DeleteView(GenericModelView):
     success_url = None
-    template_name_suffix = '_confirm_delete'
+    template_name_suffix = "_confirm_delete"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
