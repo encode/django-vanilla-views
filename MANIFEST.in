@@ -5,6 +5,7 @@ prune tests
 prune __pycache__
 include LICENSE
 include README.md
+exclude .editorconfig
 exclude .pre-commit-config.yaml
 exclude manage.py
 exclude mkdocs.py
