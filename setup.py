@@ -15,9 +15,6 @@ url = 'http://django-vanilla-views.org'
 author = 'Tom Christie'
 author_email = 'tom@tomchristie.com'
 license = 'BSD'
-install_requires = [
-    'six',
-]
 
 long_description = """Django's generic class based view implementation is unneccesarily complicated.
 
@@ -90,7 +87,7 @@ setup(
         "Repository": "https://github.com/tomchristie/django-vanilla-views/",
     },
     python_requires=">=3.6",
-    install_requires=install_requires,
+    install_requires=[],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
