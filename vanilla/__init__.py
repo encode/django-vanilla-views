@@ -5,9 +5,9 @@ __all__ = (
     'ListView', 'DetailView', 'CreateView', 'UpdateView', 'DeleteView'
 )
 
-from django.views.generic import View
+from django.views.generic import RedirectView, View
 from vanilla.views import (
-    GenericView, RedirectView, TemplateView, FormView
+    GenericView, TemplateView, FormView
 )
 from vanilla.model_views import (
     GenericModelView, ListView, DetailView, CreateView, UpdateView, DeleteView
