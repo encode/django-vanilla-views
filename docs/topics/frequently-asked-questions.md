@@ -12,7 +12,7 @@ Sure.  The `django-vanilla-views` package doesn't happen to use mixin classes, b
 
 ### Can I use decorators with Vanilla views?
 
-Yes.  Using decorators with `django-vanilla-view` is *exactly* the same as using decorators with Django's regular class-based view.  You can [wrap the decorator in the URL conf][urlconf-decorators], like so:
+Yes.  Using decorators with `django-vanilla-views` is *exactly* the same as using decorators with Django's regular class-based view.  You can [wrap the decorator in the URL conf][urlconf-decorators], like so:
 
     urlpatterns = patterns('',
         (r'^create-report/', login_required(CreateReportView.as_view())),
@@ -46,7 +46,7 @@ Actually not really.  The base views and the model views do share some common im
 
 It's also worth noting that Django's existing class based views also include duplication despite being implemented using a mixin style.  For example, both `SingleObjectMixin` and `MultipleObjectMixin` implement a functionally identical `get_queryset()` method.
 
-### What about seperation of concerns?
+### What about separation of concerns?
 
 The base classes used by vanilla views include a small core set of functionality.  In the author's opinion there's no real practical issue introduced here, and the design trade-off should favor simplicity of implementation.
 
