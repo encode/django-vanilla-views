@@ -16,7 +16,7 @@ Although a large amount of API has been removed, the functionality that the view
 
 ---
 
-**These are all removed**.  If you need to override how the form is intialized, just override `get_form()`.
+**These are all removed**.  If you need to override how the form is initialized, just override `get_form()`.
 
 For example, instead of this:
 

@@ -144,7 +144,7 @@ The inheritance hierarchy of the views in `django-vanilla-views` is trivial, mak
 
 #### Inheritance hierarchy, Django style.
 
-Here's the corresponding inheritance hiearchy in Django's implementation of `CreateView`.
+Here's the corresponding inheritance hierarchy in Django's implementation of `CreateView`.
 
                  +--> SingleObjectTemplateResponseMixin --> TemplateResponseMixin
                  |
