@@ -8,7 +8,7 @@ It covers `ListView`, `DetailView`, `CreateView`, `UpdateView` and `DeleteView`.
 
 Wherever API points have been removed, we provide examples of what you should be using instead.
 
-This scope of this migration guide may appear intimidating at first if you're intending to port your existing views accross to using `django-vanilla-views`, but you should be able to approach refactorings in a fairly simple step-by-step manner, working through each item in the list one at a time.
+This scope of this migration guide may appear intimidating at first if you're intending to port your existing views across to using `django-vanilla-views`, but you should be able to approach refactorings in a fairly simple step-by-step manner, working through each item in the list one at a time.
 
 Although a large amount of API has been removed, the functionality that the views provide should be identical to Django's existing views.  If you believe you've found some behavior in Django's generic class based views that can't also be trivially achieved in `django-vanilla-views`, then please [open a ticket][tickets], and we'll treat it as a bug.
 
@@ -46,7 +46,7 @@ For more complex lookups, override `get_object()`, like so:
 
 ---
 
-**These are all removed**.  If you need to override how the form is intialized, just override `get_form()`.
+**These are all removed**.  If you need to override how the form is initialized, just override `get_form()`.
 
 For example, instead of this:
 

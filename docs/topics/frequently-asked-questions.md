@@ -2,7 +2,7 @@
 
 ## Usage
 
-### Won't I lose functionality or flexiblity?
+### Won't I lose functionality or flexibility?
 
 No.  Everything you can do with Django's standard class based views you can also do with `django-vanilla-views`.  The migration guides cover all the bits of API that have been removed, and explain how you can easily achieve the same functionality with vanilla views.
 
