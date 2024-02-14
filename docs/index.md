@@ -7,7 +7,7 @@
 
 **Beautifully simple class-based views.**
 
-[![Build Status](https://img.shields.io/github/workflow/status/encode/django-vanilla-views/CI/master?style=for-the-badge)](https://github.com/encode/django-vanilla-views/actions?workflow=CI) [![PyPI version](https://img.shields.io/pypi/v/django-vanilla-views.svg?style=for-the-badge)](https://pypi.org/project/django-vanilla-views/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/encode/django-vanilla-views/main.yml?branch=master&style=for-the-badge)](https://github.com/encode/django-vanilla-views/actions?workflow=CI) [![PyPI version](https://img.shields.io/pypi/v/django-vanilla-views.svg?style=for-the-badge)](https://pypi.org/project/django-vanilla-views/)
 
     View --+------------------------- RedirectView
            |
